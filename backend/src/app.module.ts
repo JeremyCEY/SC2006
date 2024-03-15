@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { TasksModule } from './tasks/tasks.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ResaleModule } from './resale/resale.module';
+import { AuthModule } from './auth/auth.module';
 
 const url = 'mongodb+srv://tanw0272:UVdMb8aeATcDmYuc@sc2006.fa1n11l.mongodb.net/ResaleHDBInfo?retryWrites=true&w=majority&appName=SC2006';
 
 @Module({
-  imports: [TasksModule, ResaleModule, MongooseModule.forRoot(url)]
+  imports: [TasksModule, ResaleModule, MongooseModule.forRoot(url), AuthModule]
 })
 export class AppModule {}
