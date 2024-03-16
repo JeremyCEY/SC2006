@@ -9,11 +9,12 @@ export class User {
     @Prop()
     name: string;
 
-    @Prop({unique: [true, 'This email has already been used']})
+    @Prop()
     email: string;
 
     @Prop()
     password: string;
 }
+
 
 export const UserSchema = SchemaFactory.createForClass(User);
