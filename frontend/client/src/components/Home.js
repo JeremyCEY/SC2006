@@ -1,5 +1,7 @@
 import homeImage from "../images/home.png"
+import Explore from "./Explore";
 import LoggedOutNavbar from "./LoggedOutNavbar";
+import Map from './Map'
 
 function Home(){
     return(
@@ -22,6 +24,9 @@ function Home(){
                 <div>
                     <h2 className="font-bold text-3xl">Explore Residences</h2>
                     {/* will be a module itself */}
+                    <div className="items-center">
+                        <Map/>
+                    </div>
                 </div>
             </div>
         </>
