@@ -5,7 +5,14 @@ import * as mongoose from 'mongoose';
 const GeometrySchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['Point', 'LineString', 'Polygon', 'MultiPoint', 'MultiLineString', 'MultiPolygon'],
+    enum: [
+      'Point',
+      'LineString',
+      'Polygon',
+      'MultiPoint',
+      'MultiLineString',
+      'MultiPolygon',
+    ],
     required: true,
   },
   coordinates: {
