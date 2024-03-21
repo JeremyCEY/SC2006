@@ -14,8 +14,8 @@ export interface TestData extends mongoose.Document{
     lease_commense_date: number;
     remaining_lease: string;
     resale_price: number;
-    latitude: number;
-    longitude:number;
+    Latitude: number;
+    Longitude:number;
 }
 
 export const TestDataScehma = new mongoose.Schema({
@@ -30,6 +30,6 @@ export const TestDataScehma = new mongoose.Schema({
     lease_commense_date: {type: Number, required: true},
     remaining_lease: {type: String, required: true},
     resale_price: {type: Number, required: true},
-    latitude: {type: Number, required: true},
-    longitude: {type: Number, required: true},
+    Latitude: {type: Number, required: true},
+    Longitude: {type: Number, required: true},
 });

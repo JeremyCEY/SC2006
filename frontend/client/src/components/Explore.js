@@ -4,7 +4,6 @@ import LoggedInNavbar from '../components/LoggedInNavbar';
 import Map from './Map';
 
 function Explore(){
-
     return(
         <>
             <LoggedInNavbar />

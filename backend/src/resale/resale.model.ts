@@ -16,7 +16,7 @@ export interface Resale extends mongoose.Document{
     resale_price: number;
 }
 
-export const ResaleSchema = new mongoose.Schema({
+export const ResaleScehma = new mongoose.Schema({
     month: {type: String, required: true},
     town: {type: String, required: true},
     flat_type: {type: String, required: true},
