@@ -35,9 +35,9 @@ function Map() {
                 options={{mapId:"42923ec279983523"}}
             >
                 {resales.map(resale =>{
-                    const pos = {lat: resale.latitude, lng: resale.longitude};
-                    <Marker position = {pos}>
-                    </Marker>
+                    return(
+                    <Marker key = {resale.id} position = {{lat: resale.latitude, lng: resale.longitude}}>
+                    </Marker>)
                     })}
             </GoogleMap>
             </div>
