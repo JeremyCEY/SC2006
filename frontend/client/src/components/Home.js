@@ -58,6 +58,7 @@ function Home(){
                     </div>
                 </div>
             </div>
+            <Map></Map>
         </>
     );
     

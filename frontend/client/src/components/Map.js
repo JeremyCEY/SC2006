@@ -1,91 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
-import axios from 'axios'
+import axios from 'axios';
 
 const mapContainerStyle = {
-    width: '300%',
+    width: '100%', // Adjusted for better layout
     height: '400px'
 };
 
 const center = {
-    lat: 1.290270, // Latitude of map's center
-    lng: 103.8198 // Longitude of map's center
+    lat: 1.290270,
+    lng: 103.8198
 };
 
 function Map() {
-    const[resales, setResales] = useState([])
+    const [resales, setResales] = useState([]);
+    const [mrt, setMrt] = useState(null); // Ensured state is inside the component
 
+    // Fetch resale data
     useEffect(() => {
-        axios.get('/testData')
-            .then(resales => setResales(resales.data))
-            .catch(err => console.log(err))
-    }, [])
+        axios.get('/testData') // Make sure this URL is correct and accessible
+            .then(response => setResales(response.data))
+            .catch(err => console.error('Failed to fetch resale data:', err));
+    }, []);
 
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8"
-    })
-
-    return isLoaded?(
-        <div>
-            <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                zoom={14}
-                center={center}
-                options={{mapId:"42923ec279983523"}}
-            >
-                {resales.map(resale =>{
-                    return(
-                        <Marker key = {resale.id} position = {{lat: resale.latitude, lng: resale.longitude}}>
-                        </Marker>)
-                })}
-            </GoogleMap>
-        </div>
-    ) : <></>
-}
-export default Map;
-
-    // State to store the map instance
-    const [map, setMap] = useState(null);
-
-    // Function to fetch GeoJSON data from the backend
-    const fetchGeoJsonData = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/api/geodata');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            console.log('Fetched geodata response');
-            const data = await response.json();
-            console.log('Create geojson object');
-            return data;
-        } catch (error) {
-            console.error("Failed to fetch GeoJSON data:", error);
-            return null;
-        }
-    };
-
+    // Fetch GeoJSON data and add as a layer to the map
     useEffect(() => {
-         const addGeoJsonLayer = async () => {
-            if (map) {
-                const geoJsonData = await fetchGeoJsonData();
-                if (geoJsonData) {
-                    map.data.addGeoJson(geoJsonData);
-                    // Assuming the backend sends a FeatureCollection,
-                    // you can directly add it to the map
+        async function fetchAndAddGeoJsonLayer() {
+            if (!mrt) return; // Ensure map is loaded
 
-                    // Optional: Style the GeoJSON layer
-                    /*
-                    map.data.setStyle({
-                        fillColor: 'green',
-                        strokeColor: 'green',
-                        strokeWeight: 2,
-                        strokeWeight: 1,
-                    });*/
+            try {
+                const response = await fetch('http://localhost:3000/api/geodata');
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const geoJsonData = await response.json();
+                if (geoJsonData && geoJsonData.features.length > 0) {
+                    mrt.data.addGeoJson(geoJsonData);
+                } else {
+                    console.error("GeoJSON data is empty or not in expected format");
                 }
+                mrt.data.addGeoJson(geoJsonData); // Add GeoJSON data to map
+            } catch (error) {
+                console.error("Failed to fetch GeoJSON data:", error);
             }
-        };
-        addGeoJsonLayer();
-    }, [map]); // This effect runs when the `map` state changes
+        }
+
+        fetchAndAddGeoJsonLayer();
+    }, [mrt]); // Effect runs when the `mrt` state changes
+
+    const { isLoaded, loadError } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8" // Replace with your actual API key
+    });
+
+    if (loadError) {
+        return <div>Error loading maps</div>;
+    }
+
+    return isLoaded ? (
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={11} // Adjusted zoom for better visibility
+            center={center}
+            onLoad={setMrt} // Set the map instance
+            options={{ mapId: "42923ec279983523" }}
+        >
+            {resales.map(resale => (
+                <Marker key={resale.id} position={{ lat: resale.latitude, lng: resale.longitude }} />
+            ))}
+        </GoogleMap>
+    ) : <></>;
+}
 
 export default Map;
