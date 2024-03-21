@@ -1,8 +1,10 @@
 import homeImage from "../images/home.png"
+import Explore from "./Explore";
 import LoggedOutNavbar from "./LoggedOutNavbar";
  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
 
+import Map from './Map'
 
 function Home(){
     const [residences, setResidences] = useState([]);
