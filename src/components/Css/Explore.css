@@ -1,0 +1,58 @@
+
+/* box representing each resale */
+.card {  
+    border: 1px solid #e1e1e1; 
+    border-radius: 14px; 
+    width: calc(33.333% - 20px); 
+    margin: 10px; 
+    padding: 20px; 
+    background: rgb(228, 227, 227); 
+    display: flex;
+    flex-direction: column; 
+  }
+  .header{
+    font-size: 1.1em;
+    font-weight: 950;
+    margin-bottom: 0.1em;
+  }
+
+
+  .residence-name {
+    float: left;
+    font-size: 1.1em;
+    font-weight: bolder;
+    margin-bottom: 0.1em; 
+    width: 70%;
+  }
+  
+  .price-range {
+    font-size: 1.1em;
+    color: #333; 
+    margin-bottom: 1.5em; 
+  }
+  
+  .residence-details {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0; 
+    font-weight: bold ;
+  }
+  
+  .residence-details li {
+    font-size: 0.9em;
+    margin-bottom: 0.25em; 
+  }
+  
+  @media (max-width: 768px) {
+    .card {
+      width: calc(50% - 20px); 
+    }
+  }
+  
+/* smaller screens */
+  @media (max-width: 480px) {
+    .card {
+      width: 100%; 
+    }
+  }
+  
