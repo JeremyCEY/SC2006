@@ -1,3 +1,4 @@
+//Home.js
 import homeImage from "../images/home.png"
 import Explore from "./Explore";
 import LoggedOutNavbar from "./LoggedOutNavbar";

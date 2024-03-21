@@ -1,3 +1,4 @@
+//Map.js
 import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
@@ -22,7 +23,9 @@ const Map = () => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            console.log('Fetched geodata response');
             const data = await response.json();
+            console.log('Create geojson object');
             return data;
         } catch (error) {
             console.error("Failed to fetch GeoJSON data:", error);
