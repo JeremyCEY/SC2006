@@ -14,6 +14,10 @@ export class User extends Document {
 
     @Prop()
     password: string;
+
+    @Prop({ type: [String], default: [ ]})
+    bookmarks: string [];
+
 }
 
 

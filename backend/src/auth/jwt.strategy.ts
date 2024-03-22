@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userModel.findById(id);
 
     if (!user) {
-      throw new UnauthorizedException('Login first to bookmark property.');
+      throw new UnauthorizedException('Login first to access function.');
     }
 
     return user;

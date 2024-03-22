@@ -7,6 +7,8 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './auth.constant';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { BookmarkService } from 'src/bookmark v2/bookmark.service';
+import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
 
 @Module({
   imports: [
@@ -19,8 +21,8 @@ import { JwtStrategy } from './jwt.strategy';
     })
 
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController, BookmarkController],
+  providers: [AuthService, JwtStrategy, BookmarkService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
