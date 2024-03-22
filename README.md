@@ -2,7 +2,7 @@
 
 # Instructions:
 
-##START SERVER BEFORE CLIENT!
+START SERVER BEFORE CLIENT!
 
 ## Starting the server:
 1. cd backend
