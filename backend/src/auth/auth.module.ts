@@ -9,6 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { BookmarkService } from 'src/bookmark v2/bookmark.service';
 import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
+import { FrequentAddressController } from 'src/frequentaddress/frequentaddress.controller';
+import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.service';
 
 @Module({
   imports: [
@@ -21,8 +23,8 @@ import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
     })
 
   ],
-  controllers: [AuthController, BookmarkController],
-  providers: [AuthService, JwtStrategy, BookmarkService],
+  controllers: [AuthController, BookmarkController, FrequentAddressController],
+  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

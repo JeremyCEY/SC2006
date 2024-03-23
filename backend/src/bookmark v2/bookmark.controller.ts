@@ -10,17 +10,17 @@ export class BookmarkController {
 
     @Post(':userId/:propertyId')
     @UseGuards(AuthGuard())
-    async addBookmark(@Param('userId') userId: string, @Param('propertyId') propertyId: string): Promise<void> {
-        await this.BookmarkService.addBookmark(userId, propertyId);
+    async addBookmark(@Param('userId') userId: string, @Param('propertyId') propertyId: string): Promise<string> {
+        return this.BookmarkService.addBookmark(userId, propertyId);
     }
 
     @Delete(':userId/:propertyId')
     @UseGuards(AuthGuard())
-    async removeBookmark(@Param('userId') userId: string, @Param('propertyId') propertyId: string): Promise<void> {
-        await this.BookmarkService.removeBookmark(userId, propertyId);
+    async removeBookmark(@Param('userId') userId: string, @Param('propertyId') propertyId: string): Promise<string> {
+        return this.BookmarkService.removeBookmark(userId, propertyId);
     }
 
-    @Get(':userId/bookmarks')
+    @Get(':userId')
     @UseGuards(AuthGuard())
     async getBookmark(@Param('userId') userId: string): Promise<string[]>{
         return this.BookmarkService.getBookmark(userId);
