@@ -1,18 +1,28 @@
-//UseRailNameOverlays.js
 /* global google */
 
-import { useEffect } from "react";
+import {useEffect} from "react";
 
 export const useRailNameOverlays = (mapRef, railNames, hammerSvgURL, isLoaded) => {
     useEffect(() => {
         let overlays = []; // To keep track of all overlays
+        let uniqueNames = new Set(); // To keep track of unique rail names
+
         // Immediately-invoked async function inside useEffect
         (async () => {
             if (mapRef.current && railNames.length > 0 && isLoaded) {
                 try {
                     // Dynamically import the RailNameOverlay module
                     const { RailNameOverlay } = await import('./RailNameOverlay');
-                    railNames.forEach(feature => {
+                    // Filter for unique rail names
+                    const uniqueRailNames = railNames.filter(feature => {
+                        const isUnique = !uniqueNames.has(feature.properties.Name);
+                        if (isUnique) {
+                            uniqueNames.add(feature.properties.Name);
+                        }
+                        return isUnique;
+                    });
+
+                    uniqueRailNames.forEach(feature => {
                         const position = {
                             lat: feature.geometry.coordinates[0][1],
                             lng: feature.geometry.coordinates[0][0],
