@@ -3,7 +3,7 @@ import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { GeodataService } from './geodata.service';
 
-@Controller('api/geodata')
+@Controller('geodata/mrtlines')
 export class GeodataController {
   constructor(private readonly geodataService: GeodataService) {}
 

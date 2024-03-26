@@ -36,5 +36,5 @@ const FeatureCollectionSchema = new mongoose.Schema({
 });
 
 // Create a Mongoose model
-const GeodataModel = mongoose.model('GeoJSON', FeatureCollectionSchema);
+const GeodataModel = mongoose.model('geodata', FeatureCollectionSchema);
 export { GeodataModel, FeatureCollectionSchema };
