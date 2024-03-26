@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import hammerSvgURL from "../images/construction_black_24dp.svg"
 import axios from 'axios';
 
 const mapContainerStyle = {
@@ -27,7 +28,7 @@ function Map() {
         if (isLoaded) {
             // Define the icon here to ensure 'google' is defined
             setHammerIcon({
-                url: 'D:\\2006-SCSB-SCSB-T2\\frontend\\client\\src\\images\\construction_black_24dp.svg',
+                url: hammerSvgURL,
                 scaledSize: new window.google.maps.Size(30, 30),
                 origin: new window.google.maps.Point(0, 0),
                 anchor: new window.google.maps.Point(15, 15),
