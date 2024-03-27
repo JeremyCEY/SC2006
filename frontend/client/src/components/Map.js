@@ -2,8 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
 import axios from 'axios';
 import {useRailNameOverlays} from './UseRailNameOverlay';
-import {useGeoJsonOverlay} from './UseGeoJsonOverlay';
 import mrtSvgURL from "../images/train_FILL0_wght400_GRAD0_opsz24.svg"
+import locationSvgURL from "../images/LocationBlank.svg"
 
 const mapContainerStyle = {
     width: '100%', // Adjusted for better layout
@@ -42,9 +42,9 @@ function Map() {
     }, []);
 
 
-    // Correctly using custom hooks within the functional component
-    useRailNameOverlays(mapRef, railNames, mrtSvgURL, isLoaded);
-    useGeoJsonOverlay(mapRef, mrt);
+    //
+    useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
+    //useGeoJsonOverlay(mapRef, mrt);
 
     if (loadError) {
         return <div>Error loading maps</div>;

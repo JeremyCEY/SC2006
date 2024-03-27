@@ -2,14 +2,15 @@
 import {OverlayContentBuilder} from './OverlayContentBuilder';
 
 export class RailNameOverlay extends google.maps.OverlayView {
-    constructor(map, position, text, iconURL) {
+    constructor(map, position, text, iconContent) {
         super();
         this.map = map;
         this.text = text;
-        this.color = "blue";
         // Convert position to a LatLng object.
         this.position = new google.maps.LatLng(position.lat, position.lng);
-        this.overlayContentBuilder = new OverlayContentBuilder(iconURL, this.color, this.color);
+        this.iconContent = iconContent;
+        console.log(` Merged SVG to be overlaid as icon: ${iconContent}`);
+        this.overlayContentBuilder = new OverlayContentBuilder(this.iconContent);
         this.labelDiv = document.createElement('div');
         this.initializeOverlay(text);
     }
@@ -37,9 +38,9 @@ export class RailNameOverlay extends google.maps.OverlayView {
     getshadowOptions() {
         return {
             stdDeviation: 2, // Less blur
-            dx: 0, // Horizontal offset to the right
-            dy: 0, // Vertical offset downwards
-            color: "rgba(255, 255, 255, 0.6)" // Semi-transparent white color}
+            dx: -1, // Horizontal offset to the right
+            dy: -1, // Vertical offset downwards
+            color: "rgba(0, 0, 255, 0.6)" // Semi-transparent white color}
         }
     }
 
@@ -55,9 +56,10 @@ export class RailNameOverlay extends google.maps.OverlayView {
             fontWeight: 'bold',
             fontFamily: 'Roboto, Arial, sans-serif',
             visibility: 'visible',
-            textShadow: 'none', // Example of setting text shadow; adjust as needed
+            textShadow: 'none',
             webkitTextStroke: '0.2px white',
-            textStroke: '0.2px white' // For compatibility with non-webkit browsers
+            textStroke: '0.2px white', // For compatibility with non-webkit browsers
+            zIndex: '2'
         }
         //textShadow = '2px 2px 4px #000000'; // Drop shadow
     }

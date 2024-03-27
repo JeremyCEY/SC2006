@@ -11,7 +11,11 @@ export const SVGUtils = {
             return null;
         }
     },
-
+    // Parses an SVG string into a DOM element
+    parseSVG(svgString) {
+        const parser = new DOMParser();
+        return parser.parseFromString(svgString, "image/svg+xml").documentElement;
+    },
     // Recolors an SVG string, allowing separate colors for fill and stroke
     // Recolors an SVG string, targeting only specific elements for fill and stroke
     recolorSVG(svgContent, fillColor, strokeColor) {
@@ -33,7 +37,7 @@ export const SVGUtils = {
         // Serialize the updated SVG DOM back into a string
         const serializer = new XMLSerializer();
         const updatedSVGContent = serializer.serializeToString(svgRoot);
-
+        console.log("Recoloured SVGs");
         return updatedSVGContent;
     },
 
@@ -75,5 +79,11 @@ export const SVGUtils = {
         // Serialize the updated SVG DOM back into a string
         const serializer = new XMLSerializer();
         return serializer.serializeToString(svgRoot);
+    },
+    // Assuming SVGUtils includes a method to extract paths from SVG content
+    extractPaths(svgContent) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgContent, "image/svg+xml");
+        return Array.from(doc.querySelectorAll("path"));
     }
 };

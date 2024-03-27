@@ -1,61 +1,59 @@
 /* global google */
 
 import {useEffect} from "react";
+import {IconBuilder} from "./IconBuilder";
 
-export const useRailNameOverlays = (mapRef, railNames, svgURL, isLoaded) => {
+// Function to build the icon
+async function buildIconAsync(svgURL, locationSvgURL) {
+    const iconBuilder = new IconBuilder();
+    const options1 = {fill: "white", stroke: "white"};
+    const options2 = {fill: "blue", stroke: "blue"};
+    return await iconBuilder.mergeSVGs(locationSvgURL, svgURL, options1, options2);
+}
+
+// Function to initialize overlays
+async function initializeOverlays(mapRef, railNames, builtIcon) {
+    const uniqueNames = new Set();
+    const overlays = [];
+
+    // Dynamically import the RailNameOverlay module
+    const {RailNameOverlay} = await import('./RailNameOverlay');
+
+    railNames
+        .filter(feature => {
+            const isUnique = !uniqueNames.has(feature.properties.Name);
+            if (isUnique) uniqueNames.add(feature.properties.Name);
+            return isUnique;
+        })
+        .forEach(feature => {
+            const position = {lat: feature.geometry.coordinates[0][1], lng: feature.geometry.coordinates[0][0]};
+            const overlay = new RailNameOverlay(mapRef.current, position, feature.properties.Name, builtIcon);
+            overlays.push(overlay);
+        });
+
+    return overlays;
+}
+
+// Main hook to use rail name overlays
+export const useRailNameOverlays = (mapRef, railNames, svgURL, locationSvgURL, isLoaded) => {
     useEffect(() => {
-        let overlays = []; // To keep track of all overlays
-        let uniqueNames = new Set(); // To keep track of unique rail names
+        if (!mapRef.current || !railNames.length || !isLoaded) return;
 
-        // Immediately-invoked async function inside useEffect
-        (async () => {
-            if (mapRef.current && railNames.length > 0 && isLoaded) {
-                try {
-                    // Dynamically import the RailNameOverlay module
-                    const { RailNameOverlay } = await import('./RailNameOverlay');
-                    // Filter for unique rail names
-                    const uniqueRailNames = railNames.filter(feature => {
-                        const isUnique = !uniqueNames.has(feature.properties.Name);
-                        if (isUnique) {
-                            uniqueNames.add(feature.properties.Name);
-                        }
-                        return isUnique;
-                    });
-
-                    uniqueRailNames.forEach(feature => {
-                        const position = {
-                            lat: feature.geometry.coordinates[0][1],
-                            lng: feature.geometry.coordinates[0][0],
-                        };
-                        // Instantiate a new RailNameOverlay for each feature
-                        const overlay = new RailNameOverlay(mapRef.current, position, feature.properties.Name, svgURL);
-
-                        overlays.push(overlay);
-                        //overlay.hide();
-                    });
-                } catch (error) {
-                    // Handle any errors that occur during the import or overlay creation
-                    console.error("Failed to initialize overlays:", error);
-                }
-
+        buildIconAsync(svgURL, locationSvgURL)
+            .then(builtIcon => initializeOverlays(mapRef, railNames, builtIcon))
+            .then(overlays => {
                 // Adjust overlay visibility based on zoom level
-                google.maps.event.addListener(mapRef.current, 'zoom_changed', () => {
+                const zoomChangedListener = google.maps.event.addListener(mapRef.current, 'zoom_changed', () => {
                     const currentZoom = mapRef.current.getZoom();
-                    overlays.forEach(overlay => {
-                        if (currentZoom > 13) { // Adjust this threshold as needed
-                            overlay.show();
-                        } else {
-                            overlay.hide();
-                        }
-                    });
+                    overlays.forEach(overlay => overlay[currentZoom > 13 ? 'show' : 'hide']());
                 });
 
                 // Cleanup
                 return () => {
-                    google.maps.event.clearListeners(mapRef.current, 'zoom_changed');
+                    google.maps.event.removeListener(zoomChangedListener);
                     overlays.forEach(overlay => overlay.setMap(null));
                 };
-            }
-        })();
-    }, [mapRef, railNames, svgURL, isLoaded]); // Dependencies for useEffect
+            })
+            .catch(error => console.error("Initialization failed:", error));
+    }, [mapRef, railNames, svgURL, locationSvgURL, isLoaded]); // Dependencies for useEffect
 };
