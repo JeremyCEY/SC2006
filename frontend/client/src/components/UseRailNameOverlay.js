@@ -2,7 +2,7 @@
 
 import {useEffect} from "react";
 
-export const useRailNameOverlays = (mapRef, railNames, hammerSvgURL, isLoaded) => {
+export const useRailNameOverlays = (mapRef, railNames, svgURL, isLoaded) => {
     useEffect(() => {
         let overlays = []; // To keep track of all overlays
         let uniqueNames = new Set(); // To keep track of unique rail names
@@ -28,7 +28,7 @@ export const useRailNameOverlays = (mapRef, railNames, hammerSvgURL, isLoaded) =
                             lng: feature.geometry.coordinates[0][0],
                         };
                         // Instantiate a new RailNameOverlay for each feature
-                        const overlay = new RailNameOverlay(mapRef.current, position, feature.properties.Name, hammerSvgURL);
+                        const overlay = new RailNameOverlay(mapRef.current, position, feature.properties.Name, svgURL);
 
                         overlays.push(overlay);
                         //overlay.hide();
@@ -57,5 +57,5 @@ export const useRailNameOverlays = (mapRef, railNames, hammerSvgURL, isLoaded) =
                 };
             }
         })();
-    }, [mapRef, railNames, hammerSvgURL, isLoaded]); // Dependencies for useEffect
+    }, [mapRef, railNames, svgURL, isLoaded]); // Dependencies for useEffect
 };

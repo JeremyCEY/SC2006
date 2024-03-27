@@ -1,33 +1,65 @@
 /* global google */
+import {OverlayContentBuilder} from './OverlayContentBuilder';
+
 export class RailNameOverlay extends google.maps.OverlayView {
     constructor(map, position, text, iconURL) {
         super();
+        this.map = map;
+        this.text = text;
+        this.color = "blue";
         // Convert position to a LatLng object.
         this.position = new google.maps.LatLng(position.lat, position.lng);
-        this.text = text;
-        // Transform text to title case
-        this.text = this.toTitleCase(text);
-        // Create a div element for the label.
+        this.overlayContentBuilder = new OverlayContentBuilder(iconURL, this.color, this.color);
         this.labelDiv = document.createElement('div');
-        this.visible = true;
-        this.labelDiv.style.position = 'absolute';
-        this.labelDiv.style.display = 'flex'; // Use flexbox layout
-        this.labelDiv.style.alignItems = 'center'; // Align items in the middle vertically
-        this.labelDiv.style.whiteSpace = 'nowrap';
-        this.labelDiv.style.background = "transparent";
-        this.labelDiv.style.color = 'black';
-        this.labelDiv.style.fontSize = '14px';
-        this.labelDiv.style.fontWeight = 'bold';
-        this.labelDiv.style.fontFamily = 'Roboto, Arial, sans-serif';
-        this.labelDiv.style.webkitTextStroke = '0.5px white';
-        this.labelDiv.style.textStroke = '0.5px white'; // For compatibility with non-webkit browsers
-        this.labelDiv.style.textShadow = 'none';
-        //this.labelDiv.style.textShadow = '2px 2px 4px #000000'; // Drop shadow
-        // Correct usage of hammerSvgURL in the template literal.
-        this.labelDiv.innerHTML = `<img src="${iconURL}" style="vertical-align: middle; margin-right: 5px;" alt=""> ${this.text}`;
-        // Add the overlay to the map.
-        this.setMap(map);
-        //this.hide();
+        this.initializeOverlay(text);
+    }
+
+    async initializeOverlay(text) {
+        const content = await this.overlayContentBuilder.buildContent(text, this.getshadowOptions());
+        this.setupLabelDiv(content);
+        this.setMap(this.map);
+    }
+
+    setupLabelDiv(content) {
+        // Apply common styles from getStyle method
+        const styles = this.getStyle();
+        Object.keys(styles).forEach(key => {
+            this.labelDiv.style[key] = styles[key];
+        });
+        //this.labelDiv.style.webkitTextStroke = '0.5px white';
+        //this.labelDiv.style.textStroke = '0.5px white';
+        this.labelDiv.innerHTML = content;
+
+
+    }
+
+    // Options for the drop shadow
+    getshadowOptions() {
+        return {
+            stdDeviation: 2, // Less blur
+            dx: 0, // Horizontal offset to the right
+            dy: 0, // Vertical offset downwards
+            color: "rgba(255, 255, 255, 0.6)" // Semi-transparent white color}
+        }
+    }
+
+    getStyle() {
+        return {
+            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
+            whiteSpace: 'nowrap',
+            background: 'transparent',
+            color: 'black',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            fontFamily: 'Roboto, Arial, sans-serif',
+            visibility: 'visible',
+            textShadow: 'none', // Example of setting text shadow; adjust as needed
+            webkitTextStroke: '0.2px white',
+            textStroke: '0.2px white' // For compatibility with non-webkit browsers
+        }
+        //textShadow = '2px 2px 4px #000000'; // Drop shadow
     }
 
     draw() {
@@ -53,7 +85,6 @@ export class RailNameOverlay extends google.maps.OverlayView {
         if (this.labelDiv) {
             this.labelDiv.style.visibility = 'hidden';
         }
-        this.visibile = false;
     }
 
     // Function to show the overlay
@@ -61,10 +92,5 @@ export class RailNameOverlay extends google.maps.OverlayView {
         if (this.labelDiv) {
             this.labelDiv.style.visibility = 'visible';
         }
-        this.visibile = true;
-    }
-
-    toTitleCase(str) {
-        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
 }
