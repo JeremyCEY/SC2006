@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import axios from 'axios';
 
 export const useGeoJsonOverlay = (mapRef, mrt) => {
     useEffect(() => {
