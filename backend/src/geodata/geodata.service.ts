@@ -32,7 +32,8 @@ export class GeodataService {
             try {
               geoJsonString = await fs.readFile(filePath, 'utf-8');
               geoJsonObject = JSON.parse(geoJsonString);
-              console.log(`Parsed GEOJSON: `, geoJsonObject);
+              // console.log(`Parsed GEOJSON: `, geoJsonObject);
+              console.log(`Parsed GEOJSON: `);
             } catch (error) {
               console.error(`Error reading or parsing ${filename}:`, error);
               continue; // Skip this file and move to the next one
