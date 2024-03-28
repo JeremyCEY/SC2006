@@ -1,5 +1,6 @@
 //Home.js
 import homeImage from "../images/home.png"
+import Explore from "../components/Explore";
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
 //  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
