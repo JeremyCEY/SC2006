@@ -1,5 +1,5 @@
-import LoggedOutNavbar from "./LoggedOutNavbar";
-import "./Css/Faq.css";
+import LoggedOutNavbar from "../components/LoggedOutNavbar";
+// import "./Css/Faq.css";
 
 function FAQ(){
   

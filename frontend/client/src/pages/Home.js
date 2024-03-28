@@ -1,11 +1,11 @@
 //Home.js
 import homeImage from "../images/home.png"
-import Explore from "./Explore";
-import LoggedOutNavbar from "./LoggedOutNavbar";
- import "./Css/Explore.css";
+import Explore from "../components/Explore";
+import LoggedOutNavbar from "../components/LoggedOutNavbar";
+//  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
 
-import Map from './Map'
+import Map from '../components/Map'
 
 function Home(){
     const [residences, setResidences] = useState([]);
