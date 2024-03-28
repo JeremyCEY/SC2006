@@ -7,7 +7,8 @@ import * as path from 'path';
 export class RailNameService {
     async getAllNames(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
-        const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson';
+        //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson';
+        const directoryPath = 'railgeojson';
         const filename = 'AmendmenttoMasterPlan2019RailStationNamelayer.geojson';
         const filePath = path.join(directoryPath, filename);
         console.log(`Processing file: ${filePath}`);

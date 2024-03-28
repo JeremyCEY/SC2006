@@ -8,7 +8,8 @@ import * as path from 'path';
 export class GeodataService {
     async combineGeoJsonFiles(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
-        const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson\\railobjects';
+        //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson\\railobjects';
+        const directoryPath = 'railgeojson\\railobjects';
         const files = await fs.readdir(directoryPath);
         const featureCollection = {
           type: "FeatureCollection",
