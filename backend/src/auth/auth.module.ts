@@ -12,6 +12,7 @@ import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
 import { FrequentAddressController } from 'src/frequentaddress/frequentaddress.controller';
 import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.service';
 
+
 @Module({
   imports: [
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
