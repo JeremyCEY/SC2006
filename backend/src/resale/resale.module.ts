@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { ResaleController } from './resale.controller';
 import { ResaleService } from './resale.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ResaleScehma } from './resale.model';
+import { ResaleSchema } from './resale.model';
 
 @Module({
-  imports: [MongooseModule.forFeature([{name:'Resale', schema: ResaleScehma}])],
+  imports: [
+    MongooseModule.forFeature([{name: 'Resale', schema: ResaleSchema}]),
+  ],
   controllers: [ResaleController],
-  providers: [ResaleService]
+  providers: [ResaleService],
 })
 export class ResaleModule {}
