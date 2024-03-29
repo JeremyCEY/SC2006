@@ -2,10 +2,13 @@
 import homeImage from "../images/home.png"
 import Explore from "../components/Explore";
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 //  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
 
 import Map from '../components/Map'
+
+import Test from '../components/Navbar'
 
 function Home(){
     const [residences, setResidences] = useState([]);
@@ -22,9 +25,17 @@ function Home(){
             });
     }, []);
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(token !== null);
+    }, []);
+
     return(
         <>
-            <LoggedOutNavbar/>
+            <Test/>
+            {/* {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>} */}
             <div className="flex flex-col items-center">
                 <div className="relative pt-10 pb-10 ">
                     <img src={homeImage} className="w-full" alt="Home"/>

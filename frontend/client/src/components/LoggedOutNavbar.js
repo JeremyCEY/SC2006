@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import mainLogo from '../images/logo.png';
-import './Css/Loggedout.css';
+// import './Css/Loggedout.css';
 
 function LoggedOutNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
