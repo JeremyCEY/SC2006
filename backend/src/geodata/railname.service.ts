@@ -7,7 +7,8 @@ import * as path from 'path';
 export class RailNameService {
     async getAllNames(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
-        const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson';
+        //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson';
+        const directoryPath = 'railgeojson';
         const filename = 'AmendmenttoMasterPlan2019RailStationNamelayer.geojson';
         const filePath = path.join(directoryPath, filename);
         console.log(`Processing file: ${filePath}`);
@@ -24,7 +25,8 @@ export class RailNameService {
         try {
             geoJsonString = await fs.readFile(filePath, 'utf-8');
             geoJsonObject = JSON.parse(geoJsonString);
-            console.log(`Parsed GEOJSON: `, geoJsonObject);
+            //console.log(`Parsed GEOJSON: `, geoJsonObject);
+            console.log(`Parsed GEOJSON: `);
         } catch (error) {
             console.error(`Error reading or parsing ${filename}:`, error);
             return featureCollection; // Return empty featureCollection in case of error

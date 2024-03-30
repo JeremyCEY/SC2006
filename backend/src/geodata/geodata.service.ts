@@ -8,7 +8,8 @@ import * as path from 'path';
 export class GeodataService {
     async combineGeoJsonFiles(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
-        const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson\\railobjects';
+        //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson\\railobjects';
+        const directoryPath = 'railgeojson\\railobjects';
         const files = await fs.readdir(directoryPath);
         const featureCollection = {
           type: "FeatureCollection",
@@ -31,7 +32,8 @@ export class GeodataService {
             try {
               geoJsonString = await fs.readFile(filePath, 'utf-8');
               geoJsonObject = JSON.parse(geoJsonString);
-              console.log(`Parsed GEOJSON: `, geoJsonObject);
+              // console.log(`Parsed GEOJSON: `, geoJsonObject);
+              console.log(`Parsed GEOJSON: `);
             } catch (error) {
               console.error(`Error reading or parsing ${filename}:`, error);
               continue; // Skip this file and move to the next one

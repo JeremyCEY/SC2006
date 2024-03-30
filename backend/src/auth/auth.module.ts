@@ -6,6 +6,12 @@ import { UserSchema } from './user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './auth.constant';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
+import { BookmarkService } from 'src/bookmark v2/bookmark.service';
+import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
+import { FrequentAddressController } from 'src/frequentaddress/frequentaddress.controller';
+import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.service';
+
 
 @Module({
   imports: [
@@ -18,7 +24,8 @@ import { JwtModule } from '@nestjs/jwt';
     })
 
   ],
-  controllers: [AuthController],
-  providers: [AuthService]
+  controllers: [AuthController, BookmarkController, FrequentAddressController],
+  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
