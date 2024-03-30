@@ -34,10 +34,10 @@ function Home(){
 
     return(
         <>
-            <Test/>
-            {/* {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>} */}
+            {/* <Test/> */}
+            {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>}
             <div className="flex flex-col items-center">
-                <div className="relative pt-10 pb-10 ">
+                <div className="pt-10 pb-10 pl-5 pr-5">
                     <img src={homeImage} className="w-full" alt="Home"/>
                     
                     <div className="absolute 

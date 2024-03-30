@@ -24,24 +24,30 @@ const Navbar = () => {
   // Upto here
 
   return (
-    <nav className="pb-1 sticky top-0 mb-[20px] ">
-      <Layout>
-        <Layout.Header className="bg-white pr-[4px] pl-[24px]">
-          <div className="logo">
-            <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src={mainLogo} className="h-8" alt="Logo" />
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">Sweet Home Finder</span>
-                    </a>          
+    <nav className="h-[20vh] sticky top-0 shadow-md z-99990">
+      <Layout className="">
+        <Layout.Header className="h-30 bg-white pr-4 pl-5 flex">
+          <div className="p-5">
+            <a href="/" className="">
+              <img src={mainLogo} className="h-20" alt="Logo" />
+            </a>          
             </div>
-          <div className="w-[100% - 200px]">
-            <div className="leftMenu">
-              {/* <LeftMenu mode={"horizontal"} /> */}
-            </div>
-            <Button className="menuButton" type="text" onClick={showDrawer}>
+          
+          <div className="float-left w-[calc(100%-200px)] ">
+            
+            {/* <div className="float-left">
+              <LeftMenu mode={"horizontal"} />
+            </div> */}
+            
+            
+            <Button className="float-right 
+                              h-[32px] p-[6px]
+                              mt-[14px] mr-[10px]" 
+                              type="text" onClick={showDrawer}>
               <MenuOutlined />
             </Button>
             
-            <div className="rightMenu">
+            <div className="float-right">
               <RightMenu mode={"horizontal"} />
             </div>
 
