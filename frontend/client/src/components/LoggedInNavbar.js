@@ -7,6 +7,7 @@ import { Layout } from "antd";
 function LoggedInNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
     const toggleMenu = () => {
         setIsMenuOpen(prevState => !prevState);
     };
