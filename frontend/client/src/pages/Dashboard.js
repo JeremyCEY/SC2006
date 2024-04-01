@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; // Import the new component
 
@@ -81,4 +82,6 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default Dashboard; 
+
+

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Map from '../components/Map'
-import Test from '../components/Navbar'
+//import Test from '../components/Navbar'
 import Explore from "../components/Explore";
 
 
@@ -62,4 +62,4 @@ const SavedProperties = ({ userId }) => {
     
 };
 
-export default SavedProperties;
+export default SavedProperties; 
