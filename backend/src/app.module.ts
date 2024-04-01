@@ -20,5 +20,6 @@ const url =
     MongooseModule.forRoot(url),
     AuthModule,
   ],
+
 })
 export class AppModule {}
