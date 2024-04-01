@@ -1,12 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Map from '../components/Map'
 //import Test from '../components/Navbar'
 import Explore from "../components/Explore";
 
 
 const SavedProperties = ({ userId }) => {
+
+    const [savedProperties, setSavedProperties] = useState([]);
+
+    
     const [residences, setResidences] = useState([]);
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [token, setToken] = useState(null); // Define token state
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setIsAuthenticated(storedToken !== null);
+        setToken(storedToken); // Set token state
+    }, []);
+
+    
+
+    // useEffect(() => {        
+       
+    //     const storedToken = localStorage.getItem('token');
+    //     axios.get(`http://localhost:3000/bookmark/${userId}`, {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //         })
+    //         .then(response => {
+    //             setSavedProperties(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('There was an error!', error);
+    //         });
+    // }, []);
+
+    //retrieve id of saved properties from bookmark
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token && userId) {
@@ -25,39 +58,54 @@ const SavedProperties = ({ userId }) => {
             })
             .then(data => {
                 console.log('Raw data:', data);
-    
-                setResidences(data.bookmarks);
+                // Map over each ID and fetch details
+                Promise.all(data.map(id => {
+                    return fetch(`http://localhost:3000/resale/${id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    });
+                }))
+                .then(residencesData => {
+                    console.log('Residences data:', residencesData);
+                    setResidences(residencesData);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching bookmark data:', error);
             });
         }
     }, [userId]);
+
+    //retrieve object of resale based on id
     
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(token !== null);
-    }, []);
 
     return (
         <>
-        {residences && residences.map((resale, index) => (
-            <div key={resale.id} className="card" style={{ width: '30%', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', margin: '10px' }}>
+        {residences.map(property => (
+            <div key={property._id}>
                 <div className="header">
-                <div className="residence-name">{resale.town}</div>
-                <div className="price-range">${resale.resale_price.toLocaleString()}</div>
+                    <div className="residence-name">{property.town}</div>
+                    <div className="price-range">${property.resale_price.toLocaleString()}</div>
                 </div>
                 <ul className="residence-details">
-                <li>Type: {resale.flat_type}</li>
-                <li>Street:  {resale.street_name}</li>
-                <li>Floor area:  {resale.floor_area_sqm} sqm</li>
+                    <li>Type: {property.flat_type}</li>
+                    <li>Street: {property.street_name}</li>
+                    <li>Floor area: {property.floor_area_sqm} sqm</li>
                 </ul>
             </div>
         ))}
-        </>
+    </>
     );
     
 };

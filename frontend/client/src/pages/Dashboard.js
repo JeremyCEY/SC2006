@@ -3,6 +3,9 @@ import React, { useContext, useState } from 'react';
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; // Import the new component
 
+import { Menu, Layout } from 'antd'
+
+const { Sider } = Layout;
 
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,12 +33,35 @@ function Dashboard() {
         <>
             <LoggedInNavbar />
 
-            <div className="flex pt-[64px]">
+            <div className="flex">
                 
                 
                 {/* Sidebar */}
-                <aside 
-                    className={`fixed top-[64px] bottom-0 z-30 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 transition-transform bg-gray-50 bg-gray-300 overflow-y-auto`}
+                <Sider width={250} className='bg-gray-50 h-[87vh]'>
+                    <Menu
+                        mode="inline"
+                        defaultSelectedKeys={['saved_properties']}
+                        className='h-full border-0 bg-gray-50 font-semibold text-1xl'
+                        style={{ height: '100%', borderRight: 0 }}
+                        items = {[
+                            {
+                                key: 'saved_properties',
+                                label: 'Saved Properties',
+                            },
+                            {
+                                key: 'frequently_visited',
+                                label: 'Frequently Visited',
+                            },
+                            {
+                                key: 'settings',
+                                label: 'Settings',
+                            },
+                            
+                        ]}
+                    />
+                </Sider>
+                {/* <aside 
+                    className={`bottom-0 z-30 w-64 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 transition-transform bg-gray-50 bg-gray-300 overflow-y-auto`}
                     style={{ top: navbarHeight }} 
                 >
                     <ul className="space-y-2 p-4 font-medium">
@@ -71,7 +97,7 @@ function Dashboard() {
                     aria-controls="default-sidebar"
                     data-drawer-toggle="default-sidebar"
                     type="button"
-                ></button>
+                ></button> */}
 
                 {/* Page content */}
                 <div className="flex-1 pl-64">
