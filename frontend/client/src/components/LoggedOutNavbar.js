@@ -33,7 +33,7 @@ function LoggedOutNavbar() {
                     
                 },
                 {
-                    label: 'Register',
+                    label: 'Sign Up',
                     key: '2',
                 },
                 {
