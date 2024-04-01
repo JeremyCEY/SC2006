@@ -5,12 +5,6 @@ import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space, Avatar } from 'antd';
 
 function LoggedInNavbar() {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(prevState => !prevState);
-    }
-
 
     const handleMenuClick = (e) => {
         console.log('click', e);
@@ -62,14 +56,14 @@ function LoggedInNavbar() {
                         sticky shadow-lg
                         top-0 z-99999
                         h-[13vh]">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse mt-8">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[13vh]">
+                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
                 </a>
 
 
-                <Dropdown menu={menuProps} className='w-[7vw] h-[4vw] mt-7 
-                                                            border rounded-[100px]'>
+                <Dropdown menu={menuProps} className='w-[7vw] h-[4vw]
+                                                            border rounded-[100px] shadow-md'>
                                         <Button>
                                                 <Space>
                                                 <Avatar size="large" className="text-blue-700" icon={<UserOutlined/>} />
