@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
-import SavedProperties from './SavedProperties'; // Import the new component
+import SavedProperties from './SavedProperties'; 
+import FrequentLocations from './FrequentAddress';
 
 import { Menu, Layout } from 'antd'
 
@@ -25,7 +26,7 @@ function Dashboard() {
             case 'savedProperties':
                 return <SavedProperties userId={userId} />;
             case 'frequentlyVisited':
-                return <div>Frequently Visited</div>;
+                return <FrequentLocations userId={userId} />;
             case 'settings':
                 return <div>Settings content</div>;
             default:

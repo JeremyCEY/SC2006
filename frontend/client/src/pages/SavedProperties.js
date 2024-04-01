@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from '../components/Map'
-//import Test from '../components/Navbar'
 import Explore from "../components/Explore";
 
 
@@ -14,6 +13,15 @@ const SavedProperties = ({ userId }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null); // Define token state
+    const [expandedPropertyId, setExpandedPropertyId] = useState(null);
+
+    const toggleDetails = (id) => {
+        if (expandedPropertyId === id) {
+            setExpandedPropertyId(null); 
+        } else {
+            setExpandedPropertyId(id); 
+        }
+    };
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -91,21 +99,43 @@ const SavedProperties = ({ userId }) => {
     
 
     return (
-        <>
-        {residences.map(property => (
-            <div key={property._id}>
-                <div className="header">
-                    <div className="residence-name">{property.town}</div>
-                    <div className="price-range">${property.resale_price.toLocaleString()}</div>
+        <div>
+            
+            {residences.map((property) => (
+                <div key={property._id} className="border-b border-gray-300 p-4 w-full">
+                    <div className="flex justify-between items-center">
+                        <div 
+                            onClick={() => toggleDetails(property._id)} 
+                            className="cursor-pointer text-blue-600 font-semibold"
+                        >
+                            {property.town}
+                        </div>
+                        <button 
+                            onClick={() => {/* Button to delete, does nothing for now */}} 
+                            className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                    <div className="text-gray-500">{property.flat_type} - {property.property_type}</div>
+                    {expandedPropertyId === property._id && (
+                        <div className="mt-4">
+                            <div>Price: ${property.resale_price.toLocaleString()}</div>
+                            <div>Type: {property.flat_type}</div>
+                            <div>Street: {property.street_name}</div>
+                            <div>Floor area: {property.floor_area_sqm} sqm</div>
+                            {/* Add more Info to display if we want */}
+                        </div>
+                    )}
                 </div>
-                <ul className="residence-details">
-                    <li>Type: {property.flat_type}</li>
-                    <li>Street: {property.street_name}</li>
-                    <li>Floor area: {property.floor_area_sqm} sqm</li>
-                </ul>
-            </div>
-        ))}
-    </>
+            ))}
+            <button 
+                onClick={() => {/* Button for add property, does nothing now */}} 
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+                + Add Property
+            </button>
+        </div>
     );
     
 };
