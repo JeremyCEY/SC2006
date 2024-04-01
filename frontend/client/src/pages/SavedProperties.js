@@ -44,7 +44,7 @@ const SavedProperties = ({ userId }) => {
 
     return (
         <>
-        {residences.map((resale, index) => (
+        {residences && residences.map((resale, index) => (
             <div key={resale.id} className="card" style={{ width: '30%', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', margin: '10px' }}>
                 <div className="header">
                 <div className="residence-name">{resale.town}</div>

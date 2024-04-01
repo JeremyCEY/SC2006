@@ -7,7 +7,7 @@ import SavedProperties from './SavedProperties'; // Import the new component
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('savedProperties');
-    const userId = 'abc@mail.com'
+    const userId = '65fe8c23cec43e4c08995198'
 
 
     {/* Sidebar Selection */}
