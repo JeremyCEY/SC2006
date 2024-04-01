@@ -1,11 +1,20 @@
+import React, { useState, useEffect } from 'react';
+
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 // import "./Css/Faq.css";
 
 function FAQ(){
-  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+      const token = localStorage.getItem('token');
+      setIsAuthenticated(token !== null);
+  }, []);
     return(
         <>
-        <LoggedOutNavbar />
+          {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>}
+
            <div class="faq-header">Frequently Asked Questions</div>
 
 <div class="faq-content">
