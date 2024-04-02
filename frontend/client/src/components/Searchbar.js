@@ -18,8 +18,8 @@ function Searchbar() {
     const handleSubmit = (values) => {
         console.log(values); // Here, you can handle form submission logic
         
-        // Navigate to explore page if needed
-        // window.location.href = '/explore';
+        // Navigate to explore page
+        window.location.href = '/explore';
     };
   
   
