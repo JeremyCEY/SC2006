@@ -142,4 +142,240 @@ export class TestDataService {
         
     }
 
+
+    async filterTestData(location: string[], property_type: string[],
+                        amenities: string[], budget: string[],
+                        rooms: string[]) {
+        console.log(location);
+        try {
+        
+            // Implement your filtering logic here
+          const priceRanges = [];
+          const selectedLocations = [];
+          const selectedRooms = [];
+        
+
+        
+
+        // // Filter location
+        if (location && location.length > 0) {
+            location.forEach(selectedLoc => {
+                switch (selectedLoc) {
+                    case 'sembawang':
+                        selectedLocations.push('SEMBAWANG');
+                        break;
+                    case 'woodlands':
+                        selectedLocations.push('WOODLANDS');
+                        break;
+                    case 'yishun':
+                        selectedLocations.push('YISHUN');
+                        break;
+                    case 'angmokio':
+                        selectedLocations.push('ANG MO KIO');
+                        break;
+                    case 'hougang':
+                        selectedLocations.push('HOUGANG');
+                        break;
+                    case 'punggol':
+                        selectedLocations.push('PUNGGOL');
+                        break;
+                    case 'sengkang':
+                        selectedLocations.push('SENG KANG');
+                        break;
+                    case 'serangoon':
+                        selectedLocations.push('SERANGOON');
+                        break;
+                    case 'bedok':
+                        selectedLocations.push('BEDOK');
+                        break;
+                    case 'pasirris':
+                        selectedLocations.push('PASIR RIS');
+                        break;
+                    case 'tampines':
+                        selectedLocations.push('TAMPINES');
+                        break;
+                    case 'bukitbatok':
+                        selectedLocations.push('BUKIT BATOK');
+                        break;
+                    case 'bukitpanjang':
+                        selectedLocations.push('BUKIT PANJANG');
+                        break;
+                    case 'choachukang':
+                        selectedLocations.push('CHOA CHU KANG');
+                        break;
+                    case 'clementi':
+                        selectedLocations.push('CLEMENTI');
+                        break;
+                    case 'jurongeast':
+                        selectedLocations.push('JURONG EAST');
+                        break;
+                    case 'jurongwest':
+                        selectedLocations.push('JURONG WEST');
+                        break;
+                    case 'tengah':
+                        selectedLocations.push('TENGAH');
+                        break;
+                    case 'bishan':
+                        selectedLocations.push('BISHAN');
+                        break;
+                    case 'bukitmerah':
+                        selectedLocations.push('BUKIT MERAH');
+                        break;
+                    case 'bukittimah':
+                        selectedLocations.push('BUKIT TIMAH');
+                        break;
+                    case 'centralarea':
+                        selectedLocations.push('CENTRAL AREA');
+                        break;
+                    case 'geylang':
+                        selectedLocations.push('GEYLANG');
+                        break;
+                    case 'kallangwhampoa':
+                        selectedLocations.push('KALLANG/WHAMPOA');
+                        break;
+                    case 'marineparade':
+                        selectedLocations.push('MARINE PARADE');
+                        break;
+                    case 'queenstown':
+                        selectedLocations.push('QUEENSTOWN');
+                        break;
+                    case 'toapayoh':
+                        selectedLocations.push('TOA PAYOH');
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+        //Filter property_type
+        //currently only HDB
+
+        //Filter amenities
+        //currently not in testdata object
+
+        // Define the budget ranges based on selected values
+         if (budget && budget.length > 0) {
+            budget.forEach(selectedBudget => {
+                switch (selectedBudget) {
+                    case '1':
+                        priceRanges.push({ $gte: 100000, $lte: 200000 });
+                        break;
+                    case '2':
+                        priceRanges.push({ $gte: 200000, $lte: 300000 });
+                        break;
+                    case '3':
+                        priceRanges.push({ $gte: 300000, $lte: 400000 });
+                        break;
+                    case '4':
+                        priceRanges.push({ $gte: 400000, $lte: 500000 });
+                        break;
+                    case '5':
+                        priceRanges.push({ $gte: 500000, $lte: 600000 });
+                        break;
+                    case '6':
+                        priceRanges.push({ $gte: 600000, $lte: 700000 });
+                        break;
+                    case '7':
+                        priceRanges.push({ $gte: 700000, $lte: 800000 });
+                        break;
+                    case '8':
+                        priceRanges.push({ $gte: 800000, $lte: 900000 });
+                        break;
+                    case '9':
+                        priceRanges.push({ $gte: 900000, $lte: 1000000 });
+                        break;
+                    case '10':
+                        priceRanges.push({ $gte: 1000000, $lte: 1100000 });
+                        break;
+                    case '11':
+                        priceRanges.push({ $gte: 1100000, $lte: 1200000 });
+                        break;
+                    case '12':
+                        priceRanges.push({ $gte: 1200000, $lte: 1300000 });
+                        break;
+                    case '13':
+                        priceRanges.push({ $gte: 1300000, $lte: 1400000 });
+                        break;
+                    case '14':
+                        priceRanges.push({ $gte: 1400000, $lte: 1500000 });
+                        break;
+                    // Add more cases for additional budget ranges as needed
+                    default:
+                        break;
+                }
+            });
+        }
+        
+        // // //Filter rooms
+        if (rooms && rooms.length > 0) {
+            rooms.forEach(selectedRoom => {
+                switch (selectedRoom) {
+                    case '1':
+                        selectedRooms.push('1 ROOM');
+                        break;
+                    case '2':
+                        selectedRooms.push('2 ROOM');
+                        break;
+                    case '3':
+                        selectedRooms.push('3 ROOM');
+                        break;
+                    case '4':
+                        selectedRooms.push('4 ROOM');
+                        break;
+                    case '5':
+                        selectedRooms.push('5 ROOM');
+                        break;
+                    case 'executive':
+                        selectedRooms.push('EXECUTIVE');
+                        break;
+                    case 'multi':
+                        selectedRooms.push('MULTI-GENERATION');
+                        break;
+                    // Add more cases for other room types as needed
+                    default:
+                        break;
+                }
+            });
+        }  
+
+          
+          
+        // // Define the filter object for the find query
+        const filter = {};
+
+        // // Include location filter only if the location array is not empty
+        if (selectedLocations.length > 0) {
+            filter['town'] = { $in: selectedLocations };
+        }
+        
+        if (priceRanges.length > 0) {
+            // Construct an array of price range objects
+            const priceRangeQueries = priceRanges.map(range => ({
+                resale_price: range
+            }));
+            // Use $or to match any of the price range conditions
+            filter['$or'] = priceRangeQueries;
+        }
+        
+        if (selectedRooms.length > 0) {
+            filter['flat_type'] = { $in: selectedRooms };
+        }
+        
+        // Apply filters to find data
+        const result = await this.testDataModel.find(filter);
+          
+          
+        return result.map((testData) => ({id:testData.id, month: testData.month,town: testData.town,
+            flat_type: testData.flat_type, block_no: testData.block_no,
+            street_name: testData.street_name, storey_range: testData.storey_range,
+            floor_area_sqm: testData.floor_area_sqm, flat_model: testData.flat_model,
+            lease_commense_date: testData.lease_commense_date, remaining_lease: testData.remaining_lease,
+            resale_price: testData.resale_price, latitude: testData.Latitude, longitude: testData.Longitude}));
+
+        } catch (error) {
+          // Handle errors appropriately
+          throw new Error('Error filtering data');
+        }
+      }
 }

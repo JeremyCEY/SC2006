@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { TestDataService } from './testData.service';
 import { TestData } from './testData.model';
@@ -105,4 +106,25 @@ export class TestDataController {
   async dbdeleteResaleDataById(@Param('id') id: string) {
     await this.testDataService.dbdeleteTestDataById(id);
   }
+
+  @Get('/testData/filter')
+  async filterResaleData(
+    @Query('location') location: string[],
+    @Query('propertyType') property_type: string[],
+    @Query('amenities') amenities: string[],
+    @Query('budget') budget: string[],
+    @Query('rooms') rooms: string[],
+  ) {
+  
+    const filteredData = await this.testDataService.filterTestData(
+          location,
+          property_type,
+          amenities,
+          budget,
+          rooms,
+      );
+      return filteredData;
+  }
+
+
 }

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
 
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Select } from 'antd';
@@ -15,11 +16,21 @@ function Searchbar() {
     };
     
 
-    const handleSubmit = (values) => {
+    const [responseData, setResponseData] = useState(null);
+
+    const handleSubmit = async (values) => {
         console.log(values); // Here, you can handle form submission logic
-        
+    
+        try {
+            const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
+            console.log(response.data);
+            // setResponseData(response.data); // Store the response data in state
+        } catch (error) {
+            console.error(error);
+        }
+    
         // Navigate to explore page
-        window.location.href = '/explore';
+        // window.location.href = '/explore';
     };
   
   
