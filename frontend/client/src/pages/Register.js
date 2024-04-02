@@ -6,7 +6,7 @@ import password from '../images/lock.png'
 import email from '../images/email.png'
 
 function Register(){
-    const [formData, setFormData] = useState({ username: '', email: '', password: '' , confirmPassword: ''});
+    const [formData, setFormData] = useState({ name: '', email: '', password: '' , confirmPassword: ''});
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -16,16 +16,44 @@ function Register(){
         }));
     };
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Implement the logic to submit the register credentials
-        // to your backend API
+            // Ensure no field is empty
+        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+            console.log('All fields are required');
+            return;
+        }
 
-        //ensure no field is empty
-        //ensure valid email
-        //ensure password and confirmPassword are the same
+        // Ensure valid email
+        // You can use a simple regex for email validation
+        const emailRegex = /\S+@\S+\.\S+/;
+        if (!emailRegex.test(formData.email)) {
+            console.log('Invalid email');
+            return;
+        }
 
-        console.log('Register form submitted:', formData);
+        // Ensure password and confirmPassword are the same
+        if (formData.password !== formData.confirmPassword) {
+            console.log('Passwords do not match');
+            return;
+        }
+
+        // Send a POST request to the /signup endpoint of your backend API
+        const response = await fetch('http://localhost:3000/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Register form submitted:', data);
+            window.location.href = '/login';
+        } else {
+            console.log('Register failed:', response.status);
+        }
     };
     
     
@@ -63,10 +91,10 @@ function Register(){
                                         border rounded w-[300px] py-2 px-3 
                                         text-gray-700 leading-tight 
                                         focus:outline-none focus:shadow-outline" 
-                                name="username" 
+                                name="name" 
                                 type="text" 
-                                placeholder="Username"
-                                value={formData.username}
+                                placeholder="Name"
+                                value={formData.name}
                                 onChange={handleInputChange}
                         />
                     </div>
@@ -119,7 +147,7 @@ function Register(){
                     <div className="pb-5">
                         <button 
                             type="submit"
-                            className="w-[350px] h-[50px] rounded-md bg-blue-800 text-white font-bold text-2xl">Register</button>
+                            className="w-[350px] h-[50px] rounded-md bg-blue-800 text-white font-bold text-2xl">Sign Up</button>
                     </div>
                 </form>
 

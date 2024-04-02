@@ -3,6 +3,8 @@ import axios from 'axios';
 import Map from '../components/Map'
 import Explore from "../components/Explore";
 import { Modal, Button, Input } from 'antd';
+import MapAutocomplete from '../components/MapAutocomplete';
+
 
 
 const FrequentLocations = ({ userId }) => {
@@ -11,10 +13,9 @@ const FrequentLocations = ({ userId }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
 
-    // for add freq
+    // for add freq ------------------------ maybe issue (location part)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [newLocation, setNewLocation] = useState('');
-    const [newLocationName, setNewLocationName] = useState('');
     const [isHovering, setIsHovering] = useState(false);
 
 
@@ -31,7 +32,7 @@ const FrequentLocations = ({ userId }) => {
         setIsAuthenticated(storedToken !== null);
         setToken(storedToken);
     }, []);
-
+ // working 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token && userId) {
@@ -62,7 +63,7 @@ const FrequentLocations = ({ userId }) => {
         setExpandedLocationId(expandedLocationId === id ? null : id);
     };
     
-    //for delete button
+    //for delete button ------------------------- working
     const handleDelete = async (location) => {
         const token = localStorage.getItem('token');
         try {
@@ -84,7 +85,7 @@ const FrequentLocations = ({ userId }) => {
             console.error('Error deleting address:', error);
         }
     };
-    //addFreq button
+    //addFreq button ----------------------------- issue starting here
     const handleAddFrequentAddress = async () => {
         const token = localStorage.getItem('token');
         try {
@@ -94,20 +95,24 @@ const FrequentLocations = ({ userId }) => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ location: newLocation, name: newLocationName })
+                body: JSON.stringify({ location: newLocation })
             });
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+            
             setIsModalVisible(false);
-            setNewLocation('');
-            setNewLocationName('');
+            setNewLocation();
 
         } catch (error) {
             console.error('Error adding new frequent address:', error);
         }
+    };
+
+    // autocomplete addfreq -------------------- added this after the maps
+    const handleSelectAddress = (address) => {
+        setNewLocation(address.location);
     };
 
 
@@ -120,13 +125,13 @@ const FrequentLocations = ({ userId }) => {
                     </div>
                     <button 
                         onClick={() => handleDelete(address)} 
-                        className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+                        className="text-white bg-red-500 hover:bg-red-700 font-bold py-1 px-1 rounded"
                     >
                         Delete
                     </button>
                     <button 
                         onClick={() => {/* EDit button, might delete */}} 
-                        className="text-white bg-blue-300 hover:bg-blue-500 font-bold py-2 px-4 rounded"
+                        className="text-white bg-blue-300 hover:bg-blue-500 font-bold py-1 px-3 rounded"
                     >
                         Edit
                     </button>
@@ -144,7 +149,7 @@ const FrequentLocations = ({ userId }) => {
                         border-color: #0050b3;
                     }
                 `} </style>
-
+  
             <Button
                 type="primary"
                 onMouseEnter={() => setIsHovering(true)}
@@ -160,21 +165,19 @@ const FrequentLocations = ({ userId }) => {
                 onClick={showModal}
             >
                 Add Frequent Address
+                
             </Button>
             <Modal
-                className="add-modal" 
+                className="add-modal"
                 title="Add New Frequent Address"
                 visible={isModalVisible}
                 onOk={handleAddFrequentAddress}
-                onCancel={handleCancel}
+                onCancel={() => setIsModalVisible(false)}
                 okText="Add"
             >
+                <MapAutocomplete onSelect={handleAddFrequentAddress} />      {/* might be the issue */}
                 
-                <Input
-                    placeholder="Enter Address"
-                    value={newLocation}
-                    onChange={(e) => setNewLocation(e.target.value)}
-                />
+                
             </Modal>
         </div>
     );
