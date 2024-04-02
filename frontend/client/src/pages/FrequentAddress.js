@@ -15,7 +15,7 @@ const FrequentLocations = ({ userId }) => {
 
     // for add freq ------------------------ maybe issue (location part)
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [newLocation, setNewLocation] = useState('');
+    const [selectedPlace, setSelectedPlace] = useState();
     const [isHovering, setIsHovering] = useState(false);
 
 
@@ -57,7 +57,7 @@ const FrequentLocations = ({ userId }) => {
                 console.error('Error fetching frequent addresses:', error);
             });
         }
-    }, [userId]);
+    }, [userId, selectedPlace, isModalVisible]);    //updates whenever a new location is added
 
     const toggleDetails = (id) => {
         setExpandedLocationId(expandedLocationId === id ? null : id);
@@ -95,7 +95,7 @@ const FrequentLocations = ({ userId }) => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ location: newLocation })
+                body: JSON.stringify({ location: selectedPlace})
             });
 
             if (!response.ok) {
@@ -103,18 +103,13 @@ const FrequentLocations = ({ userId }) => {
             }
             
             setIsModalVisible(false);
-            setNewLocation();
-
+            console.log(selectedPlace);
         } catch (error) {
             console.error('Error adding new frequent address:', error);
         }
     };
 
     // autocomplete addfreq -------------------- added this after the maps
-    const handleSelectAddress = (address) => {
-        setNewLocation(address.location);
-    };
-
 
     return (
         <div className="w-full max-w-2xl mx-auto">
@@ -171,13 +166,12 @@ const FrequentLocations = ({ userId }) => {
                 className="add-modal"
                 title="Add New Frequent Address"
                 visible={isModalVisible}
-                onOk={handleAddFrequentAddress}
+                onOk={() => handleAddFrequentAddress()}
                 onCancel={() => setIsModalVisible(false)}
                 okText="Add"
             >
-                <MapAutocomplete onSelect={handleAddFrequentAddress} />      {/* might be the issue */}
-                
-                
+                <MapAutocomplete
+                    setSelectedPlace={setSelectedPlace}/>      {/* might be the issue */}
             </Modal>
         </div>
     );
