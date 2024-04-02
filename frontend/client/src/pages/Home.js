@@ -2,6 +2,7 @@
 import homeImage from "../images/home.png"
 import Explore from "../components/Explore";
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 //  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
 
@@ -22,21 +23,28 @@ function Home(){
             });
     }, []);
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(token !== null);
+    }, []);
+
     return(
         <>
-            <LoggedOutNavbar/>
+            {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>}
             <div className="flex flex-col items-center">
-                <div className="relative pt-10 pb-10 ">
+                <div className="pt-10 pb-10 pl-5 pr-5">
                     <img src={homeImage} className="w-full" alt="Home"/>
                     
                     <div className="absolute 
-                                top-1/2 left-1/2 
-                                transform -translate-x-1/2 -translate-y-1/2 
-                                text-center text-white 
-                                bg-black bg-opacity-30 p-5 rounded">
-                        <h2 className="text-3xl font-bold pb-2">Disover through Amenities</h2>
-                        <p className="text-base">Your dream home location should cater to your lifestyle. Find homes near Gyms, Schools, Shopping Centres, new MRT lines, and more...</p>
-                    </div>
+                            top-[calc(50%+30px)] left-1/2
+                            transform -translate-x-1/2 -translate-y-1/2 
+                            text-center text-white 
+                            bg-black bg-opacity-30 p-5 rounded z-10">
+                    <h2 className="text-3xl font-bold pb-2">Discover through Amenities</h2>
+                    <p className="text-base">Your dream home location should cater to your lifestyle. Find homes near Gyms, Schools, Shopping Centres, new MRT lines, and more...</p>
+                </div>
                 </div>
                 
                 <div className="w-full p-4">

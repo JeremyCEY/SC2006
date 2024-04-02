@@ -1,90 +1,483 @@
 import React, { useState } from 'react';
 import mainLogo from '../images/logo.png';
-import './Css/Loggedout.css';
+// import './Css/Loggedout.css';
+
+import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Space, Avatar, Select } from 'antd';
+
+
 
 function LoggedOutNavbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
-
-
-    const toggleMenu = () => {
-        setIsMenuOpen(prevState => !prevState);
-    };
-    const toggleDropdown = () => {
-        setIsDropdownOpen(prevState => !prevState);
-    }
-    return (
-        <nav className="bg-white border-gray-200 dark:bg-gray-900">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src={mainLogo} className="h-8" alt="Logo" />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Sweet Home Finder</span>
-                </a>
-
-                <button
-                    onClick={toggleMenu}
-                    type="button"
-                    className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                    aria-controls="navbar-default"
-                    aria-expanded={isMenuOpen}>
+            
+        const handleMenuClick = (e) => {
+            console.log('click', e);
+            switch (e.key) {
+                case '1':
+                    window.location.href = '/login';
+                    break;
+                case '2':
+                    window.location.href = '/register';
+                    break;
+                case '3':
+                    window.location.href = '/FAQ';
+                    break;
+                default:
+                    break;
+                }
+            };
+            
+        const items = [
+                {
+                    label: 'Login',
+                    key: '1',
                     
-                    <span className="sr-only">Open main menu</span>
-                    
-                    <svg
-                        className="w-7 h-7"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d={isMenuOpen ? "M6 18 L18 6 M6 6 l12 12" : "M3 5 h18 M3 12 h18 M3 19 h18"}
-                        />
-                    </svg>
-                </button>
+                },
+                {
+                    label: 'Sign Up',
+                    key: '2',
+                },
+                {
+                    label: 'FAQ',
+                    key: '3',
+                },
 
-                <div className={`w-full md:block md:w-auto ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-default">
-                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                    
-                        <li>
-                        
-                        <button onClick={toggleDropdown} className="py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-blue-700 dark:hover:text-white md:dark:hover:bg-transparent">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A12.12 12.12 0 0112 15c3.159 0 6.12 1.284 8.879 2.804M12 12a5 5 0 100-10 5 5 0 000 10z" />
-                            </svg>
-                        </button> 
-                        <div id="dropdownNavbar" className={`z-10 ${isDropdownOpen ? 'block' : 'hidden'} font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}>
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+            ];
 
-                  <li>
-                    <a href="/login" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Login</a>
-                  </li>
+            const menuProps = {
+                items,
+                onClick: handleMenuClick,
+            };
 
-                  <li>
-                    <a href="/register" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Register</a>
-                  </li>
 
-                </ul>
-                <div class="py-1">
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                </div>
-            </div>
-        </li>
-        
-                    <li>
-                            <a href="/FAQ" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:
-                            dark:hover:text-white dark:hover:bg-blue-700 dark:hover:text-white md:dark:hover:bg-transparent">FAQ</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        
-    );
+        return (
+                <nav className="bg-white border-gray-200 
+                                                sticky shadow-lg
+                                                top-0 z-99999
+                                                h-[13vh]">
+                        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[13vh]">
+                                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+                                        <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
+                                </a>
+                                
+                                <div className="flex items-center
+                                                justify-between
+                                                border shadow-md
+                                                h-[60%]
+                                                w-[80%]
+                                                rounded-[100px]">
+                                    <div className="flex flex-col ml-10 w-[15%]">
+                                        <span className="font-semibold text-sm">Location</span>
+                                        <Select maxTagCount="responsive"
+                                            showSearch
+                                            variant='borderless'
+                                            suffixIcon={null}
+                                            
+                                            mode="multiple"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                            }
+                                            
+                                            // defaultValue="yishun"
+                                            options={[
+                                                {
+                                                    value: 'sembawang',
+                                                    label: 'Sembawang',
+                                                },
+                                                {
+                                                    value: 'woodlands',
+                                                    label: 'Woodlands',
+                                                },
+                                                {
+                                                    value: 'yishun',
+                                                    label: 'Yishun',
+                                                },
+                                                {
+                                                    value: 'angmokio',
+                                                    label: 'Ang Mo Kio',
+                                                },
+                                                {
+                                                    value: 'hougang',
+                                                    label: 'Hougang',
+                                                },
+                                                {
+                                                    value: 'punggol',
+                                                    label: 'Punggol',
+                                                },
+                                                {
+                                                    value: 'sengkang',
+                                                    label: 'Seng Kang',
+                                                },
+                                                {
+                                                    value: 'serangoon',
+                                                    label: 'Serangoon',
+                                                },
+                                                {
+                                                    value: 'bedok',
+                                                    label: 'Bedok',
+                                                },
+                                                {
+                                                    value: 'pasirris',
+                                                    label: 'Pasir Ris',
+                                                },
+                                                {
+                                                    value: 'tampines',
+                                                    label: 'Tampines',
+                                                },
+                                                {
+                                                    value: 'bukitbatok',
+                                                    label: 'Bukit Batok',
+                                                },
+                                                {
+                                                    value: 'bukitpanjang',
+                                                    label: 'Bukit Panjang',
+                                                },
+                                                {
+                                                    value: 'choachukang',
+                                                    label: 'Choa Chu Kang',
+                                                },
+                                                {
+                                                    value: 'clementi',
+                                                    label: 'Clementi',
+                                                },
+                                                {
+                                                    value: 'jurongeast',
+                                                    label: 'Jurong East',
+                                                },
+                                                {
+                                                    value: 'jurongwest',
+                                                    label: 'Jurong West',
+                                                },
+                                                {
+                                                    value: 'tengah',
+                                                    label: 'Tengah',
+                                                },
+                                                {
+                                                    value: 'bishan',
+                                                    label: 'Bishan',
+                                                },
+                                                {
+                                                    value: 'bukitmerah',
+                                                    label: 'Bukit Merah',
+                                                },
+                                                {
+                                                    value: 'bukittimah',
+                                                    label: 'Bukit Timah',
+                                                },
+                                                {
+                                                    value: 'centralarea',
+                                                    label: 'Central Area',
+                                                },
+                                                {
+                                                    value: 'geylang',
+                                                    label: 'Geylang',
+                                                },
+                                                {
+                                                    value: 'kallangwhampoa',
+                                                    label: 'Kallang/Whampoa',
+                                                },
+                                                {
+                                                    value: 'marineparade',
+                                                    label: 'Marine Parade',
+                                                },
+                                                {
+                                                    value: 'queenstown',
+                                                    label: 'Queenstown',
+                                                },
+                                                {
+                                                    value: 'toapayoh',
+                                                    label: 'Toa Payoh',
+                                                },
+                                            ]}
+                                        />
+                                    </div>
+                                    
+                                    <div className="flex flex-col w-[15%]">
+                                        <span className="font-semibold text-sm">Property Type</span>
+                                        <Select maxTagCount="responsive"
+                                            mode="multiple"                                      
+                                            placeholder=""
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                            }
+                                            variant='borderless'
+                                            suffixIcon={null}
+                                            options={[
+                                                {
+                                                    value: 'hdb',
+                                                    label: 'HDB',
+                                                },
+                                                {
+                                                    value: 'condo',
+                                                    label: 'Condo',
+                                                },
+                                                {
+                                                    value: 'landed',
+                                                    label: 'Landed',
+                                                },
+                                                {
+                                                    value: 'strata_detached',
+                                                    label: 'Strata Detached',
+                                                },
+                                                {
+                                                    value: 'strata_semidetached',
+                                                    label: 'Strata Semidetached',
+                                                },
+                                                {
+                                                    value: 'strata_terrace',
+                                                    label: 'Strata Terrace',
+                                                },
+                                                {
+                                                    value: 'detached',
+                                                    label: 'Detached',
+                                                },
+                                                {
+                                                    value: 'semi_detached',
+                                                    label: 'Semi-detached',
+                                                },
+                                                {
+                                                    value: 'terrace',
+                                                    label: 'Terrace',
+                                                },
+                                                {
+                                                    value: 'apartment',
+                                                    label: 'Apartment',
+                                                },
+                                                {
+                                                    value: 'condominium',
+                                                    label: 'Condominium',
+                                                },
+                                                {
+                                                    value: 'executive_condominium',
+                                                    label: 'Executive Condominium',
+                                                }
+                                            ]}
+                                        />
+                                    </div>
+                                    
+                                    <div className="flex flex-col w-[15%]">
+                                    <span className="font-semibold text-sm">Amenities</span>
+                                    <Select maxTagCount="responsive"                                
+                                            mode="multiple"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                            }
+                                            variant='borderless'
+                                            suffixIcon={null}
+                                            options={[
+                                                {
+                                                    value: 'communitycentre',
+                                                    label: 'Community Centre',
+                                                },
+                                                {
+                                                    value: 'supermarket',
+                                                    label: 'Supermarket',
+                                                },
+                                                {
+                                                    value: 'mall',
+                                                    label: 'Mall',
+                                                },
+                                                {
+                                                    value: 'secondaryschool',
+                                                    label: 'Secondary School',
+                                                },
+                                                {
+                                                    value: 'primaryschool',
+                                                    label: 'Primary School',
+                                                },
+                                                {
+                                                    value: 'eldercare',
+                                                    label: 'Elder Care',
+                                                },
+                                                {
+                                                    value: 'studentcare',
+                                                    label: 'Student Care',
+                                                },
+                                                {
+                                                    value: 'mrt',
+                                                    label: 'MRT',
+                                                },
+                                                {
+                                                    value: 'pool',
+                                                    label: 'Pool',
+                                                },
+                                                {
+                                                    value: 'basketballcourt',
+                                                    label: 'Basketball Court',
+                                                },
+                                                {
+                                                    value: 'badmintoncourt',
+                                                    label: 'Badminton Court',
+                                                },
+                                                {
+                                                    value: 'park',
+                                                    label: 'Park',
+                                                },
+                                                {
+                                                    value: 'gym',
+                                                    label: 'Gym',
+                                                },
+                                                {
+                                                    value: 'coffeeshophawkercentre',
+                                                    label: 'Coffee shop/Hawker Centre',
+                                                },
+                                                {
+                                                    value: 'restaurant',
+                                                    label: 'Restaurant',
+                                                },
+                                            ]}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col w-[15%]">
+                                    <span className="font-semibold text-sm">Budget</span>
+                                    <Select maxTagCount="responsive"
+                                            mode="multiple"                                   
+                                            placeholder=""
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            // filterSort={(optionA, optionB) =>
+                                            // (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                            // }
+                                            variant='borderless'
+                                            suffixIcon={null}
+                                            options={[
+                                            {
+                                                value: '1',
+                                                label: '100K-200K',
+                                            },
+                                            {
+                                                value: '2',
+                                                label: '200K-300K',
+                                            },
+                                            {
+                                                value: '3',
+                                                label: '300K-400K',
+                                            },
+                                            {
+                                                value: '4',
+                                                label: '400K-500K',
+                                            },
+                                            {
+                                                value: '5',
+                                                label: '500K-600K',
+                                            },
+                                            {
+                                                value: '6',
+                                                label: '600K-700K',
+                                            },
+                                            {
+                                                value: '7',
+                                                label: '700K-800K',
+                                            },
+                                            {
+                                                value: '8',
+                                                label: '800K-900K',
+                                            },
+                                            {
+                                                value: '9',
+                                                label: '900K-1M',
+                                            },
+                                            {
+                                                value: '10',
+                                                label: '1M-1.1M',
+                                            },
+                                            {
+                                                value: '11',
+                                                label: '1.1M-1.2M',
+                                            },
+                                            {
+                                                value: '12',
+                                                label: '1.2M-1.3M',
+                                            },
+                                            {
+                                                value: '13',
+                                                label: '1.3M-1.4M',
+                                            },
+                                            {
+                                                value: '14',
+                                                label: '1.4M-1.5M',
+                                            },
+                                            ]}
+                                        />
+                                    </div>
+                                    
+                                    <div className="flex flex-col w-[15%]">
+                                    <span className="font-semibold text-sm">Rooms</span>
+                                    <Select maxTagCount="responsive"
+                                            mode="multiple"                                    
+                                            placeholder=""
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                            filterSort={(optionA, optionB) =>
+                                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                            }
+                                            variant='borderless'
+                                            suffixIcon={null}
+                                            options={[
+                                            {
+                                                value: '1',
+                                                label: '1 Room',
+                                            },
+                                            {
+                                                value: '2',
+                                                label: '2 Room',
+                                            },
+                                            {
+                                                value: '3',
+                                                label: '3 Room',
+                                            },
+                                            {
+                                                value: '4',
+                                                label: '4 Room',
+                                            },
+                                            {
+                                                value: '5',
+                                                label: '5 Room',
+                                            },
+                                            {
+                                                value: 'executive',
+                                                label: 'Executive',
+                                            },
+                                            {
+                                                value: 'multi',
+                                                label: 'Multi-generation',
+                                            },
+                                            ]}
+                                        />
+                                    </div>
+
+                                    <div className="mr-5">
+                                        <Button size="large" 
+                                                shape="circle" 
+                                                className="border-none shadow-none" 
+                                                icon={<SearchOutlined style={{ fontSize: '25px' }}/>}/>     
+                                    </div>
+                                    
+                                </div>
+
+
+                                <Dropdown menu={menuProps} className='w-[10%]
+                                                                    lg:w-[8%] 
+                                                                    h-[60%] 
+                                                                    
+                                                                    rounded-[100px] shadow-md'>
+                                        <Button>
+                                                <Space>
+                                                <Avatar size="large" className="text-blue-700" icon={<UserOutlined/>} />
+                                                <DownOutlined />
+                                                </Space>
+                                        </Button>
+                                </Dropdown>
+                        </div>                    
+                </nav>
+                
+        );
 }
 
 export default LoggedOutNavbar;

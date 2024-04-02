@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
+
 
 import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
 import password from '../images/lock.png'
 
+import axios from 'axios';
+
 function Login(){
+    const navigate = useNavigate();
+    
     const [formData, setFormData] = useState({ username: '', password: '' });
 
     const handleInputChange = (event) => {
@@ -15,12 +21,48 @@ function Login(){
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Implement the logic to submit the login credentials
-        // to your backend API
-        console.log('Login form submitted:', formData);
+    
+        try {
+            const response = await axios.post('http://localhost:3000/auth/login', {
+                email: formData.username,
+                password: formData.password,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            const { token } = response.data;
+            console.log('Received token:', token);
+            localStorage.setItem('token', token);
+    
+            // Redirect to another page, update state, etc. based on your application flow
+            window.location.href = '/dashboard';
+
+        } catch (error) {
+            console.error('Login error:', error);
+            if (error.response) {
+                console.error('Server responded with status:', error.response.status);
+                if (error.response.status === 401) {
+                    alert('Invalid email or password');
+                } else {
+                    alert('An error occurred. Please try again later.');
+                }
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error('No response received:', error.request);
+                alert('No response received. Please check your internet connection.');
+            } else {
+                // Something happened in setting up the request that triggered an error
+                console.error('Request setup error:', error.message);
+                alert('An error occurred. Please try again later.');
+            }
+        }
     };
+
+
     
     return(
         <>
@@ -59,7 +101,7 @@ function Login(){
                                         focus:outline-none focus:shadow-outline" 
                                 name="username" 
                                 type="text" 
-                                placeholder="Username/Email Address"
+                                placeholder="Email Address"
                                 value={formData.username}
                                 onChange={handleInputChange}
                         />

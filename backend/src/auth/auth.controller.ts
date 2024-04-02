@@ -13,7 +13,7 @@ export class AuthController {
         return this.authService.signUp(SignUpDto);
     }
 
-    @Get('/login')
+    @Post('/login')
     login(@Body() LoginDto: LoginDto): Promise <{token: string}> {
         return this.authService.login(LoginDto);
     }
