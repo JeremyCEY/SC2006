@@ -12,8 +12,7 @@ const center = {
     lng: 103.8198
 };
 
-function MapAutocomplete() {
-    const [selectedPlace, setSelectedPlace] = useState(null);
+function MapAutocomplete({setSelectedPlace}) {
     const [markers, setMarkers] = useState([]);
     const autocompleteRef = useRef(null);
     const mapRef = useRef(null);
@@ -23,9 +22,13 @@ function MapAutocomplete() {
         libraries: ['places']
     });
 
+
+
     const onPlaceChanged = () => {
         const place = autocompleteRef.current.getPlace();
         if (place && place.geometry && place.geometry.location && mapRef.current) {
+            setSelectedPlace(place.formatted_address);
+
             // Remove previous markers
             markers.forEach(marker => marker.setMap(null));
 
