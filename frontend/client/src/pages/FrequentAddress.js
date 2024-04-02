@@ -2,13 +2,29 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from '../components/Map'
 import Explore from "../components/Explore";
+import { Modal, Button, Input } from 'antd';
+
 
 const FrequentLocations = ({ userId }) => {
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [expandedLocationId, setExpandedLocationId] = useState(null);
-
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
+
+    // for add freq
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [newLocation, setNewLocation] = useState('');
+    const [newLocationName, setNewLocationName] = useState('');
+    const [isHovering, setIsHovering] = useState(false);
+
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -45,7 +61,8 @@ const FrequentLocations = ({ userId }) => {
     const toggleDetails = (id) => {
         setExpandedLocationId(expandedLocationId === id ? null : id);
     };
-
+    
+    //for delete button
     const handleDelete = async (location) => {
         const token = localStorage.getItem('token');
         try {
@@ -67,14 +84,39 @@ const FrequentLocations = ({ userId }) => {
             console.error('Error deleting address:', error);
         }
     };
+    //addFreq button
+    const handleAddFrequentAddress = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:3000/frequentaddress/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ location: newLocation, name: newLocationName })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            setIsModalVisible(false);
+            setNewLocation('');
+            setNewLocationName('');
+
+        } catch (error) {
+            console.error('Error adding new frequent address:', error);
+        }
+    };
 
 
     return (
-        <div className="w-full">
+        <div className="w-full max-w-2xl mx-auto">
             {frequentAddresses.map((address, index) => (
-                <div key={index} className="border-b border-gray-300 p-4 w-full flex justify-between items-center">
-                    <div className="cursor-pointer text-blue-600 font-semibold" onClick={() => {/* click to show addr, same as UI mock */}}>
-                        {address}
+                <div key={index} className="flex items-center justify-between p-4 border-b border-gray-300">
+                    <div className="flex-grow">
+                        <p className="text-lg font-semibold text-blue-600">{address}</p>
                     </div>
                     <button 
                         onClick={() => handleDelete(address)} 
@@ -90,12 +132,50 @@ const FrequentLocations = ({ userId }) => {
                     </button>
                 </div>
             ))}
-            <button 
-                onClick={() => {}} 
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            <style>
+                {`
+                    .add-modal .ant-btn-primary {
+                        background-color: #1890ff;
+                        border-color: #1890ff;
+                    }
+
+                    .add-modal .ant-btn-primary:hover {
+                        background-color: #0050b3;
+                        border-color: #0050b3;
+                    }
+                `} </style>
+
+            <Button
+                type="primary"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                style={{
+                    
+                    backgroundColor: isHovering ? '#0050b3' : '#1890ff', // blue button 
+                    borderColor: isHovering ? '#0050b3' : '#1890ff', 
+                    color: '#ffffff', 
+                    marginTop: '10px'
+                    
+                }}
+                onClick={showModal}
             >
-                + Add Location
-            </button>
+                Add Frequent Address
+            </Button>
+            <Modal
+                className="add-modal" 
+                title="Add New Frequent Address"
+                visible={isModalVisible}
+                onOk={handleAddFrequentAddress}
+                onCancel={handleCancel}
+                okText="Add"
+            >
+                
+                <Input
+                    placeholder="Enter Address"
+                    value={newLocation}
+                    onChange={(e) => setNewLocation(e.target.value)}
+                />
+            </Modal>
         </div>
     );
 };
