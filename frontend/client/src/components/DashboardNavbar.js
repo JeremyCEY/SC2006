@@ -4,8 +4,6 @@ import mainLogo from '../images/logo.png';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Space, Avatar } from 'antd';
 
-import Searchbar from './Searchbar';
-
 function LoggedInNavbar() {
 
     const handleMenuClick = (e) => {
@@ -62,7 +60,7 @@ function LoggedInNavbar() {
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
                 </a>
-                <Searchbar/>
+
 
                 <Dropdown menu={menuProps} className='w-[7vw] h-[4vw]
                                                             border rounded-[100px] shadow-md'>

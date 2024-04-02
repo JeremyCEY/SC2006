@@ -6,12 +6,12 @@ import mrtSvgURL from "../images/train_FILL0_wght400_GRAD0_opsz24.svg"
 import locationSvgURL from "../images/LocationBlank.svg"
 
 const mapContainerStyle = {
-    width: '80%', // Adjusted for better layout
-    height: '600px'
+    width: '100vw', // Adjusted for better layout
+    height: '87vh'
 };
 
 const center = {
-    lat: 1.290270,
+    lat: 1.350270,
     lng: 103.8198
 };
 
@@ -61,7 +61,7 @@ function Map() {
     return isLoaded ? (
         <GoogleMap
             mapContainerStyle={mapContainerStyle}
-            zoom={11} // Adjusted zoom for better visibility
+            zoom={12} // Adjusted zoom for better visibility
             center={center}
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}

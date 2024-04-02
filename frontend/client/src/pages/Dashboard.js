@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import LoggedInNavbar from '../components/LoggedInNavbar';
+import LoggedInNavbar from '../components/DashboardNavbar';
 import SavedProperties from './SavedProperties'; // Import the new component
 import Settings from '../components/Settings';
 

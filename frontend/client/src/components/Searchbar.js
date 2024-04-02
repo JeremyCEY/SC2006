@@ -1,12 +1,17 @@
 import SavedProperties from "../pages/SavedProperties";
 
 
-import { DownOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Space, Avatar, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Select } from 'antd';
 
 
 function Searchbar() {
-  return (
+    const handleClick = () => {
+        window.location.href = '/explore';
+    };
+  
+  
+    return (
     <div className="flex items-center
                                                 justify-between
                                                 border shadow-md
@@ -25,9 +30,7 @@ function Searchbar() {
                                             filterOption={(input, option) => (option?.label ?? '').includes(input)}
                                             filterSort={(optionA, optionB) =>
                                             (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                            }
-                                            
-                                            // defaultValue="yishun"
+                                            }                                           
                                             options={[
                                                 {
                                                     value: 'sembawang',
@@ -404,6 +407,7 @@ function Searchbar() {
                                         <Button size="large" 
                                                 shape="circle" 
                                                 className="border-none shadow-none" 
+                                                onClick={handleClick}
                                                 icon={<SearchOutlined style={{ fontSize: '25px' }}/>}/>     
                                     </div>
                                     
