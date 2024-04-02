@@ -46,6 +46,29 @@ const FrequentLocations = ({ userId }) => {
         setExpandedLocationId(expandedLocationId === id ? null : id);
     };
 
+    const handleDelete = async (location) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:3000/frequentaddress/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ location }) 
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            setFrequentAddresses(frequentAddresses.filter(item => item !== location));
+        } catch (error) {
+            console.error('Error deleting address:', error);
+        }
+    };
+
+
     return (
         <div className="w-full">
             {frequentAddresses.map((address, index) => (
@@ -54,13 +77,13 @@ const FrequentLocations = ({ userId }) => {
                         {address}
                     </div>
                     <button 
-                        onClick={() => {/* Delete button */}} 
+                        onClick={() => handleDelete(address)} 
                         className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
                     >
                         Delete
                     </button>
                     <button 
-                        onClick={() => {/* EDit button */}} 
+                        onClick={() => {/* EDit button, might delete */}} 
                         className="text-white bg-blue-300 hover:bg-blue-500 font-bold py-2 px-4 rounded"
                     >
                         Edit
@@ -68,7 +91,7 @@ const FrequentLocations = ({ userId }) => {
                 </div>
             ))}
             <button 
-                onClick={() => {/* Button for add Location, does nothing now */}} 
+                onClick={() => {}} 
                 className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
                 + Add Location

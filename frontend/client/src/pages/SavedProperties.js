@@ -66,7 +66,6 @@ const SavedProperties = ({ userId }) => {
             })
             .then(data => {
                 console.log('Raw data:', data);
-                // Map over each ID and fetch details
                 Promise.all(data.map(id => {
                     return fetch(`http://localhost:3000/resale/${id}`, {
                         method: 'GET',
@@ -96,6 +95,28 @@ const SavedProperties = ({ userId }) => {
     }, [userId]);
 
     //retrieve object of resale based on id
+
+
+    const handleDelete = async (propertyId) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:3000/bookmark/${userId}/${propertyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            setSavedProperties(savedProperties.filter(property => property._id !== propertyId));
+        } catch (error) {
+            console.error('Error deleting property:', error);
+        }
+    };
     
 
     return (
@@ -111,7 +132,7 @@ const SavedProperties = ({ userId }) => {
                             {property.town}
                         </div>
                         <button 
-                            onClick={() => {/* Button to delete, does nothing for now */}} 
+                            onClick={() => handleDelete(property._id)} 
                             className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
                         >
                             Delete
