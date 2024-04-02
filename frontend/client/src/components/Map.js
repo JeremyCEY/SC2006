@@ -66,13 +66,14 @@ function Map() {
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-            <MarkerClustererF>
-                {clusterer => (
+            {/* <MarkerClustererF> */}
+                {
+                // clusterer => (
                     resales.map(resale => (
                         <Marker
                             key={resale.id}
-                            position={{ lat: resale.latitude, lng: resale.longitude }}
-                            clusterer={clusterer}
+                            position={{ lat: parseFloat(resale.latitude), lng: parseFloat(resale.longitude) }}
+                            // clusterer={clusterer}
                             onClick={() => handleMarkerClick(resale)}
                         >
 
@@ -86,8 +87,10 @@ function Map() {
                             )}
 
                         </Marker>
-                    )))}
-            </MarkerClustererF>
+                    ))
+                    // )
+                    }
+            {/* </MarkerClustererF> */}
         </GoogleMap>
     ) : <></>;
 }

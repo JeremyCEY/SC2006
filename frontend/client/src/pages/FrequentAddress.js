@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from '../components/Map'
-import Explore from "../components/Explore";
+import Explore from "../pages/Explore";
 import { Modal, Button, Input } from 'antd';
 import MapAutocomplete from '../components/MapAutocomplete';
 
