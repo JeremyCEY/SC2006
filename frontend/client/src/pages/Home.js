@@ -1,6 +1,6 @@
 //Home.js
 import homeImage from "../images/home.png"
-import Explore from "../components/Explore";
+import Explore from "./Explore";
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 //  import "./Css/Explore.css";

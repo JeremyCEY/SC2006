@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from '../components/Map'
 //import Test from '../components/Navbar'
-import Explore from "../components/Explore";
+import Explore from "./Explore";
 
 
 const SavedProperties = ({ userId }) => {

@@ -1,7 +1,7 @@
 //Explore.js
 import React from 'react';
 import LoggedInNavbar from '../components/LoggedInNavbar';
-import Map from './Map';
+import Map from '../components/Map';
 
 function Explore(){
     return(

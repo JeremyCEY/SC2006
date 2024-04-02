@@ -15,6 +15,7 @@ import FAQ from './pages/FAQ'
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import ForgetPassword from './pages/ForgetPassword';
+import Explore from './pages/Explore';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          <Route path="/FAQ" element={<FAQ />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
       </Router>
     </>

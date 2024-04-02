@@ -2,10 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; // Import the new component
+import Settings from '../components/Settings';
 
 import { jwtDecode } from 'jwt-decode';
-
-
 
 import { Menu, Layout } from 'antd'
 
@@ -41,7 +40,7 @@ function Dashboard() {
             case 'frequentlyVisited':
                 return <div>Frequently Visited</div>;
             case 'settings':
-                return <div>Settings content</div>;
+                return <Settings userId={userId} />;
             default:
                 return <div>Select a section</div>;
         }
