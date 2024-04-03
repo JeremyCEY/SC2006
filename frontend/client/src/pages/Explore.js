@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Layout, Menu, Button, ConfigProvider, List } from 'antd';
-import { LeftOutlined, RightOutlined, FilterOutlined } from '@ant-design/icons';
+import { Layout, Menu, Button, ConfigProvider, List, Select } from 'antd';
+import { LeftOutlined, RightOutlined, FilterOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
@@ -42,9 +42,34 @@ function Explore(){
     const [selectedResale, setSelectedResale] = useState(null);
 
     const handleDivClick = (resale) => {
-        console.log('Clicked:', resale);
+        // console.log('Clicked:', resale);
         setSelectedResale(resale);
     };
+
+
+    const [sortOption, setSortOption] = useState(null);
+
+    const [sortedData, setSortedData] = useState([]);
+
+    useEffect(() => {
+        let sorted = [...responseData];
+        if (sortOption) {
+            const [field, direction] = sortOption.split(' ');
+            sorted.sort((a, b) => {
+                if (field === 'price' && direction === 'up') {
+                    return a.resale_price - b.resale_price;
+                } else if (field === 'price' && direction === 'down') {
+                    return b.resale_price - a.resale_price;
+                } else if (field === 'size' && direction === 'up') {
+                    return a.floor_area_sqm - b.floor_area_sqm;
+                } else if (field === 'size' && direction === 'down') {
+                    return b.floor_area_sqm - a.floor_area_sqm;
+                }
+                return 0; // Return 0 if no valid sorting condition is met
+            });
+        }
+        setSortedData(sorted);
+    }, [responseData, sortOption]);
 
     return(
         <>
@@ -81,25 +106,38 @@ function Explore(){
                     <div className="justify-between flex mt-5 mb-5">
                         <span className="font-bold text-3xl ml-10" >Search Results</span>
                         
-                        <Button type="primary"
-                                icon={<FilterOutlined/>}
-                                className="bg-white border-none text-black shadow-md mr-10"
+
+                        <Select
+                            suffixIcon={<FilterOutlined />}
+                            defaultValue="Sort By"
+                            className="bg-white border-none text-black shadow-md mr-10"
+                            onChange={(value) => {
+                                setSortOption(value);
+                            }}
+
                         >
-                            Filters
-                        </Button>
+                            <Select.Option  value="price up">Price <ArrowUpOutlined/></Select.Option>
+                            <Select.Option  value="price down">Price <ArrowDownOutlined/></Select.Option>
+
+                            <Select.Option value="size up">Size <ArrowUpOutlined/></Select.Option>
+                            <Select.Option value="size down">Size <ArrowDownOutlined/></Select.Option>
+
+                        </Select>
                     </div>
                     
        
                     
                     
                     <div className='h-[77vh] overflow-auto justify-center flex'>
-                        <List className='ml-3'
-                            grid={{ gutter: 16, column: 2 }} // Adjust column count as needed
+                        <List className='ml-4'
+                            grid={{ column: 2 }} // Adjust column count as needed
                             
-                            dataSource={responseData}
+                            // dataSource={responseData}
+                            dataSource={sortedData}
+
                             renderItem={resale => (
                                 <List.Item>
-                                    <Button className=" h-[20vh] w-[15vw] p-[20px] shadow-md bg-gray-50"
+                                    <Button className=" h-[20vh] w-[15vw]  shadow-md bg-gray-50"
                                         key={resale.id}
                                         onClick={() => handleDivClick(resale)} // Add this line
 
@@ -111,7 +149,7 @@ function Explore(){
                                         <ul className="residence-details">
                                             <li>Type: {resale.flat_type}</li>
                                             <li>Street: {resale.street_name}</li>
-                                            <li>Floor area: {resale.floor_area_sqm} sqm</li>
+                                            <li>Floor Area: {resale.floor_area_sqm} sqm</li>
                                         </ul>
                                     </Button>
                                 </List.Item>

@@ -23,16 +23,16 @@ function Searchbar({ initialValues }) {
 
     const [responseData, setResponseData] = useState(null);
     const [formValues, setFormValues] = useState(null);
-    useEffect(() => {
-        console.log('Initial values:', mergedInitialValues);
-    }, [mergedInitialValues]);
+    // useEffect(() => {
+    //     console.log('Initial values:', mergedInitialValues);
+    // }, [mergedInitialValues]);
 
     const handleSubmit = async (values) => {
         console.log(values); // Here, you can handle form submission logic
     
         try {
             const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
-            console.log(response.data);
+            // console.log(response.data);
             // setResponseData(response.data); // Store the response data in state
             // setFormValues(values); // Store the form values in state
             navigate('/explore', { state: { responseData: response.data, formValues: values } });
