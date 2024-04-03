@@ -84,7 +84,7 @@ function Explore(){
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                // console.log('response:', response);
+                console.log('response:', response);
                 return response.json();
             })
             .then(data => {

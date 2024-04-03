@@ -42,15 +42,17 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses }) {
                     backgroundColor: 'white',
                 }}
             >
-                {/* Render Frequently Visited Locations under the user account */}
-                <div>
-                {frequentAddresses.map((address, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border-b border-gray-300">
-                        <div className="flex-grow">
-                            <p className="text-lg font-semibold text-blue-600">{address}</p>
-                        </div>
+                <div className="flex flex-col">
+                    <span className="font-semibold text-2xl">Routing to Frequent Locations</span>
+                    <div className="overflow-auto h-[40vh]">
+                    {frequentAddresses.map((address, index) => (
+                        <Button key={index} className="flex items-center justify-between p-4 border-b border-gray-300">
+                            <div className="flex-grow">
+                                <p className="text-lg font-semibold text-blue-600">{address}</p>
+                            </div>
+                        </Button>
+                    ))}
                     </div>
-                ))}
                 </div>
             </Sider>
                 
