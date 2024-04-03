@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { Sign } from 'crypto';
@@ -17,4 +17,10 @@ export class AuthController {
     login(@Body() LoginDto: LoginDto): Promise <{token: string}> {
         return this.authService.login(LoginDto);
     }
+
+    @Patch('/forgetpassword')
+    async forgetPassword(@Body ('email') email: string, @Body ('answer')answer: string): Promise<string>{
+        return this.authService.forgetPassword(email, answer)
+    }
+
 }
