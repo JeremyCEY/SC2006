@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
-// import "./Css/Faq.css";
+import "../components/Css/Faq.css";
 
 function FAQ(){
   const [isAuthenticated, setIsAuthenticated] = useState(false);

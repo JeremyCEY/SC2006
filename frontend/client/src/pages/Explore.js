@@ -86,6 +86,23 @@ function Explore(){
                             Menu Item 2
                         </Menu.Item>
                     </Menu> */}
+                    <div className="flex flex-wrap justify-center gap-4">
+                        {responseData.map((resale, index) => (
+                            <div key={resale.id}
+                                // className= "w-[30%], p-[20px], shadow-md, m-[10px]"
+                                style={{ width: '30%', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', margin: '10px' }}>
+                                <div className="header">
+                                <div className="residence-name">{resale.town}</div>
+                                <div className="price-range">${resale.resale_price.toLocaleString()}</div>
+                                </div>
+                                <ul className="residence-details">
+                                <li>Type: {resale.flat_type}</li>
+                                <li>Street:  {resale.street_name}</li>
+                                <li>Floor area:  {resale.floor_area_sqm} sqm</li>
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
                     
                 </Sider>
                 <ConfigProvider wave={{ disabled: true }}>
