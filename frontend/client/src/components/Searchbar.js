@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 
@@ -6,17 +8,24 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Select } from 'antd';
 
 
-function Searchbar() {
-    const initialValues = {
+function Searchbar({ initialValues }) {
+    // Set default values if initialValues is empty
+    const defaultInitialValues = {
         location: [],
         propertyType: [],
         amenities: [],
         budget: [],
         rooms: []
     };
+    const mergedInitialValues = { ...defaultInitialValues, ...initialValues };
     
+    const navigate = useNavigate();
 
     const [responseData, setResponseData] = useState(null);
+    const [formValues, setFormValues] = useState(null);
+    useEffect(() => {
+        console.log('Initial values:', mergedInitialValues);
+    }, [mergedInitialValues]);
 
     const handleSubmit = async (values) => {
         console.log(values); // Here, you can handle form submission logic
@@ -25,17 +34,21 @@ function Searchbar() {
             const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
             console.log(response.data);
             // setResponseData(response.data); // Store the response data in state
+            // setFormValues(values); // Store the form values in state
+            navigate('/explore', { state: { responseData: response.data, formValues: values } });
         } catch (error) {
             console.error(error);
         }
-    
+        
+
+
         // Navigate to explore page
         // window.location.href = '/explore';
     };
   
   
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit}>
             {({ values, setFieldValue }) => (
                 <Form className='w-[80%] h-[50%]'>
                     <div className="
@@ -62,6 +75,8 @@ function Searchbar() {
                                         setFieldValue('location', selectedValues);
                                         // console.log({ ...values, location: selectedValues });
                                     }}
+                                    defaultValue={values.location} // Set defaultValue based on values.location
+
                                     options={[
                                     {
                                         value: 'sembawang',
@@ -192,6 +207,8 @@ function Searchbar() {
                                     setFieldValue('propertyType', selectedValues);
                                     // console.log({ ...values, propertyType: selectedValues });
                                 }}
+                                defaultValue={values.propertyType} // Set defaultValue based on values.location
+
                                 options={[
                                     {
                                         value: 'hdb',
@@ -261,6 +278,8 @@ function Searchbar() {
                                     setFieldValue('amenities', selectedValues);
                                     // console.log({ ...values, amenities: selectedValues });
                                 }}
+                                defaultValue={values.amenities} // Set defaultValue based on values.location
+
                                 options={[
                                     {
                                         value: 'communitycentre',
@@ -343,6 +362,8 @@ function Searchbar() {
                                         setFieldValue('budget', selectedValues);
                                         // console.log({ ...values, budget: selectedValues });
                                     }}
+                                    defaultValue={values.budget} // Set defaultValue based on values.location
+
                                     options={[
                                     {
                                         value: '1',
@@ -421,6 +442,8 @@ function Searchbar() {
                                         setFieldValue('rooms', selectedValues);
                                         // console.log({ ...values, rooms: selectedValues });
                                     }}
+                                    defaultValue={values.rooms} // Set defaultValue based on values.location
+
                                     options={[
                                     {
                                         value: '1',

@@ -1,6 +1,7 @@
 //Explore.js
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Layout, Menu, Button, ConfigProvider } from 'antd';
 import { LeftOutlined, RightOutlined, FilterOutlined } from '@ant-design/icons';
@@ -32,15 +33,23 @@ function Explore(){
     const toggleSidebar = () => {
         setCollapsed(!collapsed);
     };
+    
+    const location = useLocation();
+    const responseData = location.state.responseData;
+    const formValues = location.state.formValues;
+
+    // useEffect(() => {
+    //     console.log('passed formvalues' ,formValues);
+    // });
 
     return(
         <>
-            {isAuthenticated ? <LoggedInNavbar/> : <LoggedOutNavbar/>}
+            {isAuthenticated ? <LoggedInNavbar formValues={formValues}/> : <LoggedOutNavbar formValues={formValues}/>}
             <Layout >
                 {/* need to resize the map according to window size */}
                 <Layout>
                     <Content>
-                        <Map/>
+                        <Map responseData={responseData} />                    
                     </Content>
                 </Layout>
 

@@ -7,7 +7,7 @@ import { Button, Dropdown, Space, Avatar, Select } from 'antd';
 
 import Searchbar from './Searchbar';
 
-function LoggedOutNavbar() {
+function LoggedOutNavbar({formValues}) {
             
         const handleMenuClick = (e) => {
             console.log('click', e);
@@ -58,7 +58,7 @@ function LoggedOutNavbar() {
                                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                                         <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
                                 </a>
-                                <Searchbar/>
+                                <Searchbar initialValues={formValues}/>
                                 
 
 

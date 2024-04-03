@@ -15,7 +15,9 @@ const center = {
     lng: 103.8198
 };
 
-function Map() {
+function Map({ responseData }) {
+    
+    
     const [resales, setResales] = useState([]);
     const [mrt, setMrt] = useState([]);
     const [railNames, setRailNames] = useState([]); //
@@ -69,7 +71,8 @@ function Map() {
             {/* <MarkerClustererF> */}
                 {
                 // clusterer => (
-                    resales.map(resale => (
+                    //used to be resales.map
+                    responseData.map(resale => (
                         <Marker
                             key={resale.id}
                             position={{ lat: parseFloat(resale.latitude), lng: parseFloat(resale.longitude) }}

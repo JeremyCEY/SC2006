@@ -6,7 +6,7 @@ import { Button, Dropdown, Space, Avatar } from 'antd';
 
 import Searchbar from './Searchbar';
 
-function LoggedInNavbar() {
+function LoggedInNavbar({formValues}) {
 
     const handleMenuClick = (e) => {
         console.log('click', e);
@@ -62,7 +62,7 @@ function LoggedInNavbar() {
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
                 </a>
-                <Searchbar/>
+                <Searchbar initialValues={formValues}/>
 
                 <Dropdown menu={menuProps} className='w-[7vw] h-[4vw]
                                                             border rounded-[100px] shadow-md'>
