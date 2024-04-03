@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Layout, Menu, Button, ConfigProvider } from 'antd';
+import { Layout, Menu, Button, ConfigProvider, List } from 'antd';
 import { LeftOutlined, RightOutlined, FilterOutlined } from '@ant-design/icons';
 
 
@@ -38,18 +38,27 @@ function Explore(){
     const responseData = location.state.responseData;
     const formValues = location.state.formValues;
 
-    // useEffect(() => {
-    //     console.log('passed formvalues' ,formValues);
-    // });
+
+    const [selectedResale, setSelectedResale] = useState(null);
+
+    const handleDivClick = (resale) => {
+        console.log('Clicked:', resale);
+        setSelectedResale(resale);
+    };
 
     return(
         <>
-            {isAuthenticated ? <LoggedInNavbar formValues={formValues}/> : <LoggedOutNavbar formValues={formValues}/>}
+            <div className='relative z-[1000]'>
+                {isAuthenticated ? <LoggedInNavbar formValues={formValues}/> : <LoggedOutNavbar formValues={formValues}/>}
+            </div>
             <Layout >
                 {/* need to resize the map according to window size */}
                 <Layout>
                     <Content>
-                        <Map responseData={responseData} />                    
+                        <Map 
+                        selectedResale1={selectedResale}
+                        responseData={responseData} 
+                        />                    
                     </Content>
                 </Layout>
 
@@ -64,47 +73,55 @@ function Explore(){
                     style={{
                         position: 'absolute',
                         left: 0,
-                        zIndex: 1000,
+                        zIndex: 100,
                         height: '87vh',
                         backgroundColor: 'white',
                     }}
                 >
-                    <div>
-                        <span className='font-bold text-3xl'>Search Results</span>
+                    <div className="justify-between flex mt-5 mb-5">
+                        <span className="font-bold text-3xl ml-10" >Search Results</span>
+                        
                         <Button type="primary"
                                 icon={<FilterOutlined/>}
-                                className="bg-white border-none text-black shadow-md"
+                                className="bg-white border-none text-black shadow-md mr-10"
                         >
                             Filters
                         </Button>
                     </div>
-                    {/* <Menu  defaultSelectedKeys={['1']} mode="inline">
-                        <Menu.Item key="1">
-                            Menu Item 1
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            Menu Item 2
-                        </Menu.Item>
-                    </Menu> */}
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {responseData.map((resale, index) => (
-                            <div key={resale.id}
-                                // className= "w-[30%], p-[20px], shadow-md, m-[10px]"
-                                style={{ width: '30%', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', margin: '10px' }}>
-                                <div className="header">
-                                <div className="residence-name">{resale.town}</div>
-                                <div className="price-range">${resale.resale_price.toLocaleString()}</div>
-                                </div>
-                                <ul className="residence-details">
-                                <li>Type: {resale.flat_type}</li>
-                                <li>Street:  {resale.street_name}</li>
-                                <li>Floor area:  {resale.floor_area_sqm} sqm</li>
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
                     
+       
+                    
+                    
+                    <div className='h-[77vh] overflow-auto justify-center flex'>
+                        <List className='ml-3'
+                            grid={{ gutter: 16, column: 2 }} // Adjust column count as needed
+                            
+                            dataSource={responseData}
+                            renderItem={resale => (
+                                <List.Item>
+                                    <Button className=" h-[20vh] w-[15vw] p-[20px] shadow-md bg-gray-50"
+                                        key={resale.id}
+                                        onClick={() => handleDivClick(resale)} // Add this line
+
+                                    >
+                                        <div className="header">
+                                            <div className="residence-name">{resale.town}</div>
+                                            <div className="price-range">${resale.resale_price.toLocaleString()}</div>
+                                        </div>
+                                        <ul className="residence-details">
+                                            <li>Type: {resale.flat_type}</li>
+                                            <li>Street: {resale.street_name}</li>
+                                            <li>Floor area: {resale.floor_area_sqm} sqm</li>
+                                        </ul>
+                                    </Button>
+                                </List.Item>
+                            )}
+                            
+                        />
+                    </div>
+
                 </Sider>
+
                 <ConfigProvider wave={{ disabled: true }}>
                 <Button
                     type="primary"
@@ -121,6 +138,7 @@ function Explore(){
                         borderRadius: '0%',
                         height: '50px',
                         border: 'none',
+                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)'
                     }}
                 />
                 </ConfigProvider>

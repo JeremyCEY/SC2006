@@ -15,8 +15,10 @@ const center = {
     lng: 103.8198
 };
 
-function Map({ responseData }) {
-    
+function Map({ responseData, selectedResale1 }) {
+    // useEffect(() => {
+    //     console.log(selectedResale1);
+    // }, [selectedResale1]);
     
     const [resales, setResales] = useState([]);
     const [mrt, setMrt] = useState([]);
@@ -26,6 +28,20 @@ function Map({ responseData }) {
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8",
     });
+
+
+    //pans and zoom when different properties are selected
+    useEffect(() => {
+        if (mapRef.current && selectedResale1) {
+            mapRef.current.panTo({
+                lat: parseFloat(selectedResale1.latitude),
+                lng: parseFloat(selectedResale1.longitude)
+            });
+            mapRef.current.setZoom(15); // Set your desired zoom level here
+
+        }
+    }, [selectedResale1]);
+
 
     const [selectedResale, setSelectedResale] = useState(null);
 
@@ -68,11 +84,9 @@ function Map({ responseData }) {
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-            {/* <MarkerClustererF> */}
-                {
-                // clusterer => (
-                    //used to be resales.map
+                {/* {
                     responseData.map(resale => (
+                        
                         <Marker
                             key={resale.id}
                             position={{ lat: parseFloat(resale.latitude), lng: parseFloat(resale.longitude) }}
@@ -91,9 +105,27 @@ function Map({ responseData }) {
 
                         </Marker>
                     ))
-                    // )
-                    }
-            {/* </MarkerClustererF> */}
+                    } */}
+            {selectedResale1 && (
+
+                    <Marker
+                            key={selectedResale1}
+                            position={{ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }}
+                            // clusterer={clusterer}
+                            onClick={() => handleMarkerClick(selectedResale1)}
+                        >
+
+                            {selectedResale === selectedResale1 && (
+                                <InfoWindow onCloseClick={handleCloseInfoWindow}>
+                                    <div>
+                                        <p>Address: {selectedResale1.street_name + " " + selectedResale1.block_no}</p>
+                                        <p>Price: {"$" + selectedResale1.resale_price}</p>
+                                    </div>
+                                </InfoWindow>
+                            )}
+
+                        </Marker>
+                       )}     
         </GoogleMap>
     ) : <></>;
 }
