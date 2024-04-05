@@ -27,7 +27,7 @@ export class LoginFunctionService {
     async changeEmail(userId: string, newEmail: string): Promise<string>{
         const user = await this.userModel.findById(userId);
         if (!isEmail(newEmail)) {
-            throw new BadRequestException('Invalid email');
+            throw new BadRequestException('Please enter valid email address');
         }
         const oldemail = user.email;
         while (oldemail == newEmail){
@@ -45,7 +45,7 @@ export class LoginFunctionService {
         const user = await this.userModel.findById(userId);
         const oldMatched = await bcrypt.compare(oldPassword, user.password);
         while(!oldMatched){
-            throw new UnauthorizedException('Incorrect password! Please try again');
+            throw new UnauthorizedException('Incorrect old password! Please try again');
         }
         while (newPassword.length<6) {
             throw new BadRequestException('password must be longer than or equal to 6 characters ');
@@ -55,7 +55,7 @@ export class LoginFunctionService {
             throw new BadRequestException('New password cannot be same as old password');
         }
         while(confirmPassword != newPassword){
-            throw new BadRequestException('Your password does not match');
+            throw new BadRequestException('Your passwords do not match');
         }
         const hashedPassword = await bcrypt.hash(confirmPassword, 10);
         user.password = hashedPassword;
