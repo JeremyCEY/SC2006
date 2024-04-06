@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Button, List, Select, ConfigProvider, message } from 'antd';
 import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { jwtDecode } from 'jwt-decode';
 
 const { Sider } = Layout;
 
@@ -18,12 +19,25 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
         setCollapsed(!collapsed);
     };
 
+    const [userID, setUserID] = useState(null); // State for user ID
+
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setUserID(decodedToken.id); // Set user ID from decoded token
+        }
+    }, []); // Empty dependency array to run only once on component mount
+
+
     // Heart icon to bookmark ------------
     const handleBookmarkClick = async (propertyId) => {
         const token = localStorage.getItem('token');
+    
         const isCurrentlyBookmarked = bookmarked[propertyId];    
         try {
-            const response = await fetch(`http://localhost:3000/bookmark/${userId}/${propertyId}`, {
+            const response = await fetch(`http://localhost:3000/bookmark/${userID}/${propertyId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
