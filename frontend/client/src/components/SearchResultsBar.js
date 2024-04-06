@@ -18,7 +18,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
         setCollapsed(!collapsed);
     };
 
-    // Heart icon to bookmark -------------
+    // Heart icon to bookmark ------------
     const handleBookmarkClick = async (propertyId) => {
         const token = localStorage.getItem('token');
         const isCurrentlyBookmarked = bookmarked[propertyId];    
