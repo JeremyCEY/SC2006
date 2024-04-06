@@ -282,59 +282,31 @@ function Searchbar({ initialValues }) {
 
                                 options={[
                                     {
-                                        value: 'communitycentre',
-                                        label: 'Community Centre',
-                                    },
-                                    {
                                         value: 'supermarket',
                                         label: 'Supermarket',
                                     },
                                     {
-                                        value: 'mall',
+                                        value: 'shopping_mall',
                                         label: 'Mall',
                                     },
                                     {
-                                        value: 'secondaryschool',
+                                        value: 'secondary_school',
                                         label: 'Secondary School',
                                     },
                                     {
-                                        value: 'primaryschool',
+                                        value: 'primary_school',
                                         label: 'Primary School',
                                     },
                                     {
-                                        value: 'eldercare',
-                                        label: 'Elder Care',
-                                    },
-                                    {
-                                        value: 'studentcare',
-                                        label: 'Student Care',
-                                    },
-                                    {
-                                        value: 'mrt',
+                                        value: 'train_station',
                                         label: 'MRT',
-                                    },
-                                    {
-                                        value: 'pool',
-                                        label: 'Pool',
-                                    },
-                                    {
-                                        value: 'basketballcourt',
-                                        label: 'Basketball Court',
-                                    },
-                                    {
-                                        value: 'badmintoncourt',
-                                        label: 'Badminton Court',
                                     },
                                     {
                                         value: 'park',
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'gym',
-                                        label: 'Gym',
-                                    },
-                                    {
-                                        value: 'coffeeshophawkercentre',
+                                        value: 'food',
                                         label: 'Coffee shop/Hawker Centre',
                                     },
                                     {

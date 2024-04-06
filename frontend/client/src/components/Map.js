@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, Marker, InfoWindow, DirectionsService, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, DirectionsService, DirectionsRenderer, Circle, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { useRailNameOverlays } from './UseRailNameOverlay';
 import mrtSvgURL from "../images/train_FILL0_wght400_GRAD0_opsz24.svg"
@@ -15,7 +15,7 @@ const center = {
     lng: 103.8198
 };
 
-function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime }) {
+function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
     // useEffect(() => {
     //     console.log(selectedResale1);
     // }, [selectedResale1]);
@@ -29,6 +29,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8",
+        libraries: ['places'],
     });
 
 
@@ -79,11 +80,11 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const [directionsRequested, setDirectionsRequested] = useState(false); // Track whether directions have been requested
 
     useEffect(() => {
-        if(selectedFrequentAddress !== null){
+        if (selectedFrequentAddress !== null) {
             setDestination(String(selectedFrequentAddress));
             setDirectionsRequested(true);
         }
-    }, [selectedFrequentAddress]);
+    }, [selectedFrequentAddress, selectedResale1]);
 
     const directionsCallback = (response) => {
         if (response !== null && response.status === 'OK') {
@@ -96,6 +97,41 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     };
 
     // Routing funcs end
+
+    //amenity searching
+    const [amenities, setAmenities] = useState([]);
+    const [circleCenter, setCircleCenter] = useState(null);
+    const [circleRadius, setCircleRadius] = useState(500);
+
+    useEffect(() => {
+        if (isLoaded && selectedResale1 !== null) {
+            // Fetch amenities when the map is loaded
+            fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
+            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) })
+        }
+    }, [isLoaded, selectedResale1]);
+
+    const fetchAmenities = async (location) => {
+        const service = new window.google.maps.places.PlacesService(mapRef.current);
+        const request = {
+            location: location,
+            radius: 500,
+            type: [amenityTypes], // Adjust types as needed
+        };
+        if (amenityTypes) {
+            service.nearbySearch(request, (results, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                    setAmenities(results);
+                } else {
+                    setAmenities([])
+                }
+            });
+        }
+        console.log(amenities);
+        console.log(amenityTypes);
+    };
+
+    //amenity searching end
 
     if (loadError) {
         return <div>Error loading maps</div>;
@@ -148,7 +184,13 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                         </InfoWindow>
                     )}
 
-                    {directionsRequested && (
+                    <Circle center={circleCenter} radius={circleRadius}></Circle>
+                    {amenities.map((amenity, index) => (        //amenities mapping
+                        <Marker key={index} position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}>
+                        </Marker>
+                    ))}
+
+                    {directionsRequested && (               //routing stuff
                         <DirectionsService
                             options={{
                                 destination: destination,

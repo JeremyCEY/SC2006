@@ -28,7 +28,6 @@ function Explore() {
     const responseData = location.state.responseData;
     const formValues = location.state.formValues;
 
-
     const [selectedResale, setSelectedResale] = useState(null);
 
     const handleDivClick = (resale) => {
@@ -116,6 +115,7 @@ function Explore() {
                             selectedFrequentAddress={selectedFrequentAddress}
                             travelMode={travelMode}
                             setTravelTime={setTravelTime}
+                            amenityTypes={formValues.amenities}
                         />
                     </Content>
                 </Layout>
@@ -128,7 +128,8 @@ function Explore() {
                     isAuthenticated={isAuthenticated}
                     frequentAddresses={frequentAddresses}
                     setSelectedFrequentAddress={setSelectedFrequentAddress} 
-                    setTravelMode={setTravelMode}/>
+                    setTravelMode={setTravelMode}
+                    />
             </Layout>
 
         </>
