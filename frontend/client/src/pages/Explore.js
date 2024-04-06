@@ -14,8 +14,8 @@ import ExploreRightBar from '../components/ExploreRightBar';
 const { Content } = Layout;
 
 
-function Explore(){
-    
+function Explore() {
+
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ function Explore(){
         setIsAuthenticated(token !== null);
     }, []);
 
-    
+
     const location = useLocation();
     const responseData = location.state.responseData;
     const formValues = location.state.formValues;
@@ -63,8 +63,12 @@ function Explore(){
 
 
     const [frequentAddresses, setFrequentAddresses] = useState([]);
+    const [selectedFrequentAddress, setSelectedFrequentAddress] = useState(null);
     const [userId, setUserId] = useState(null); // State for user ID
 
+        useEffect(() => {
+        console.log(selectedFrequentAddress);
+    }, [selectedFrequentAddress]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -80,47 +84,50 @@ function Explore(){
                     'Content-Type': 'application/json',
                 },
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                console.log('response:', response);
-                return response.json();
-            })
-            .then(data => {
-                console.log('Frequent addresses:', data);
-                setFrequentAddresses(data); 
-            })
-            .catch(error => {
-                console.error('Error fetching frequent addresses:', error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('response:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Frequent addresses:', data);
+                    setFrequentAddresses(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching frequent addresses:', error);
+                });
         }
-    }, [userId]);  
+    }, [userId]);
 
-    return(
+    return (
         <>
             <div className='relative z-[1000]'>
-                {isAuthenticated ? <LoggedInNavbar formValues={formValues}/> : <LoggedOutNavbar formValues={formValues}/>}
+                {isAuthenticated ? <LoggedInNavbar formValues={formValues} /> : <LoggedOutNavbar formValues={formValues} />}
             </div>
             <Layout >
                 {/* need to resize the map according to window size */}
                 <Layout>
                     <Content>
-                        <Map 
-                        selectedResale1={selectedResale}
-                        responseData={responseData} 
-                        />                    
+                        <Map
+                            selectedResale1={selectedResale}
+                            responseData={responseData}
+                            selectedFrequentAddress={selectedFrequentAddress}
+                        />
                     </Content>
                 </Layout>
-            
+
 
                 <SearchResultsBar setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} />
-                
-                
-                <ExploreRightBar isAuthenticated={isAuthenticated} frequentAddresses={frequentAddresses} />                
 
+
+                <ExploreRightBar
+                    isAuthenticated={isAuthenticated}
+                    frequentAddresses={frequentAddresses}
+                    setSelectedFrequentAddress={setSelectedFrequentAddress} />
             </Layout>
-            
+
         </>
     );
 }

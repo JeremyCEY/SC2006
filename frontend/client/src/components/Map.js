@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, Marker, MarkerClustererF, InfoWindow, Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, DirectionsService, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { useRailNameOverlays } from './UseRailNameOverlay';
 import mrtSvgURL from "../images/train_FILL0_wght400_GRAD0_opsz24.svg"
@@ -15,11 +15,13 @@ const center = {
     lng: 103.8198
 };
 
-function Map({ responseData, selectedResale1 }) {
+function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
     // useEffect(() => {
     //     console.log(selectedResale1);
     // }, [selectedResale1]);
-    
+    const [response, setResponse] = useState(null);
+    const [destination, setDestination] = useState('');
+
     const [resales, setResales] = useState([]);
     const [mrt, setMrt] = useState([]);
     const [railNames, setRailNames] = useState([]); //
@@ -72,6 +74,26 @@ function Map({ responseData, selectedResale1 }) {
     //useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
+    //For Routing:
+
+    const [directionsRequested, setDirectionsRequested] = useState(false); // Track whether directions have been requested
+
+    useEffect(() => {
+        setDestination(String(selectedFrequentAddress));
+        setDirectionsRequested(true);
+    }, [selectedFrequentAddress]);
+
+    const directionsCallback = (response) => {
+        if (response !== null) {
+            if (response.status === 'OK') {
+                setResponse(response);
+            } else {
+                console.log('Directions request failed due to ' + response.status);
+            }
+            setDirectionsRequested(false);
+        }
+    };
+
     if (loadError) {
         return <div>Error loading maps</div>;
     }
@@ -84,7 +106,7 @@ function Map({ responseData, selectedResale1 }) {
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-                {/* {
+            {/* {
                     responseData.map(resale => (
                         
                         <Marker
@@ -108,25 +130,41 @@ function Map({ responseData, selectedResale1 }) {
                     } */}
             {selectedResale1 && (
 
-                    <Marker
-                            key={selectedResale1}
-                            position={{ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }}
-                            // clusterer={clusterer}
-                            onClick={() => handleMarkerClick(selectedResale1)}
-                        >
+                <Marker
+                    key={selectedResale1}
+                    position={{ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }}
+                    // clusterer={clusterer}
+                    onClick={() => handleMarkerClick(selectedResale1)}
+                >
+                    {directionsRequested && (
+                        <DirectionsService
+                            options={{
+                                destination: destination,
+                                origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
+                                travelMode: 'TRANSIT',
+                            }}
+                            callback={directionsCallback}
+                        />
+                    )}
+                    {response !== null && <DirectionsRenderer directions={response} />}
 
-                            {selectedResale === selectedResale1 && (
-                                <InfoWindow onCloseClick={handleCloseInfoWindow}>
-                                    <div>
-                                        <p>Address: {selectedResale1.street_name + " " + selectedResale1.block_no}</p>
-                                        <p>Price: {"$" + selectedResale1.resale_price}</p>
-                                    </div>
-                                </InfoWindow>
-                            )}
+                    {response && (                  //idk how to display this
+                        <div>
+                            <p>Travel Time: {response.routes[0].legs[0].duration.text}</p>
+                        </div>
+                    )}
 
-                        </Marker>
-                       )}     
-        </GoogleMap>
+                    {selectedResale === selectedResale1 && (
+                        <InfoWindow onCloseClick={handleCloseInfoWindow}>
+                            <div>
+                                <p>Address: {selectedResale1.street_name + " " + selectedResale1.block_no}</p>
+                                <p>Price: {"$" + selectedResale1.resale_price}</p>
+                            </div>
+                        </InfoWindow>
+                    )}
+                </Marker>
+            )}
+        </GoogleMap >
     ) : <></>;
 }
 
