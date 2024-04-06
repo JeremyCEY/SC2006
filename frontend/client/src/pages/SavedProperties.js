@@ -28,7 +28,7 @@ const SavedProperties = ({ userId }) => {
         setIsAuthenticated(storedToken !== null);
         setToken(storedToken); // Set token state
     }, []);
-
+    
     
 
     // useEffect(() => {        
@@ -49,9 +49,10 @@ const SavedProperties = ({ userId }) => {
 
     //retrieve id of saved properties from bookmark
     useEffect(() => {
+        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         if (token && userId) {
-            fetch(`http://localhost:3000/bookmark/${userId}`, {
+            axios.get(`http://localhost:3000/bookmark/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
