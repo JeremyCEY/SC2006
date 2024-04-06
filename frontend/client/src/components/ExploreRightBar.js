@@ -7,7 +7,7 @@ const { Sider } = Layout;
 
 
 
-function ExploreRightBar({ isAuthenticated, frequentAddresses }) {
+function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress }) {
     
     const [collapsedRight, setCollapsedRight] = useState(false);
 
@@ -19,7 +19,6 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses }) {
     const toggleSidebarRight = () => {
         setCollapsedRight(!collapsedRight);
     };
-    
     
     
     return (
@@ -46,7 +45,8 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses }) {
                     <span className="font-semibold text-2xl">Routing to Frequent Locations</span>
                     <div className="overflow-auto h-[40vh]">
                     {frequentAddresses.map((address, index) => (
-                        <Button key={index} className="flex items-center justify-between p-4 border-b border-gray-300">
+                        <Button key={index} className="flex items-center justify-between p-4 border-b border-gray-300"
+                        onClick={() => setSelectedFrequentAddress(address)}>
                             <div className="flex-grow">
                                 <p className="text-lg font-semibold text-blue-600">{address}</p>
                             </div>
