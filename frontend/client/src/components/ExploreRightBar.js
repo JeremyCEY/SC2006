@@ -7,7 +7,7 @@ const { Sider } = Layout;
 
 
 
-function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress }) {
+function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress, setTravelMode }) {
     
     const [collapsedRight, setCollapsedRight] = useState(false);
 
@@ -19,7 +19,6 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
     const toggleSidebarRight = () => {
         setCollapsedRight(!collapsedRight);
     };
-    
     
     return (
         <>
@@ -50,7 +49,7 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
                             <div className="flex-grow">
                                 <p className="text-lg font-semibold text-blue-600">{address}</p>
                             </div>
-                        </Button>
+                        </Button>     //Travel modes that can be set: "TRANSIT", "DRIVING", "WALKING", "BICYCLING"
                     ))}
                     </div>
                 </div>

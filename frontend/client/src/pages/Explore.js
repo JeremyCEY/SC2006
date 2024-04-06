@@ -63,12 +63,7 @@ function Explore() {
 
 
     const [frequentAddresses, setFrequentAddresses] = useState([]);
-    const [selectedFrequentAddress, setSelectedFrequentAddress] = useState(null);
     const [userId, setUserId] = useState(null); // State for user ID
-
-        useEffect(() => {
-        console.log(selectedFrequentAddress);
-    }, [selectedFrequentAddress]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -101,6 +96,11 @@ function Explore() {
         }
     }, [userId]);
 
+    //for Routing
+    const [selectedFrequentAddress, setSelectedFrequentAddress] = useState(null);   //For user to select a frequent address to route to
+    const [travelMode, setTravelMode] = useState("TRANSIT");    //Default to travel mode: public transport
+    const[travelTime, setTravelTime] = useState('');    //travel time for route, obtained from Map.js
+
     return (
         <>
             <div className='relative z-[1000]'>
@@ -114,6 +114,8 @@ function Explore() {
                             selectedResale1={selectedResale}
                             responseData={responseData}
                             selectedFrequentAddress={selectedFrequentAddress}
+                            travelMode={travelMode}
+                            setTravelTime={setTravelTime}
                         />
                     </Content>
                 </Layout>
@@ -125,7 +127,8 @@ function Explore() {
                 <ExploreRightBar
                     isAuthenticated={isAuthenticated}
                     frequentAddresses={frequentAddresses}
-                    setSelectedFrequentAddress={setSelectedFrequentAddress} />
+                    setSelectedFrequentAddress={setSelectedFrequentAddress} 
+                    setTravelMode={setTravelMode}/>
             </Layout>
 
         </>

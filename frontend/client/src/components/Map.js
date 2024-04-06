@@ -15,7 +15,7 @@ const center = {
     lng: 103.8198
 };
 
-function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
+function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime }) {
     // useEffect(() => {
     //     console.log(selectedResale1);
     // }, [selectedResale1]);
@@ -55,20 +55,20 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
         setSelectedResale(null);
     };
 
-    useEffect(() => {
-        axios.get('/testData') // Make sure this URL is correct and accessible
-            .then(response => setResales(response.data))
-            .catch(err => console.error('Failed to fetch resale data:', err));
+    // useEffect(() => {
+    //     axios.get('/testData') // Make sure this URL is correct and accessible
+    //         .then(response => setResales(response.data))
+    //         .catch(err => console.error('Failed to fetch resale data:', err));
 
-        // Fetch GeoJSON data similar to resale data
-        axios.get('geodata/railnames') // Adjust URL as necessary
-            .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
-            .catch(err => console.error('Failed to fetch GeoJSON data:', err));
+    //     // Fetch GeoJSON data similar to resale data
+    //     axios.get('geodata/railnames') // Adjust URL as necessary
+    //         .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
+    //         .catch(err => console.error('Failed to fetch GeoJSON data:', err));
 
-        axios.get('geodata/mrtlines')
-            .then(response => setMrt(response.data))
-            .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
-    }, []);
+    //     axios.get('geodata/mrtlines')
+    //         .then(response => setMrt(response.data))
+    //         .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
+    // }, []);
 
     //
     //useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
@@ -79,20 +79,23 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
     const [directionsRequested, setDirectionsRequested] = useState(false); // Track whether directions have been requested
 
     useEffect(() => {
-        setDestination(String(selectedFrequentAddress));
-        setDirectionsRequested(true);
+        if(selectedFrequentAddress !== null){
+            setDestination(String(selectedFrequentAddress));
+            setDirectionsRequested(true);
+        }
     }, [selectedFrequentAddress]);
 
     const directionsCallback = (response) => {
-        if (response !== null) {
-            if (response.status === 'OK') {
-                setResponse(response);
-            } else {
-                console.log('Directions request failed due to ' + response.status);
-            }
+        if (response !== null && response.status === 'OK') {
+            setResponse(response);
             setDirectionsRequested(false);
+            setTravelTime(response.routes[0].legs[0].duration.text)
+        } else {
+            console.log('Directions request failed due to ' + response?.status);
         }
     };
+
+    // Routing funcs end
 
     if (loadError) {
         return <div>Error loading maps</div>;
@@ -136,24 +139,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
                     // clusterer={clusterer}
                     onClick={() => handleMarkerClick(selectedResale1)}
                 >
-                    {directionsRequested && (
-                        <DirectionsService
-                            options={{
-                                destination: destination,
-                                origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
-                                travelMode: 'TRANSIT',
-                            }}
-                            callback={directionsCallback}
-                        />
-                    )}
-                    {response !== null && <DirectionsRenderer directions={response} />}
-
-                    {response && (                  //idk how to display this
-                        <div>
-                            <p>Travel Time: {response.routes[0].legs[0].duration.text}</p>
-                        </div>
-                    )}
-
                     {selectedResale === selectedResale1 && (
                         <InfoWindow onCloseClick={handleCloseInfoWindow}>
                             <div>
@@ -161,6 +146,25 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
                                 <p>Price: {"$" + selectedResale1.resale_price}</p>
                             </div>
                         </InfoWindow>
+                    )}
+
+                    {directionsRequested && (
+                        <DirectionsService
+                            options={{
+                                destination: destination,
+                                origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
+                                travelMode: travelMode,
+                            }}
+                            callback={directionsCallback}
+                        />
+                    )}
+
+                    <DirectionsRenderer directions={response} />
+
+                    {response && (                  //idk how to display this
+                        <div>
+                            <p>Travel Time: {response.routes[0].legs[0].duration.text}</p>
+                        </div>
                     )}
                 </Marker>
             )}
