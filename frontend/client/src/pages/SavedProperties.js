@@ -136,12 +136,7 @@ const SavedProperties = ({ userId }) => {
                     )}
                 </div>
             ))}
-            <button 
-                onClick={() => {/* Button for add property, does nothing now */}} 
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                + Add Property
-            </button>
+            
         </div>
     );
     

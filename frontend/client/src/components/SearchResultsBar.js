@@ -67,6 +67,38 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
             message.error('Failed to update the bookmark.');
         }
     };
+   // ---------------- keeping heart red after bookmarked--------
+    useEffect(() => {
+        const fetchBookmarkedItems = async () => {
+          const token = localStorage.getItem('token');
+          if (token && userID) {
+            try {
+              const response = await fetch(`http://localhost:3000/bookmark/${userID}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+      
+              if (!response.ok) {
+                throw new Error('Failed to fetch bookmarked items');
+              }
+      
+              const bookmarkedItems = await response.json();
+              const bookmarkedState = {};
+      
+              bookmarkedItems.forEach(item => {
+                bookmarkedState[item] = true;
+              });
+      
+              setBookmarked(bookmarkedState);
+            } catch (error) {
+              console.error('Error fetching bookmarked items:', error);
+            }
+          }
+        };
+      
+        fetchBookmarkedItems();
+      }, [userID]);
 
     return (
         <>
