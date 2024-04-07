@@ -27,11 +27,11 @@ const FrequentLocations = ({ userId }) => {
         setIsModalVisible(false);
     };
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setIsAuthenticated(storedToken !== null);
-        setToken(storedToken);
-    }, []);
+    // useEffect(() => {
+    //     const storedToken = localStorage.getItem('token');
+    //     setIsAuthenticated(storedToken !== null);
+    //     setToken(storedToken);
+    // }, []);
  // working 
     useEffect(() => {
         const token = localStorage.getItem('token');

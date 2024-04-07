@@ -24,28 +24,12 @@ const SavedProperties = ({ userId }) => {
     };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setIsAuthenticated(storedToken !== null);
-        setToken(storedToken); // Set token state
+        // const storedToken = localStorage.getItem('token');
+        // setIsAuthenticated(storedToken !== null);
+        // setToken(storedToken); // Set token state
+        console.log('User ID:', userId);
     }, []);
-
     
-
-    // useEffect(() => {        
-       
-    //     const storedToken = localStorage.getItem('token');
-    //     axios.get(`http://localhost:3000/bookmark/${userId}`, {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         }
-    //         })
-    //         .then(response => {
-    //             setSavedProperties(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('There was an error!', error);
-    //         });
-    // }, []);
 
     //retrieve id of saved properties from bookmark
     useEffect(() => {
@@ -62,12 +46,14 @@ const SavedProperties = ({ userId }) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+                setSavedProperties(response.data);
+                console.log('Saved properties:');
                 return response.json();
             })
             .then(data => {
                 console.log('Raw data:', data);
                 Promise.all(data.map(id => {
-                    return fetch(`http://localhost:3000/resale/${id}`, {
+                    return fetch(`http://localhost:3000/testData/${id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -150,12 +136,7 @@ const SavedProperties = ({ userId }) => {
                     )}
                 </div>
             ))}
-            <button 
-                onClick={() => {/* Button for add property, does nothing now */}} 
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                + Add Property
-            </button>
+            
         </div>
     );
     
