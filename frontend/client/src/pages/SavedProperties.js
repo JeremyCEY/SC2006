@@ -24,35 +24,18 @@ const SavedProperties = ({ userId }) => {
     };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setIsAuthenticated(storedToken !== null);
-        setToken(storedToken); // Set token state
+        // const storedToken = localStorage.getItem('token');
+        // setIsAuthenticated(storedToken !== null);
+        // setToken(storedToken); // Set token state
+        console.log('User ID:', userId);
     }, []);
     
-    
-
-    // useEffect(() => {        
-       
-    //     const storedToken = localStorage.getItem('token');
-    //     axios.get(`http://localhost:3000/bookmark/${userId}`, {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         }
-    //         })
-    //         .then(response => {
-    //             setSavedProperties(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('There was an error!', error);
-    //         });
-    // }, []);
 
     //retrieve id of saved properties from bookmark
     useEffect(() => {
-        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         if (token && userId) {
-            axios.get(`http://localhost:3000/bookmark/${userId}`, {
+            fetch(`http://localhost:3000/bookmark/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -64,12 +47,13 @@ const SavedProperties = ({ userId }) => {
                     throw new Error('Network response was not ok');
                 }
                 setSavedProperties(response.data);
+                console.log('Saved properties:');
                 return response.json();
             })
             .then(data => {
                 console.log('Raw data:', data);
                 Promise.all(data.map(id => {
-                    return fetch(`http://localhost:3000/resale/${id}`, {
+                    return fetch(`http://localhost:3000/testData/${id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

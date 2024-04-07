@@ -22,10 +22,14 @@ function Dashboard() {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            setUserId(decodedToken.id); // Set user ID from decoded token
+            // console.log('Decoded token:', decodedToken);
+            // console.log('User ID:', decodedToken.id);
+            setUserId(decodedToken.id);
+            // console.log('User ID:', userId);
+        } else {
+            console.log('No token found in local storage');
         }
-    }, []); // Empty dependency array to run only once on component mount
-
+    }, [userId]);
 
     {/* Sidebar Selection */}
 
@@ -35,6 +39,10 @@ function Dashboard() {
 
 
     const renderContent = () => {
+        if (!userId) {
+            return <div>Loading...</div>;
+        }
+    
         switch (activeSection) {
             case 'savedProperties':
                 return <SavedProperties userId={userId} />;
