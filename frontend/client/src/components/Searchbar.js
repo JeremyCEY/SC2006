@@ -298,7 +298,7 @@ function Searchbar({ initialValues }) {
                                         label: 'Primary School',
                                     },
                                     {
-                                        value: 'train_station',
+                                        value: '',
                                         label: 'MRT',
                                     },
                                     {
@@ -306,7 +306,7 @@ function Searchbar({ initialValues }) {
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'food',
+                                        value: 'cafe',
                                         label: 'Coffee shop/Hawker Centre',
                                     },
                                     {

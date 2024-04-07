@@ -72,7 +72,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     // }, []);
 
     //
-    //useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
+    useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
     //For Routing:
@@ -116,20 +116,55 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         const request = {
             location: location,
             radius: 500,
-            type: [amenityTypes], // Adjust types as needed
+            type: amenityTypes, // Adjust types as needed
         };
-        if (amenityTypes) {
+        console.log(amenityTypes);
+        if (amenityTypes.length > 0) {
             service.nearbySearch(request, (results, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                    setAmenities(results);
+                    const filteredResults = results.filter(amenity => amenityTypes.includes(amenity.types[0]));
+                    setAmenities(filteredResults);
                 } else {
-                    setAmenities([])
+                    setAmenities([]);
                 }
             });
         }
         console.log(amenities);
-        console.log(amenityTypes);
     };
+
+    const processedAmenities = amenities.map(amenity => {
+        let iconUrl;
+        switch (amenity.types[0]) {
+            case 'restaurant':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet.svg';
+                break;
+            case 'primary_school':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
+                break;
+            case 'secondary_school':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
+                break;
+            case 'cafe':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/cafe_pinlet.svg';
+                break;
+            case 'park':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg';
+                break;
+            case 'supermarket':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/shoppingcart_pinlet.svg'
+                break;
+            case 'shopping_mall':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet.svg'
+                break;
+            default:
+                iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'; // Replace with default icon URL
+                break;
+        }
+        console.log(amenity.types);
+        // Return amenity object with additional 'iconUrl' property
+        return { ...amenity, iconUrl };
+    });
+
 
     //amenity searching end
 
@@ -185,10 +220,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
 
                     <Circle center={circleCenter} radius={circleRadius}></Circle>
-                    {amenities.map((amenity, index) => (        //amenities mapping
-                        <Marker key={index} position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}>
-                        </Marker>
-                    ))}
 
                     {directionsRequested && (               //routing stuff
                         <DirectionsService
@@ -210,6 +241,16 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
                 </Marker>
             )}
+            {processedAmenities.map((amenity, index) => (
+                <Marker
+                    key={index}
+                    position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}
+                    icon={{
+                        url: amenity.iconUrl,
+                        scaledSize: new window.google.maps.Size(30, 30),
+                    }}
+                />
+            ))}
         </GoogleMap >
     ) : <></>;
 }
