@@ -35,8 +35,15 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
     const handleBookmarkClick = async (propertyId) => {
         const token = localStorage.getItem('token');
     
-        const isCurrentlyBookmarked = bookmarked[propertyId];    
+        const isCurrentlyBookmarked = bookmarked[propertyId];  
+
+        setBookmarked({
+            ...bookmarked,
+            [propertyId]: !isCurrentlyBookmarked,
+        });
+
         try {
+            
             const response = await fetch(`http://localhost:3000/bookmark/${userID}/${propertyId}`, {
                 method: 'POST',
                 headers: {
@@ -98,11 +105,15 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
                         className='ml-4'
                         grid={{ column: 2 }}
                         dataSource={sortedData}
-                        renderItem={property => (
+                        renderItem={property => {
+                            console.log('Property:', property);  // Log the entire property object to inspect its structure
+
+                            return (
+                                
                             <List.Item>
                                 <Button
                                     className="h-[20vh] w-[15vw] shadow-md bg-gray-50"
-                                    key={property.id}
+                                    key={property.id}    // i think should be property._Id but that gives undefined in database
                                     onClick={() => handleDivClick(property)}
                                 >
                                     <div className="header">
@@ -119,14 +130,17 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
                                             position: 'absolute',
                                             top: '10px',
                                             right: '10px',
-                                            color: bookmarked[property._id] ? 'red' : 'gray',
+                                            color: bookmarked[property.id] ? 'red' : 'gray',
                                             fontSize: '16px',
                                         }}
-                                        onClick={(e) => handleBookmarkClick(property, e)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleBookmarkClick(property.id);}}   // if i use .id it works but _.id stores undefined
                                     />
                                 </Button>
                             </List.Item>
-                        )}
+                            )
+                        }}
                     />
                 </div>
             </Sider>
