@@ -214,50 +214,50 @@ function Searchbar({ initialValues }) {
                                         value: 'hdb',
                                         label: 'HDB',
                                     },
-                                    {
-                                        value: 'condo',
-                                        label: 'Condo',
-                                    },
-                                    {
-                                        value: 'landed',
-                                        label: 'Landed',
-                                    },
-                                    {
-                                        value: 'strata_detached',
-                                        label: 'Strata Detached',
-                                    },
-                                    {
-                                        value: 'strata_semidetached',
-                                        label: 'Strata Semidetached',
-                                    },
-                                    {
-                                        value: 'strata_terrace',
-                                        label: 'Strata Terrace',
-                                    },
-                                    {
-                                        value: 'detached',
-                                        label: 'Detached',
-                                    },
-                                    {
-                                        value: 'semi_detached',
-                                        label: 'Semi-detached',
-                                    },
-                                    {
-                                        value: 'terrace',
-                                        label: 'Terrace',
-                                    },
-                                    {
-                                        value: 'apartment',
-                                        label: 'Apartment',
-                                    },
-                                    {
-                                        value: 'condominium',
-                                        label: 'Condominium',
-                                    },
-                                    {
-                                        value: 'executive_condominium',
-                                        label: 'Executive Condominium',
-                                    }
+                                    // {
+                                    //     value: 'condo',
+                                    //     label: 'Condo',
+                                    // },
+                                    // {
+                                    //     value: 'landed',
+                                    //     label: 'Landed',
+                                    // },
+                                    // {
+                                    //     value: 'strata_detached',
+                                    //     label: 'Strata Detached',
+                                    // },
+                                    // {
+                                    //     value: 'strata_semidetached',
+                                    //     label: 'Strata Semidetached',
+                                    // },
+                                    // {
+                                    //     value: 'strata_terrace',
+                                    //     label: 'Strata Terrace',
+                                    // },
+                                    // {
+                                    //     value: 'detached',
+                                    //     label: 'Detached',
+                                    // },
+                                    // {
+                                    //     value: 'semi_detached',
+                                    //     label: 'Semi-detached',
+                                    // },
+                                    // {
+                                    //     value: 'terrace',
+                                    //     label: 'Terrace',
+                                    // },
+                                    // {
+                                    //     value: 'apartment',
+                                    //     label: 'Apartment',
+                                    // },
+                                    // {
+                                    //     value: 'condominium',
+                                    //     label: 'Condominium',
+                                    // },
+                                    // {
+                                    //     value: 'executive_condominium',
+                                    //     label: 'Executive Condominium',
+                                    // }
                                 ]}
                             />
                         </div>
