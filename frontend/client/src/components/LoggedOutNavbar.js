@@ -69,7 +69,7 @@ function LoggedOutNavbar({formValues}) {
                                                                     rounded-[100px] shadow-md'>
                                         <Button>
                                                 <Space>
-                                                <Avatar size="large" className="text-blue-700" icon={<UserOutlined/>} />
+                                                <Avatar size="large" className="text-blue-700" style={{ backgroundColor: '#F4F4F4' }} icon={<UserOutlined/>} />
                                                 <DownOutlined />
                                                 </Space>
                                         </Button>

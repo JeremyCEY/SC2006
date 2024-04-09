@@ -48,6 +48,33 @@ export class AuthService {
         return {token};
     }
 
-    
+    async updateEmail(userId: string, newEmail: string): Promise<User> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+        const existingUser = await this.userModel.findOne({ email: newEmail });
+        if (existingUser) {
+            throw new ConflictException('This email is already in use');
+        }
+        user.email = newEmail;
+        await user.save();
+        return user;
+    }
+
+    async updatePassword(userId: string, currentPassword: string, newPassword: string): Promise<User> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        const passwordMatched = await bcrypt.compare(currentPassword, user.password);
+        if (!passwordMatched) {
+            throw new UnauthorizedException('Current password is incorrect');
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        return user;
+    }
 
 }
