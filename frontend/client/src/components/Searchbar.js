@@ -214,50 +214,50 @@ function Searchbar({ initialValues }) {
                                         value: 'hdb',
                                         label: 'HDB',
                                     },
-                                    {
-                                        value: 'condo',
-                                        label: 'Condo',
-                                    },
-                                    {
-                                        value: 'landed',
-                                        label: 'Landed',
-                                    },
-                                    {
-                                        value: 'strata_detached',
-                                        label: 'Strata Detached',
-                                    },
-                                    {
-                                        value: 'strata_semidetached',
-                                        label: 'Strata Semidetached',
-                                    },
-                                    {
-                                        value: 'strata_terrace',
-                                        label: 'Strata Terrace',
-                                    },
-                                    {
-                                        value: 'detached',
-                                        label: 'Detached',
-                                    },
-                                    {
-                                        value: 'semi_detached',
-                                        label: 'Semi-detached',
-                                    },
-                                    {
-                                        value: 'terrace',
-                                        label: 'Terrace',
-                                    },
-                                    {
-                                        value: 'apartment',
-                                        label: 'Apartment',
-                                    },
-                                    {
-                                        value: 'condominium',
-                                        label: 'Condominium',
-                                    },
-                                    {
-                                        value: 'executive_condominium',
-                                        label: 'Executive Condominium',
-                                    }
+                                    // {
+                                    //     value: 'condo',
+                                    //     label: 'Condo',
+                                    // },
+                                    // {
+                                    //     value: 'landed',
+                                    //     label: 'Landed',
+                                    // },
+                                    // {
+                                    //     value: 'strata_detached',
+                                    //     label: 'Strata Detached',
+                                    // },
+                                    // {
+                                    //     value: 'strata_semidetached',
+                                    //     label: 'Strata Semidetached',
+                                    // },
+                                    // {
+                                    //     value: 'strata_terrace',
+                                    //     label: 'Strata Terrace',
+                                    // },
+                                    // {
+                                    //     value: 'detached',
+                                    //     label: 'Detached',
+                                    // },
+                                    // {
+                                    //     value: 'semi_detached',
+                                    //     label: 'Semi-detached',
+                                    // },
+                                    // {
+                                    //     value: 'terrace',
+                                    //     label: 'Terrace',
+                                    // },
+                                    // {
+                                    //     value: 'apartment',
+                                    //     label: 'Apartment',
+                                    // },
+                                    // {
+                                    //     value: 'condominium',
+                                    //     label: 'Condominium',
+                                    // },
+                                    // {
+                                    //     value: 'executive_condominium',
+                                    //     label: 'Executive Condominium',
+                                    // }
                                 ]}
                             />
                         </div>
@@ -282,59 +282,31 @@ function Searchbar({ initialValues }) {
 
                                 options={[
                                     {
-                                        value: 'communitycentre',
-                                        label: 'Community Centre',
-                                    },
-                                    {
                                         value: 'supermarket',
                                         label: 'Supermarket',
                                     },
                                     {
-                                        value: 'mall',
+                                        value: 'shopping_mall',
                                         label: 'Mall',
                                     },
                                     {
-                                        value: 'secondaryschool',
+                                        value: 'secondary_school',
                                         label: 'Secondary School',
                                     },
                                     {
-                                        value: 'primaryschool',
+                                        value: 'primary_school',
                                         label: 'Primary School',
                                     },
                                     {
-                                        value: 'eldercare',
-                                        label: 'Elder Care',
-                                    },
-                                    {
-                                        value: 'studentcare',
-                                        label: 'Student Care',
-                                    },
-                                    {
-                                        value: 'mrt',
+                                        value: '',
                                         label: 'MRT',
-                                    },
-                                    {
-                                        value: 'pool',
-                                        label: 'Pool',
-                                    },
-                                    {
-                                        value: 'basketballcourt',
-                                        label: 'Basketball Court',
-                                    },
-                                    {
-                                        value: 'badmintoncourt',
-                                        label: 'Badminton Court',
                                     },
                                     {
                                         value: 'park',
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'gym',
-                                        label: 'Gym',
-                                    },
-                                    {
-                                        value: 'coffeeshophawkercentre',
+                                        value: 'cafe',
                                         label: 'Coffee shop/Hawker Centre',
                                     },
                                     {

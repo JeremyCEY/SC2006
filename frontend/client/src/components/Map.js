@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, Marker, InfoWindow, DirectionsService, DirectionsRenderer, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, DirectionsService, DirectionsRenderer, Circle, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { useRailNameOverlays } from './UseRailNameOverlay';
 import mrtSvgURL from "../images/train_FILL0_wght400_GRAD0_opsz24.svg"
@@ -15,7 +15,7 @@ const center = {
     lng: 103.8198
 };
 
-function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
+function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
     // useEffect(() => {
     //     console.log(selectedResale1);
     // }, [selectedResale1]);
@@ -29,6 +29,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8",
+        libraries: ['places'],
     });
 
 
@@ -55,23 +56,23 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
         setSelectedResale(null);
     };
 
-    useEffect(() => {
-        axios.get('/testData') // Make sure this URL is correct and accessible
-            .then(response => setResales(response.data))
-            .catch(err => console.error('Failed to fetch resale data:', err));
+    // useEffect(() => {
+    //     axios.get('/testData') // Make sure this URL is correct and accessible
+    //         .then(response => setResales(response.data))
+    //         .catch(err => console.error('Failed to fetch resale data:', err));
 
-        // Fetch GeoJSON data similar to resale data
-        axios.get('geodata/railnames') // Adjust URL as necessary
-            .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
-            .catch(err => console.error('Failed to fetch GeoJSON data:', err));
+    //     // Fetch GeoJSON data similar to resale data
+    //     axios.get('geodata/railnames') // Adjust URL as necessary
+    //         .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
+    //         .catch(err => console.error('Failed to fetch GeoJSON data:', err));
 
-        axios.get('geodata/mrtlines')
-            .then(response => setMrt(response.data))
-            .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
-    }, []);
+    //     axios.get('geodata/mrtlines')
+    //         .then(response => setMrt(response.data))
+    //         .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
+    // }, []);
 
     //
-    //useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
+    useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
     //For Routing:
@@ -79,20 +80,93 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
     const [directionsRequested, setDirectionsRequested] = useState(false); // Track whether directions have been requested
 
     useEffect(() => {
-        setDestination(String(selectedFrequentAddress));
-        setDirectionsRequested(true);
-    }, [selectedFrequentAddress]);
+        if (selectedFrequentAddress !== null) {
+            setDestination(String(selectedFrequentAddress));
+            setDirectionsRequested(true);
+        }
+    }, [selectedFrequentAddress, selectedResale1]);
 
     const directionsCallback = (response) => {
-        if (response !== null) {
-            if (response.status === 'OK') {
-                setResponse(response);
-            } else {
-                console.log('Directions request failed due to ' + response.status);
-            }
+        if (response !== null && response.status === 'OK') {
+            setResponse(response);
             setDirectionsRequested(false);
+            setTravelTime(response.routes[0].legs[0].duration.text)
+        } else {
+            console.log('Directions request failed due to ' + response?.status);
         }
     };
+
+    // Routing funcs end
+
+    //amenity searching
+    const [amenities, setAmenities] = useState([]);
+    const [circleCenter, setCircleCenter] = useState(null);
+    const [circleRadius, setCircleRadius] = useState(500);
+
+    useEffect(() => {
+        if (isLoaded && selectedResale1 !== null) {
+            // Fetch amenities when the map is loaded
+            fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
+            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) })
+        }
+    }, [isLoaded, selectedResale1]);
+
+    const fetchAmenities = async (location) => {
+        const service = new window.google.maps.places.PlacesService(mapRef.current);
+        const request = {
+            location: location,
+            radius: 500,
+            type: amenityTypes, // Adjust types as needed
+        };
+        console.log(amenityTypes);
+        if (amenityTypes.length > 0) {
+            service.nearbySearch(request, (results, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                    const filteredResults = results.filter(amenity => amenityTypes.includes(amenity.types[0]));
+                    setAmenities(filteredResults);
+                } else {
+                    setAmenities([]);
+                }
+            });
+        }
+        console.log(amenities);
+    };
+
+    const processedAmenities = amenities.map(amenity => {
+        let iconUrl;
+        switch (amenity.types[0]) {
+            case 'restaurant':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet.svg';
+                break;
+            case 'primary_school':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
+                break;
+            case 'secondary_school':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
+                break;
+            case 'cafe':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/cafe_pinlet.svg';
+                break;
+            case 'park':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet.svg';
+                break;
+            case 'supermarket':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/shoppingcart_pinlet.svg'
+                break;
+            case 'shopping_mall':
+                iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet.svg'
+                break;
+            default:
+                iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'; // Replace with default icon URL
+                break;
+        }
+        console.log(amenity.types);
+        // Return amenity object with additional 'iconUrl' property
+        return { ...amenity, iconUrl };
+    });
+
+
+    //amenity searching end
 
     if (loadError) {
         return <div>Error loading maps</div>;
@@ -136,24 +210,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
                     // clusterer={clusterer}
                     onClick={() => handleMarkerClick(selectedResale1)}
                 >
-                    {directionsRequested && (
-                        <DirectionsService
-                            options={{
-                                destination: destination,
-                                origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
-                                travelMode: 'TRANSIT',
-                            }}
-                            callback={directionsCallback}
-                        />
-                    )}
-                    {response !== null && <DirectionsRenderer directions={response} />}
-
-                    {response && (                  //idk how to display this
-                        <div>
-                            <p>Travel Time: {response.routes[0].legs[0].duration.text}</p>
-                        </div>
-                    )}
-
                     {selectedResale === selectedResale1 && (
                         <InfoWindow onCloseClick={handleCloseInfoWindow}>
                             <div>
@@ -162,8 +218,39 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress }) {
                             </div>
                         </InfoWindow>
                     )}
+
+                    <Circle center={circleCenter} radius={circleRadius}></Circle>
+
+                    {directionsRequested && (               //routing stuff
+                        <DirectionsService
+                            options={{
+                                destination: destination,
+                                origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
+                                travelMode: travelMode,
+                            }}
+                            callback={directionsCallback}
+                        />
+                    )}
+
+                    <DirectionsRenderer directions={response} />
+
+                    {response && (                  //idk how to display this
+                        <div>
+                            <p>Travel Time: {response.routes[0].legs[0].duration.text}</p>
+                        </div>
+                    )}
                 </Marker>
             )}
+            {processedAmenities.map((amenity, index) => (
+                <Marker
+                    key={index}
+                    position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}
+                    icon={{
+                        url: amenity.iconUrl,
+                        scaledSize: new window.google.maps.Size(30, 30),
+                    }}
+                />
+            ))}
         </GoogleMap >
     ) : <></>;
 }
