@@ -77,4 +77,22 @@ export class AuthService {
         return user;
     }
 
+    async updateName(userId: string, newName: string): Promise<User> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+        user.name = newName;
+        await user.save();
+        return user;
+    }
+
+    async getAccount(userId: string): Promise<{name: string, email: string}> {
+        const user = await this.userModel.findById(userId).select('name email -_id');
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+        return { name: user.name, email: user.email };
+    }
+
 }
