@@ -93,5 +93,4 @@ export class AuthController {
     async getAccount(@Request() req) {
         return this.authService.getAccount(req.user.id);
     }
-
 }
