@@ -30,7 +30,6 @@ export class AuthService {
         });
 
         const token = this.jwtService.sign({id: user._id});
-
         return {token};
     }
 
@@ -52,10 +51,10 @@ export class AuthService {
     async forgetPassword(email: string, answer: string): Promise<string>{
         const user = await this.userModel.findOne({email});
         if(!user){
-            throw new UnauthorizedException('Invalid email');
+            throw new UnauthorizedException('Invalid email address');
         }
         if(user.security!=answer){
-            return 'Wrong Answer'
+            throw new UnauthorizedException('Wrong Answer to Security Question');
         }
         else{
             const defaultPassword = '123456';
@@ -66,21 +65,24 @@ export class AuthService {
         }
     }
 
-    async updateEmail(userId: string, newEmail: string): Promise<User> {
+    async updateEmail(userId: string, newEmail: string): Promise<{token: string}> {
         const user = await this.userModel.findById(userId);
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
-        const existingUser = await this.userModel.findOne({ email: newEmail });
-        if (existingUser) {
-            throw new ConflictException('This email is already in use');
+        /*
+        const existingemail = await this.userModel.findOne({email});
+        if(existingemail){
+            throw new ConflictException('This email has already been used');
         }
+        */
         user.email = newEmail;
         await user.save();
-        return user;
+        const token = this.jwtService.sign({id: user._id});
+        return {token};
     }
 
-    async updatePassword(userId: string, currentPassword: string, newPassword: string): Promise<User> {
+    async updatePassword(userId: string, currentPassword: string, newPassword: string): Promise<string> {
         const user = await this.userModel.findById(userId);
         if (!user) {
             throw new UnauthorizedException('User not found');
@@ -92,7 +94,7 @@ export class AuthService {
         }
         user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
-        return user;
+        return 'Your password has been successfully changed';
     }
 
     async updateName(userId: string, newName: string): Promise<User> {

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
-import { Button, Input, message } from 'antd';
+import { Button, Input, message, Result } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -18,23 +18,58 @@ const validationSchema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
+    const [passwordReset, setPasswordReset] = useState(false);
+    const [resetMessage, setResetMessage] = useState('');
     // Function to validate credentials and reset password
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await axios.patch('http://localhost:3000/auth/forgetpassword', values);
             // Assuming your backend returns a success message
-            message.success(response.data.message || 'Password reset successfully.');
+            message.success(response.data || 'Password reset successfully.');
+            setPasswordReset(true);
+            setResetMessage(response.data || 'Password reset successfully.');
             resetForm();
         } catch (error) {
             message.error(error.response?.data?.message || 'Failed to reset password.');
+            setPasswordReset(false);
         } finally {
             setSubmitting(false);
         }
     };
 
-    return (
+    if (passwordReset) {
+        return (
+            <Result
+                status="success"
+                title={<span className="text-3xl font-bold pb-5">Password Reset Successfully!</span>}
+                subTitle={resetMessage}
+                extra={[
+                    <Button type="primary" key="login" href="/login">
+                        Login
+                    </Button>,
+                ]}
+            />
+        );
+    }
 
+    return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            <a href="/" className="self-start pl-3 pt-3">
+                <button type="button" className="text-white bg-blue-800
+                                                hover:bg-blue-800 focus:ring-4 focus:outline-none
+                                                focus:ring-blue-300 font-medium rounded-full
+                                                text-sm p-2.5 text-center inline-flex
+                                                items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700
+                                                dark:focus:ring-blue-800
+                                                pr">
+                    <svg className="w-5 h-5 rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                              d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                    <span className="sr-only">Icon description</span>
+                </button>
+            </a>
             <div className="flex pt-[100px] pb-5">
                 <img src={mainLogo} className="h-12 pr-3" alt="Logo"/>
                 <span
@@ -44,7 +79,7 @@ const ForgotPassword = () => {
 
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                 {({values, handleChange, handleBlur, handleSubmit, isSubmitting}) => (
-                    <Form onSubmit={handleSubmit} style={{width: '30%'}}>
+                    <Form onSubmit={handleSubmit} style={{width: '30%', minWidth: '300px'}}>
                         <div style={{marginBottom: '15px'}}>
                             <Field name="email">
                                 {({field}) => (
@@ -88,14 +123,13 @@ const ForgotPassword = () => {
                             alignItems: 'center', // Vertically center
                             marginTop: '15px'
                         }}>
-                            <Button type="primary" htmlType="submit" style={{
-                                backgroundColor: '#1890ff',
+                            <button class=" h-[50px] rounded-md bg-blue-800 text-white font-bold text-xl" style={{
                                 color: 'white',
                                 width: '100%',
                                 margin: '10px 0'
                             }} loading={isSubmitting}>
-                                Submit
-                            </Button>
+                                Reset Password
+                            </button>
                         </div>
                     </Form>
                 )}

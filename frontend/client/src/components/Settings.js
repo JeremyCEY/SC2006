@@ -1,165 +1,3 @@
-/*import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { Button, Typography, message, Input} from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
-const { Title } = Typography;*/
-/*
-// Create a custom Input component that integrates Formik with Ant Design's Input components
-const FormikAntInput = ({ ...props }) => {
-    return (
-
-        <Field name="email">
-            {({ field, meta }) => (
-                <div>
-                    <Input {...field} placeholder="Email" />
-                    {meta.touched && meta.error && <div className="error">{meta.error}</div>}
-                </div>
-            )}
-        </Field>
-
-    );
-};
-
-
-const Settings = ({ userId }) => {
-    const [initialValues, setInitialValues] = useState({ name: '', email: '', currentPassword: '', newPassword: '', confirmPassword: '' });
-
-    const [showNameSave, setShowNameSave] = useState(false);
-    const [showEmailSave, setShowEmailSave] = useState(false);
-
-    const [savedProperties, setSavedProperties] = useState([]);
-    const [residences, setResidences] = useState([]);
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [token, setToken] = useState(null); // Define token state
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setIsAuthenticated(storedToken !== null);
-        setToken(storedToken); // Set token state
-    }, []);
-
-    //Get current user email and name data
-    useEffect(() => {
-        const fetchData = async () => {
-            const storedToken = localStorage.getItem('token');
-            if (storedToken) {
-                try {
-                    const response = await axios.get(`http://localhost:3000/auth/${userId}`, {
-                        headers: { Authorization: `Bearer ${storedToken}` },
-                    });
-                    const { name, email } = response.data;
-                    setInitialValues(vals => ({ ...vals, name, email }));
-
-                    console.log(name);
-                    console.log(email);
-                } catch (error) {
-                    console.error('Error fetching account details:', error);
-                }
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Required'),
-        email: Yup.string().email('Invalid email').required('Required'),
-        currentPassword: Yup.string().required('Required'),
-        newPassword: Yup.string().min(8, 'Password must be at least 8 characters'),
-        confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
-    });
-
-    const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-        const { name, email, currentPassword, newPassword } = values;
-        try {
-            // Update Name
-            if (name !== initialValues.name) { // Assuming initialValues.name is set to the current name initially
-                await axios.patch('http://localhost:3000/auth/update-name', { name }, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                message.success('Name updated successfully');
-            }
-
-            // Update Email
-            if (email !== initialValues.email) { // Assuming initialValues.email is set to the current email initially
-                await axios.patch('http://localhost:3000/auth/update-email', { newEmail: email }, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                message.success('Email updated successfully');
-            }
-
-            // Update Password
-            if (currentPassword && newPassword) {
-                await axios.patch('http://localhost:3000/auth/update-password', { currentPassword, newPassword }, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                message.success('Password updated successfully');
-            }
-
-            // Optionally reset form or update initial values here
-            resetForm({ values: { ...values, currentPassword: '', newPassword: '', confirmPassword: '' } }); // Clear password fields
-
-        } catch (error) {
-            // Handle errors
-            if (error.response) {
-                // Specific error messages for different failure cases
-                const status = error.response.status;
-                switch (status) {
-                    case 409:
-                        message.error('This email is already in use');
-                        break;
-                    case 401:
-                        message.error('Current password is incorrect');
-                        break;
-                    default:
-                        message.error('Failed to update information');
-                }
-            } else {
-                message.error('An error occurred');
-            }
-        } finally {
-            setSubmitting(false); // Ensure we're no longer submitting
-        }
-    };
-
-    return (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
-                <Form>
-                    <div style={{ flex: '1', margin: '5%', boxSizing: 'border-box' }}>
-                        <div className='flex flex-col space-y-4'>
-                            <Title level={4}>Name</Title>
-                            <FormikAntInput name="name" placeholder="Name" />
-
-                            <Title level={4}>Email</Title>
-                            <FormikAntInput name="email" placeholder="Email" />
-
-                            <Title level={4}>Modify Password</Title>
-                            <FormikAntInput name="currentPassword" type="password" placeholder="Current Password" />
-                            <FormikAntInput name="newPassword" type="password" placeholder="New Password" />
-                            <FormikAntInput name="confirmPassword" type="password" placeholder="Confirm New Password" />
-
-                            <Button type="primary" htmlType="submit" disabled={isSubmitting} style={{ marginTop: '16px' }}>
-                                Save Changes
-                            </Button>
-                        </div>
-                    </div>
-                </Form>
-            )}
-        </Formik>
-    );
-};
-
-export default Settings;
-
-
-
-*/
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Map from '../components/Map'
@@ -235,7 +73,7 @@ const Settings = ({ userId }) => {
         }
         try {
             console.log('Saving name:', name);
-            await axios.patch('http://localhost:3000/auth/update-name', { newName: name }, {
+            await axios.patch('http://localhost:3000/auth/update-name', { name: name }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             message.success('Name updated successfully');
@@ -248,7 +86,7 @@ const Settings = ({ userId }) => {
     const updateEmail = async () => {
         try {
             console.log('Saving email:', email);
-            await axios.patch('http://localhost:3000/auth/update-email', { newEmail: email }, {
+            await axios.patch('http://localhost:3000/auth/update-email', { email: email }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             message.success('Email updated successfully');
@@ -259,6 +97,7 @@ const Settings = ({ userId }) => {
             } else {
                 message.error('Failed to update email');
             }
+            console.log(error.response);
         }
     };
 
@@ -286,7 +125,13 @@ const Settings = ({ userId }) => {
             setConfirmPasswordError('');
         } catch (error) {
             setCurrentPasswordValid(false)
-            message.error('Failed to update password');
+            // Check if the error response has data and a message, then display it
+            if (error.response && error.response.data && error.response.data.message) {
+                message.error(error.response.data.message);
+            } else {
+                // Generic error message if specific error message is not found
+                message.error('Failed to update password. Please try again later.');
+            }
         }
     };
 
