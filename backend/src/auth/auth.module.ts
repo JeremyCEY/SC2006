@@ -11,6 +11,8 @@ import { BookmarkService } from 'src/bookmark v2/bookmark.service';
 import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
 import { FrequentAddressController } from 'src/frequentaddress/frequentaddress.controller';
 import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.service';
+import { LoginFunctionController } from 'src/loginfunction/loginfunction.controller';
+import { LoginFunctionService } from 'src/loginfunction/loginfunction.service';
 
 
 @Module({
@@ -24,8 +26,8 @@ import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.serv
     })
 
   ],
-  controllers: [AuthController, BookmarkController, FrequentAddressController],
-  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService],
+  controllers: [AuthController, BookmarkController, FrequentAddressController, LoginFunctionController],
+  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService, LoginFunctionService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

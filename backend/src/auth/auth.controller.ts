@@ -20,6 +20,12 @@ export class AuthController {
         return this.authService.login(LoginDto);
     }
 
+    @Patch('/forgetpassword')
+    async forgetPassword(@Body ('email') email: string, @Body ('answer')answer: string): Promise<string>{
+        return this.authService.forgetPassword(email, answer)
+    }
+
+
     //MODIFY data
     @Patch('/update-email')
     async updateEmail(@Request() req, @Body('newEmail') newEmail: string) {

@@ -6,13 +6,17 @@ export class SignUpDto {
   readonly name: string;
 
   @IsNotEmpty()
-  @IsEmail({}, { message: 'Please enter valid email' })
+  @IsEmail({}, { message: 'Please enter valid email address' })
   readonly email: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(6)
   readonly password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly security: string;
 }
 
 

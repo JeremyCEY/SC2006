@@ -16,7 +16,7 @@ export class AuthService {
     ) {}
 
     async signUp(signUpDto: SignUpDto): Promise<{token: string}> {
-        const {name, email, password} = signUpDto;
+        const {name, email, password, security} = signUpDto;
         const existingemail = await this.userModel.findOne({email});
         if(existingemail){
             throw new ConflictException('This email has already been used');
@@ -25,7 +25,8 @@ export class AuthService {
         const user = await this.userModel.create({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            security
         });
 
         const token = this.jwtService.sign({id: user._id});
@@ -46,6 +47,23 @@ export class AuthService {
         
         const token = this.jwtService.sign({id: user._id});
         return {token};
+    }
+
+    async forgetPassword(email: string, answer: string): Promise<string>{
+        const user = await this.userModel.findOne({email});
+        if(!user){
+            throw new UnauthorizedException('Invalid email');
+        }
+        if(user.security!=answer){
+            return 'Wrong Answer'
+        }
+        else{
+            const defaultPassword = '123456';
+            const hashedPassword = await bcrypt.hash(defaultPassword, 10)
+            user.password = hashedPassword
+            await user.save()
+            return 'Your password has been changed to 123456. Please change your password after you logged in'
+        }
     }
 
     async updateEmail(userId: string, newEmail: string): Promise<User> {
