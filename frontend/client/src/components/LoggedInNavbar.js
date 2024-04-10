@@ -62,10 +62,10 @@ function LoggedInNavbar({formValues}) {
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
                 </a>
-                <div style={{ width: '75%', height: '80%' }}>
+                <div style={{ width: '75%', height: '70%' }}>
                 <Searchbar initialValues={formValues} />
                 </div>
-                <div style={{ width: '7%', height: '80%' }}>
+                <div style={{ width: '7%', height: '70%' }}>
                     <Dropdown menu={menuProps} className='
                             border rounded-[100px] shadow-md'>
                             <Button style={{ height: '100%', width: '100%' }}>
