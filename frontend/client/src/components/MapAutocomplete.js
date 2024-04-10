@@ -18,7 +18,7 @@ function MapAutocomplete({setSelectedPlace}) {
     const mapRef = useRef(null);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8",
+        googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
         libraries: ['places']
     });
 
