@@ -48,16 +48,15 @@ function Searchbar({ initialValues }) {
   
   
     return (
-        <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit} >
             {({ values, setFieldValue }) => (
-                <Form className='w-[80%] h-[50%]'>
+                <Form style={{ height: '100%', width: '100%' }}>
                     <div className="
-                                    flex items-center
+                                    flex flex-row items-center
                                     justify-between
                                     border shadow-md
-                                    
                                     rounded-[100px]
-                                    ">
+                                    "  style={{width:'100%', height: '100%' }}>
                         {/* Location */}
                         <div className="flex flex-col ml-10 w-[15%]">
                             <span className="font-semibold text-sm">Location</span>

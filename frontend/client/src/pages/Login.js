@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
-
+import {message} from 'antd'
 
 import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
@@ -37,7 +37,7 @@ function Login(){
             const { token } = response.data;
             console.log('Received token:', token);
             localStorage.setItem('token', token);
-    
+            message.success("Login successful")
             // Redirect to another page, update state, etc. based on your application flow
             window.location.href = '/dashboard';
 
@@ -45,19 +45,21 @@ function Login(){
             console.error('Login error:', error);
             if (error.response) {
                 console.error('Server responded with status:', error.response.status);
+                // Use message.error to display error messages
                 if (error.response.status === 401) {
-                    alert('Invalid email or password');
+                    message.error('Invalid email or password');
                 } else {
-                    alert('An error occurred. Please try again later.');
+                    // You can customize this message to be more specific based on error.response.data.message or keep it generic
+                    message.error(error.response.data.message || 'An error occurred. Please try again later.');
                 }
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error('No response received:', error.request);
-                alert('No response received. Please check your internet connection.');
+                message.error('No response received. Please check your internet connection.');
             } else {
                 // Something happened in setting up the request that triggered an error
                 console.error('Request setup error:', error.message);
-                alert('An error occurred. Please try again later.');
+                message.error('An error occurred. Please try again later.');
             }
         }
     };

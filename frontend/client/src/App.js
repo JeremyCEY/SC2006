@@ -33,7 +33,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          <Route path="/FAQ" element={<FAQ />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/login/forget-password" element={<ForgetPassword />} />
           <Route path="/explore" element={<Explore />} />
         </Routes>
       </Router>

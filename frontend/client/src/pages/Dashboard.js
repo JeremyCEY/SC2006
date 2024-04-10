@@ -61,9 +61,7 @@ function Dashboard() {
         <>
             <LoggedInNavbar />
 
-            <div className="flex">
-                
-                
+            <div className="flex" >
                 {/* Sidebar */}
                 <Sider width={250} className='bg-gray-50 h-[87vh]'>
                     <Menu
@@ -91,7 +89,7 @@ function Dashboard() {
                 </Sider>
 
                 {/* Page content */}
-                <div className="flex">
+                <div className="flex-grow">
                     {renderContent()}
                 </div>
             </div>
