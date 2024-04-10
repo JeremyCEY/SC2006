@@ -6,21 +6,48 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import mainLogo from '../images/logo.png'; // Ensure this path is correct
 
+/**
+ * Defines the initial values for the Forgot Password form fields.
+ * @type {Object}
+ */
 const initialValues = {
     email: '',
     securityAnswer: '',
 };
 
-// Validation schema
+/**
+ * Sets up a validation schema using Yup to ensure that the form data
+ * meets certain requirements before being submitted.
+ */
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
     securityAnswer: Yup.string().required('Answer is required'),
 });
 
+/**
+ * A functional component that renders a form for users to reset their password.
+ * Users are required to provide their email and answer a security question.
+ * If the credentials are validated successfully, their password will be reset.
+ *
+ * State Hooks:
+ * - passwordReset (boolean): To track the success status of the password reset operation.
+ * - resetMessage (string): To hold the message to be displayed upon password reset.
+ *
+ * The form uses Formik for form handling and Yup for validation.
+ */
 const ForgotPassword = () => {
     const [passwordReset, setPasswordReset] = useState(false);
     const [resetMessage, setResetMessage] = useState('');
-    // Function to validate credentials and reset password
+
+    /**
+     * Handles the form submission. Validates the user's credentials and attempts to reset the password.
+     * If successful, displays a success message and resets the form. Otherwise, displays an error message.
+     *
+     * @async
+     * @function handleSubmit
+     * @param {Object} values - The form values.
+     * @param {Object} formikHelpers - The set of Formik actions and helpers.
+     */
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await axios.patch('http://localhost:3000/auth/forgetpassword', values);
@@ -37,6 +64,15 @@ const ForgotPassword = () => {
         }
     };
 
+    /**
+     * Displays a success message if the password has been reset successfully.
+     *
+     * This component conditionally renders a success message using Ant Design's `Result` component if
+     * the password reset operation was successful. If not, it renders a form allowing the user to reset
+     * their password by providing their email and answering a security question.
+     *
+     * @returns {React.Component} A `Result` component displaying a success message or a form for resetting the password.
+     */
     if (passwordReset) {
         return (
             <Result
@@ -53,7 +89,9 @@ const ForgotPassword = () => {
     }
 
     return (
+        // Main container for the Forgot Password page, centered both vertically and horizontally.
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            {/* Back to Home button with an icon */}
             <a href="/" className="self-start pl-3 pt-3">
                 <button type="button" className="text-white bg-blue-800
                                                 hover:bg-blue-800 focus:ring-4 focus:outline-none
@@ -70,16 +108,21 @@ const ForgotPassword = () => {
                     <span className="sr-only">Icon description</span>
                 </button>
             </a>
+            {/* Logo and title for the page */}
             <div className="flex pt-[100px] pb-5">
                 <img src={mainLogo} className="h-12 pr-3" alt="Logo"/>
                 <span
                     className="self-center text-2xl font-semibold whitespace-nowrap text-black">Sweet Home Finder</span>
             </div>
+
+            {/* Page Header */}
             <span className="text-3xl font-bold pb-5">Forget Your Password?</span>
 
+            {/* Formik component for handling the form submission and validation */}
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                 {({values, handleChange, handleBlur, handleSubmit, isSubmitting}) => (
                     <Form onSubmit={handleSubmit} style={{width: '30%', minWidth: '300px'}}>
+                        {/* SECTION Email input field with an email icon */}
                         <div style={{marginBottom: '15px'}}>
                             <Field name="email">
                                 {({field}) => (
@@ -94,6 +137,8 @@ const ForgotPassword = () => {
                                 )}
                             </Field>
                         </div>
+                        {/* SECTION Security question */}
+                        {/* Security question */}
                         <div style={{
                             display: 'flex',
                             justifyContent: 'flex-start',
@@ -103,7 +148,7 @@ const ForgotPassword = () => {
                             <span style={{fontWeight: 'bold', marginRight: '8px'}}>Security Question</span>
                             <span>What's your pet's name?</span>
                         </div>
-
+                        {/* Security answer input field with a lock icon */}
                         <Field name="securityAnswer">
                             {({field}) => (
                                 <Input
@@ -116,6 +161,7 @@ const ForgotPassword = () => {
                                 />
                             )}
                         </Field>
+                        {/* SECTION Submit button for the form */}
                         <div style={{
                             width: '100%',
                             display: 'flex',
@@ -139,97 +185,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-
-/*
-import React from 'react';
-import { Formik } from 'formik';
-import {
-    SubmitButton,
-    Input,
-    Checkbox,
-    ResetButton,
-    FormikDebug,
-    Form,
-    FormItem,
-} from "formik-antd"
-
-import { message } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import * as Yup from 'yup';
-import mainLogo from '../images/logo.png'
-import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
-
-const ForgotPassword = () => {
-    const initialValues = {
-        email: '',
-        securityAnswer: '',
-    };
-
-// Mock security question for demonstration
-    const securityQuestion = "What's your pet's name?";
-
-// Validation schema
-    const validationSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        securityAnswer: Yup.string().required('Answer is required'),
-    });
-
-    const navigate = useNavigate();
-    // Function to validate credentials and reset password
-    const handleSubmit = async (values, { setSubmitting }) => {
-        try {
-            const response = await axios.patch('http://localhost:3000/auth/forgetpassword', values);
-            message.success(response.data);
-        } catch (error) {
-            let errorMessage = 'Failed to validate your details. Please try again.';
-            if (error.response && error.response.data && error.response.data.message) {
-                errorMessage = error.response.data.message;
-            }
-            message.error(errorMessage);
-        } finally {
-            setSubmitting(false);
-        }
-    };
-    return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            <div className="flex pt-[100px] pb-5">
-                <img src={mainLogo} className="h-12 pr-3" alt="Logo"/>
-                <span
-                    className="self-center text-2xl font-semibold whitespace-nowrap text-black">Sweet Home Finder</span>
-            </div>
-            <span className="text-3xl font-bold pb-5">Forget Your Password?</span>
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}
-
-                render={() => (
-                    <Form>
-                        <FormItem name="email">
-                            <Input name="email" placeholder="Email" prefix={<MailOutlined/>}/>
-                        </FormItem >
-
-                        <div style={{display: 'flex', alignItems: 'center', marginBottom: '24px'}}>
-                            <LockOutlined style={{marginRight: '8px'}}/>
-                            <span>{securityQuestion}</span>
-                        </div>
-                        <FormItem name="securityAnswer">
-                            <Input name="securityAnswer" placeholder="Your answer"/>
-                        </FormItem >
-                        <SubmitButton type="primary" htmlType="submit" style={{marginTop: '16px'}}>
-                            Submit
-                        </SubmitButton>
-
-                    </Form>
-                )}
-            />
-        </div>
-    );
-}
-
-export default ForgotPassword;
-*/
