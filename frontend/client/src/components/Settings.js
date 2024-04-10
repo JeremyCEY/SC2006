@@ -61,29 +61,42 @@ const Settings = ({ userId }) => {
     }, []);
 
     /**
+     * Runs whenever `newPassword` or `confirmNewPassword` changes
+     * Validates the password confirmation to ensure there is no password mismatch
+     * @returns {boolean} Whether the confirmed new password is valid.
+     */
+    useEffect(() => {
+        validateConfirmPassword();
+    }, [newPassword, confirmNewPassword]);
+
+    /**
      * Validates the new password to ensure it meets length requirements.
      * @returns {boolean} Whether the new password is valid.
      */
     const validatePassword = () => {
-        if (newPassword.length < 6) {
+        if (newPassword.length >= 6) {
+            setPasswordError('');
+            return true;
+        }
+        else{
             setPasswordError('Password must be at least 6 characters');
             return false;
         }
-        setPasswordError('');
-        return true;
     };
 
     /**
      * Validates the confirmed password matches the new password.
      * @returns {boolean} Whether the confirmed password matches.
      */
-    const validateConfirmPassword = (password, confirmPassword) => {
-        if (password != confirmPassword) {
+    const validateConfirmPassword = () => {
+        if (newPassword == confirmNewPassword) {
+            setConfirmPasswordError('');
+            return true;
+        }
+        else{
             setConfirmPasswordError('Passwords do not match');
             return false;
         }
-        setConfirmPasswordError('');
-        return true;
     };
 
     /**
@@ -158,9 +171,19 @@ const Settings = ({ userId }) => {
             setPasswordError('');
             setConfirmPasswordError('');
         } catch (error) {
-            setCurrentPasswordValid(false)
-            // Check if the error response has data and a message, then display it
+            // Reset validation states to true before setting specific errors
+            setCurrentPasswordValid(true);
+            setPasswordError(false);
+
             if (error.response && error.response.data && error.response.data.message) {
+                if (error.response.data.message.includes('Current password is incorrect')) {
+                    // Mark the current password as invalid
+                    setCurrentPasswordValid(false);
+
+                } else if (error.response.data.message.includes('New password cannot be the same as the old password')) {
+                    // Mark the new password as having an error
+                    setPasswordError('New password cannot be the same as the old password');
+                }
                 message.error(error.response.data.message);
             } else {
                 // Generic error message if specific error message is not found
@@ -195,7 +218,7 @@ const Settings = ({ userId }) => {
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
         setNewPassword(newPassword);
-        validateConfirmPassword(newPassword, confirmNewPassword);
+        validateConfirmPassword();
         if(newPassword.length < 6) {
             setPasswordError("Password must be at least 6 characters long"); //Sets password error to be true
             return false;
@@ -222,7 +245,7 @@ const Settings = ({ userId }) => {
     const handleConfirmPasswordChange = (e) => {
         const newConfirmPassword = e.target.value;
         setConfirmNewPassword(newConfirmPassword);
-        validateConfirmPassword(newPassword, newConfirmPassword);
+        validateConfirmPassword();
     };
 
     /**
@@ -286,7 +309,7 @@ const Settings = ({ userId }) => {
                         <div className='flex flex-col space-y-4' style={{width: '32%'}}>
                             <Input.Password
                                 placeholder="New Password"
-                                onChange={handlePasswordChange}
+                                onChange={(e) => {setPasswordError(false); handlePasswordChange(e) }}
                                 iconRender={(visible) => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                                 style={{width: '100%'}}
                                 status={passwordError ? "error" : ""}
@@ -297,7 +320,7 @@ const Settings = ({ userId }) => {
                         <div className='flex flex-col space-y-4' style={{width: '32%'}}>
                             <Input.Password
                                 placeholder="Confirm New Password"
-                                onChange={handleConfirmPasswordChange}
+                                onChange={(e) => {setConfirmPasswordError(false); handleConfirmPasswordChange(e)}}
                                 iconRender={(visible) => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                                 style={{width: '100%'}}
                                 status={confirmPasswordError ? "error" : ""}

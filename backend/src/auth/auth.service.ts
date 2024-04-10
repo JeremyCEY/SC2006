@@ -70,12 +70,16 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
-        /*
-        const existingemail = await this.userModel.findOne({email});
+
+        const existingemail = await this.userModel.findOne({newEmail});
         if(existingemail){
-            throw new ConflictException('This email has already been used');
+            throw new ConflictException('This email is already in use');
         }
-        */
+
+        if (newEmail === user.email) {
+            throw new UnauthorizedException('No change in email');
+        }
+
         user.email = newEmail;
         await user.save();
         const token = this.jwtService.sign({id: user._id});
@@ -92,6 +96,11 @@ export class AuthService {
         if (!passwordMatched) {
             throw new UnauthorizedException('Current password is incorrect');
         }
+
+        if (currentPassword === newPassword) {
+            throw new UnauthorizedException('New password cannot be the same as the old password');
+        }
+
         user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
         return 'Your password has been successfully changed';
