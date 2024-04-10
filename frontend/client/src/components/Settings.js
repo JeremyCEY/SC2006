@@ -135,9 +135,10 @@ const Settings = ({ userId }) => {
             message.success('Email updated successfully');
             setShowEmailSave(false);
         } catch (error) {
-            if (error.response && error.response.status === 409) {
-                message.error('Email already in use');
-            } else {
+            if (error.response && error.response.data && error.response.data.message) {
+                message.error(error.response.data.message);
+            }
+            else {
                 message.error('Failed to update email');
             }
             console.log(error.response);

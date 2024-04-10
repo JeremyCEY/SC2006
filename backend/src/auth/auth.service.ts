@@ -111,6 +111,11 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
+
+        if (user.name === newName) {
+            throw new UnauthorizedException('Please enter a new name');
+        }
+
         user.name = newName;
         await user.save();
         return user;
