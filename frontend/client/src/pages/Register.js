@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import mainLogo from '../images/logo.png'
-import username from '../images/user.png'
-import password from '../images/lock.png'
-import email from '../images/email.png'
+import { message, Typography, Input, Button } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 
 function Register(){
-    const [formData, setFormData] = useState({ name: '', email: '', password: '' , confirmPassword: ''});
+    const [formData, setFormData] = useState({ name: '', email: '', password: '' , confirmPassword: '', security: '' });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -19,8 +18,9 @@ function Register(){
     const handleSubmit = async (event) => {
         event.preventDefault();
             // Ensure no field is empty
-        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-            console.log('All fields are required');
+        if (!formData.name || !formData.email || !formData.password ||
+            !formData.confirmPassword || !formData.security) {
+            message.error('All fields are required');
             return;
         }
 
@@ -28,35 +28,57 @@ function Register(){
         // You can use a simple regex for email validation
         const emailRegex = /\S+@\S+\.\S+/;
         if (!emailRegex.test(formData.email)) {
-            console.log('Invalid email');
+            message.error('Invalid email');
             return;
         }
 
         // Ensure password and confirmPassword are the same
         if (formData.password !== formData.confirmPassword) {
-            console.log('Passwords do not match');
+            message.error('Passwords do not match');
             return;
         }
 
-        // Send a POST request to the /signup endpoint of your backend API
-        const response = await fetch('http://localhost:3000/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+        // Ensure password and confirmPassword are the same
+        if (formData.password.length < 6) {
+            message.error('Password must be more than 6 characters long');
+            return;
+        }
 
-        if (response.ok) {
+        try {
+            // Send a POST request to the /signup endpoint of your backend API
+            const response = await fetch('http://localhost:3000/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                // Attempt to read the error message from the response body
+                const errorData = await response.json();
+                // Use the error message from the backend or a default message
+                const errorMessage = errorData.message || 'Failed to register for an account.';
+                // Log the error message for debugging purposes
+                console.log('Register failed:', errorMessage);
+                // Display the error message to the user
+                message.error(errorMessage);
+                return; // Prevent further execution in case of error
+            }
+
             const data = await response.json();
             console.log('Register form submitted:', data);
+            message.success('Registration succeeded');
             window.location.href = '/login';
-        } else {
-            console.log('Register failed:', response.status);
+
+        } catch (error) {
+            // This catch block is now more focused on handling network errors or
+            // errors in the execution of the fetch itself, not HTTP error statuses
+            console.error('An unexpected error occurred:', error);
+            message.error('An unexpected error occurred while trying to register.');
         }
     };
-    
-    
+
     return(
         <>
             <div className="flex flex-col items-center ">
@@ -75,7 +97,7 @@ function Register(){
                     </button>
                 </a>
 
-                <div className="flex pt-[100px] pb-5">
+                <div className="flex pt-[50px] pb-5">
                     <img src={mainLogo} className="h-12 pr-3" alt="Logo" />
                     <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">Sweet Home Finder</span>
                 </div>
@@ -83,80 +105,105 @@ function Register(){
                 <span className="text-3xl font-bold pb-5">Welcome!</span>
 
                 <span className="text-2xl font-semibold text-slate-300 pb-5">Create an Account</span>
-                <form onSubmit={handleSubmit}>
-                    <div className="flex pb-5">
-                        <img src={username} className="h-8 pr-2" alt="Logo" />
-
-                        <input className="shadow appearance-none 
-                                        border rounded w-[300px] py-2 px-3 
-                                        text-gray-700 leading-tight 
-                                        focus:outline-none focus:shadow-outline" 
-                                name="name" 
-                                type="text" 
-                                placeholder="Name"
-                                value={formData.name}
-                                onChange={handleInputChange}
+                <form onSubmit={handleSubmit} style={{width: '30%', minWidth: '300px'}}>
+                    <div className="flex flex-row pb-5 "
+                         style={{justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+                        <UserOutlined style={{fontSize: '25px'}}/>
+                        <Input className="shadow appearance-none
+                                border rounded w-[85%] py-2 px-3
+                                text-gray-700 leading-tight
+                                focus:outline-none focus:shadow-outline"
+                               name="name"
+                               type="text"
+                               placeholder="Name"
+                               value={formData.name}
+                               onChange={handleInputChange}
                         />
                     </div>
 
-                    <div className="flex pb-5">
-                        <img src={email} className="h-9 pr-2" alt="Logo" />
-
-                        <input className="shadow appearance-none 
-                                        border rounded w-[300px] py-2 px-3 
-                                        text-gray-700 leading-tight 
-                                        focus:outline-none focus:shadow-outline" 
-                                name="email" 
-                                type="text" 
-                                placeholder="Email Address"
-                                value={formData.email}
-                                onChange={handleInputChange}
+                    <div className="flex flex-row pb-5 "
+                         style={{justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+                        <MailOutlined style={{fontSize: '25px'}}/>
+                        <Input className="shadow appearance-none
+                                    border rounded w-[85%] py-2 px-3
+                                    text-gray-700 leading-tight
+                                    focus:outline-none focus:shadow-outline"
+                               name="email"
+                               type="text"
+                               placeholder="Email Address"
+                               value={formData.email}
+                               onChange={handleInputChange}
                         />
                     </div>
 
-                    <div className="flex pb-5">
-                        <img src={password} className="h-7 pr-2" alt="Logo" />
-
-                        <input className="shadow appearance-none 
-                                        border rounded w-[300px] py-2 px-3 
+                    <div className="flex flex-row pb-5 "
+                         style={{justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+                        <LockOutlined style={{fontSize: '25px'}}/>
+                        <Input.Password className="shadow appearance-none
+                                        border rounded w-[85%] py-2 px-3
                                         text-gray-700 leading-tight 
-                                        focus:outline-none focus:shadow-outline" 
-                                name="password" 
-                                type="password" 
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleInputChange}
+                                        focus:outline-none focus:shadow-outline"
+                                        name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        iconRender={(visible) => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                         />
                     </div>
 
-                    <div className="flex pb-5">
-                        <img src={password} className="h-7 pr-2" alt="Password" />
-
-                        <input className="shadow appearance-none 
-                                        border rounded w-[300px] py-2 px-3 
+                    <div className="flex flex-row pb-5 "
+                         style={{justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+                        <LockOutlined style={{fontSize: '25px'}}/>
+                        <Input.Password className="shadow appearance-none
+                                        border rounded w-[85%] py-2 px-3
                                         text-gray-700 leading-tight 
-                                        focus:outline-none focus:shadow-outline" 
-                                name="confirmPassword" 
-                                type="password" 
-                                placeholder="Confirm Password"
-                                value={formData.confirmPassword}
-                                onChange={handleInputChange}
+                                        focus:outline-none focus:shadow-outline"
+                                        name="confirmPassword"
+                                        type="password"
+                                        placeholder="Confirm Password"
+                                        value={formData.confirmPassword}
+                                        onChange={handleInputChange}
+                                        iconRender={(visible) => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                         />
                     </div>
-
-                    <div className="pb-5">
-                        <button 
-                            type="submit"
-                            className="w-[350px] h-[50px] rounded-md bg-blue-800 text-white font-bold text-2xl">Sign Up</button>
+                    {/*Security Question Field*/}
+                    <div className="flex flex-row pb-2 "
+                         style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
+                        <span style={{fontWeight: 'bold', marginRight: '8px'}}>Security Question</span>
+                        <span>What's your pet's name?</span>
                     </div>
+                        <div className="flex flex-row pb-5 "
+                             style={{justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+                            <LockOutlined style={{fontSize: '25px'}}/>
+                            <Input className="shadow appearance-none
+                                        border rounded w-[85%] py-2 px-3
+                                        text-gray-700 leading-tight
+                                        focus:outline-none focus:shadow-outline"
+                                            name="security"
+                                            type="text"
+                                            placeholder="Answer"
+                                            value={formData.security}
+                                            onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="pb-5">
+                            <button
+                                type="submit"
+                                className="h-[50px] rounded-md bg-blue-800 text-white font-bold text-2xl"
+                                style={{width: '100%'}}>
+                                Sign Up
+                            </button>
+                        </div>
                 </form>
 
                 <div className="flex pb-5">
                     <span className=" font-semibold pr-12">Already have an account?</span>
                     <a href="/login">
-                        <span  className="text-blue-800 font-semibold">Login</span>
+                        <span className="text-blue-800 font-semibold">Login</span>
                     </a>
-                    
+
                 </div>
             </div>
         </>
