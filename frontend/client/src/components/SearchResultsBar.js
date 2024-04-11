@@ -63,8 +63,8 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
                 throw new Error(`HTTP error: ${response.status}`);
             }
     
-            const action = isCurrentlyBookmarked ? 'removed from' : 'added to';
-            message.success(`Bookmark ${action} bookmarks.`);
+            const action = isCurrentlyBookmarked ? 'removed' : 'added';
+            message.success(`Bookmark ${action}.`);
         } catch (error) {
             console.error('Error updating bookmark:', error);
             setBookmarked({
