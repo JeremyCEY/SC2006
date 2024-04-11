@@ -5,7 +5,9 @@ import { User } from "src/auth/user.schema";
 import { isEmail} from 'class-validator';
 import * as bcrypt from 'bcryptjs';
 
-
+/**
+ * Service responsible for handling login function related logic and operations
+ */
 @Injectable()
 export class LoginFunctionService {
     constructor(
@@ -13,6 +15,12 @@ export class LoginFunctionService {
         private userModel: Model<User>,
     ) {}
 
+    /**
+     * Changes the name of a user
+     * @param userId User's email
+     * @param newName New name for the user
+     * @returns Success message after changing the name
+     */
     async changeName(userId: string, newName: string): Promise<string>{
         const user = await this.userModel.findById(userId);
         const oldname = user.name;
@@ -24,6 +32,12 @@ export class LoginFunctionService {
         return 'Name  changed successfully';
     }
 
+    /**
+     * Changes the email address of a user
+     * @param userId User's email
+     * @param newEmail New email address for the user
+     * @returns Success message after changing the email
+     */
     async changeEmail(userId: string, newEmail: string): Promise<string>{
         const user = await this.userModel.findById(userId);
         if (!isEmail(newEmail)) {
@@ -40,7 +54,15 @@ export class LoginFunctionService {
         await user.save()
         return 'Email changed successfully';
     }
-
+    
+    /**
+     * Changes the password of a user
+     * @param userId User's email
+     * @param oldPassword User's current password
+     * @param newPassword New password
+     * @param confirmPassword Confirmation of new password
+     * @returns Success message after change password
+     */
     async changePassword(userId: string, oldPassword: string, newPassword: string, confirmPassword: string): Promise<string>{
         const user = await this.userModel.findById(userId);
         const oldMatched = await bcrypt.compare(oldPassword, user.password);

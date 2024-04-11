@@ -3,6 +3,10 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
+/**
+ * End-to-end test suite for the AppController in the application
+ * Tests the behavior of HTTP endpoints by sending requests to the server
+ */
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 

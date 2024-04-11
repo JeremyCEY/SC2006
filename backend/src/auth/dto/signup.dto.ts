@@ -1,5 +1,9 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
+/**
+ * Data Transfer Object (DTO) for user signup
+ * Used for validating and transferring signup information
+ */
 export class SignUpDto {
   @IsNotEmpty()
   @IsString()

@@ -2,7 +2,10 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 
-
+/**
+ * User Schema and Model
+ * Defines the schema and model for user documents in the database
+ */
 @Schema({
     timestamps: true,
 })
