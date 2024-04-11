@@ -34,36 +34,43 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
     // Heart icon to bookmark ------------
     const handleBookmarkClick = async (propertyId) => {
         const token = localStorage.getItem('token');
-    
         const isCurrentlyBookmarked = bookmarked[propertyId];  
-
+    
         setBookmarked({
             ...bookmarked,
             [propertyId]: !isCurrentlyBookmarked,
         });
-
+    
         try {
+            const method = isCurrentlyBookmarked ? 'DELETE' : 'POST';
+    
+            const url = `http://localhost:3000/bookmark/${userID}/${propertyId}`;
             
-            const response = await fetch(`http://localhost:3000/bookmark/${userID}/${propertyId}`, {
-                method: 'POST',
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ propertyId: propertyId }),
+                ...(method === 'POST' && { body: JSON.stringify({ propertyId: propertyId }) }),
             });
     
             if (!response.ok) {
-                console.log('Failed to add bookmark:', await response.text());
+                setBookmarked({
+                    ...bookmarked,
+                    [propertyId]: isCurrentlyBookmarked,
+                });
                 throw new Error(`HTTP error: ${response.status}`);
-        }
+            }
     
-
-            
-            message.success('Bookmark added.');
-    
+            const action = isCurrentlyBookmarked ? 'removed' : 'added';
+            message.success(`Bookmark ${action}.`);
         } catch (error) {
             console.error('Error updating bookmark:', error);
+            setBookmarked({
+                ...bookmarked,
+                [propertyId]: isCurrentlyBookmarked,
+            });
             message.error('Failed to update the bookmark.');
         }
     };
