@@ -38,7 +38,7 @@ function Explore() {
         setSelectedResale(resale);
     };
 
-
+    const [bookmarked, setBookmarked] = useState({});
     const [sortOption, setSortOption] = useState(null);
 
     const [sortedData, setSortedData] = useState([]);
@@ -47,21 +47,29 @@ function Explore() {
         let sorted = [...responseData];
         if (sortOption) {
             const [field, direction] = sortOption.split(' ');
-            sorted.sort((a, b) => {
-                if (field === 'price' && direction === 'up') {
-                    return a.resale_price - b.resale_price;
-                } else if (field === 'price' && direction === 'down') {
-                    return b.resale_price - a.resale_price;
-                } else if (field === 'size' && direction === 'up') {
-                    return a.floor_area_sqm - b.floor_area_sqm;
-                } else if (field === 'size' && direction === 'down') {
-                    return b.floor_area_sqm - a.floor_area_sqm;
-                }
-                return 0; // Return 0 if no valid sorting condition is met
-            });
+            if (field === 'bookmark') {
+                const bookmarkedProperties = sorted.filter(property => bookmarked[property.id]);
+                const nonBookmarkedProperties = sorted.filter(property => !bookmarked[property.id]);
+                sorted = [...bookmarkedProperties, ...nonBookmarkedProperties];
+            } else {
+                sorted.sort((a, b) => {
+                    if (field === 'price' && direction === 'up') {
+                        return a.resale_price - b.resale_price;
+                    } else if (field === 'price' && direction === 'down') {
+                        return b.resale_price - a.resale_price;
+                    } else if (field === 'size' && direction === 'up') {
+                        return a.floor_area_sqm - b.floor_area_sqm;
+                    } else if (field === 'size' && direction === 'down') {
+                        return b.floor_area_sqm - a.floor_area_sqm;
+                    }
+                    return 0; // Return 0 if no valid sorting condition is met
+                });
+            }
         }
+        
         setSortedData(sorted);
-    }, [responseData, sortOption]);
+    }, [responseData, sortOption, bookmarked]);
+    
 
 
     const [frequentAddresses, setFrequentAddresses] = useState([]);
@@ -126,7 +134,7 @@ function Explore() {
                 </Layout>
 
 
-                <SearchResultsBar setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} userId={userId} selectedResale={selectedResale}/>
+                <SearchResultsBar bookmarked={bookmarked} setBookmarked={setBookmarked} setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} userId={userId} selectedResale={selectedResale}/>
 
                 {selectedProperty && 
                     <ExploreRightBar

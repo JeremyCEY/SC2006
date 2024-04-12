@@ -4,9 +4,9 @@ import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, Right
 
 const { Sider } = Layout;
 
-function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, selectedResale }) {
+function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, selectedResale, setBookmarked, bookmarked }) {
     const [collapsed, setCollapsed] = useState(false);
-    const [bookmarked, setBookmarked] = useState({}); 
+    // const [bookmarked, setBookmarked] = useState({}); 
 
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
@@ -16,6 +16,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
         setCollapsed(!collapsed);
     };
 
+    
     // Heart icon to bookmark ------------
     const handleBookmarkClick = async (propertyId) => {
         const token = localStorage.getItem('token');
@@ -117,10 +118,12 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
                         className="bg-white border-none text-black shadow-md mr-10"
                         onChange={setSortOption}
                     >
-                        <Select.Option value="price up">Price <ArrowUpOutlined /></Select.Option>
-                        <Select.Option value="price down">Price <ArrowDownOutlined /></Select.Option>
-                        <Select.Option value="size up">Size <ArrowUpOutlined /></Select.Option>
-                        <Select.Option value="size down">Size <ArrowDownOutlined /></Select.Option>
+                        <Select.Option value="bookmark"><HeartOutlined /> Saved</Select.Option>
+                        <Select.Option value="price up"><ArrowUpOutlined /> Price</Select.Option>
+                        <Select.Option value="price down"><ArrowDownOutlined /> Price</Select.Option>
+                        <Select.Option value="size up"><ArrowUpOutlined /> Size</Select.Option>
+                        <Select.Option value="size down"><ArrowDownOutlined /> Size</Select.Option>
+                        
                     </Select>
                 </div>
 
