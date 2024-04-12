@@ -65,17 +65,43 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             setDestination(String(selectedFrequentAddress));
             setDirectionsRequested(true);
         }
-    }, [selectedFrequentAddress, selectedResale1]);
+    }, [selectedFrequentAddress, selectedResale1, travelMode]);
 
     const directionsCallback = (response) => {
         if (response !== null && response.status === 'OK') {
             setResponse(response);
             setDirectionsRequested(false);
-            setTravelTime(response.routes[0].legs[0].duration.text)
+            // setTravelTime(response.routes[0].legs[0].duration.text)
         } else {
             console.log('Directions request failed due to ' + response?.status);
         }
     };
+
+    //set travel time for all modes
+    useEffect(() => {
+        if (selectedFrequentAddress !== null) {
+            // Make a request for each transport mode
+            ['DRIVING', 'TRANSIT', 'WALKING', 'BICYCLING'].forEach(mode => {
+                const DirectionsService = new window.google.maps.DirectionsService();
+                DirectionsService.route({
+                    origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
+                    destination: destination,
+                    travelMode: mode,
+                }, (result, status) => {
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        // Set the travel time for the current mode
+                        setTravelTime(prevState => ({ 
+                            ...prevState, 
+                            [mode]: result.routes[0].legs[0].duration.text 
+                        }));
+                        // console.log(`Travel time for ${mode}: ${result.routes[0].legs[0].duration.text}`);
+                    } else {
+                        console.error(`error fetching directions ${result}`);
+                    }
+                });
+            });
+        }
+    }, [destination, selectedResale1]);
 
     // Routing funcs end
 
@@ -99,7 +125,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             radius: 500,
             type: amenityTypes, // Adjust types as needed
         };
-        console.log(amenityTypes);
+        // console.log(amenityTypes);
         if (amenityTypes.length > 0) {
             service.nearbySearch(request, (results, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK) {

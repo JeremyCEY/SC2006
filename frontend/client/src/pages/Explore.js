@@ -29,9 +29,12 @@ function Explore() {
     const formValues = location.state.formValues;
 
     const [selectedResale, setSelectedResale] = useState(null);
+    const [selectedProperty, setSelectedProperty] = useState(false);
+
 
     const handleDivClick = (resale) => {
         // console.log('Clicked:', resale);
+        setSelectedProperty(true);
         setSelectedResale(resale);
     };
 
@@ -95,10 +98,12 @@ function Explore() {
         }
     }, [userId]);
 
+
     //for Routing
     const [selectedFrequentAddress, setSelectedFrequentAddress] = useState(null);   //For user to select a frequent address to route to
     const [travelMode, setTravelMode] = useState("TRANSIT");    //Default to travel mode: public transport
-    const[travelTime, setTravelTime] = useState('');    //travel time for route, obtained from Map.js
+    const [travelTime, setTravelTime] = useState({ TRANSIT: '', DRIVING: '', BICYCLING: '', WALKING: '' });
+
 
     return (
         <>
@@ -106,7 +111,6 @@ function Explore() {
                 {isAuthenticated ? <LoggedInNavbar formValues={formValues} /> : <LoggedOutNavbar formValues={formValues} />}
             </div>
             <Layout >
-                {/* need to resize the map according to window size */}
                 <Layout>
                     <Content>
                         <Map
@@ -115,21 +119,26 @@ function Explore() {
                             selectedFrequentAddress={selectedFrequentAddress}
                             travelMode={travelMode}
                             setTravelTime={setTravelTime}
+                            travelTime={travelTime}
                             amenityTypes={formValues.amenities}
                         />
                     </Content>
                 </Layout>
 
 
-                <SearchResultsBar setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} />
+                <SearchResultsBar setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} userId={userId} selectedResale={selectedResale}/>
 
-
-                <ExploreRightBar
-                    isAuthenticated={isAuthenticated}
-                    frequentAddresses={frequentAddresses}
-                    setSelectedFrequentAddress={setSelectedFrequentAddress} 
-                    setTravelMode={setTravelMode}
+                {selectedProperty && 
+                    <ExploreRightBar
+                        isAuthenticated={isAuthenticated}
+                        frequentAddresses={frequentAddresses}
+                        setSelectedFrequentAddress={setSelectedFrequentAddress} 
+                        selectedFrequentAddress={selectedFrequentAddress}
+                        setTravelMode={setTravelMode}
+                        travelMode={travelMode}
+                        travelTime={travelTime}
                     />
+                }
             </Layout>
 
         </>

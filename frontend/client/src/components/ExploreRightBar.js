@@ -1,12 +1,35 @@
 import React, { useState } from "react";
 
+import TrainIcon from '@mui/icons-material/Train';
+import BicycleIcon from '@mui/icons-material/DirectionsBike';
+import CarIcon from '@mui/icons-material/DriveEta';
+import WalkingIcon from '@mui/icons-material/DirectionsWalk';
+
 import { Layout, Button, ConfigProvider } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
+function formatTravelTime(time) {
+    if (time === "") {
+        return "";
+    }
+    const parts = time.split(' ');
+    let formattedTime = '';
+    if (parts.length === 4) {
+        // Time includes hours and minutes
+        formattedTime = `${parts[0]}hr ${parts[2]}min`;
+    } else if (parts[1] === 'hours' || parts[1] === 'hour') {
+        // Time includes only hours
+        formattedTime = `${parts[0]}hr`;
+    } else {
+        // Time includes only minutes
+        formattedTime = `${parts[0]}min`;
+    }
+    return formattedTime;
+}
 
-function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress, setTravelMode }) {
+function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress, selectedFrequentAddress, setTravelMode, travelMode, travelTime }) {
     
     const [collapsedRight, setCollapsedRight] = useState(false);
 
@@ -38,18 +61,67 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
                     backgroundColor: 'white',
                 }}
             >
-                <div className="flex flex-col">
-                    <span className="font-semibold text-2xl">Routing to Frequent Locations</span>
-                    <div className="overflow-auto h-[40vh]">
-                    {frequentAddresses.map((address, index) => (
-                        <Button key={index} className="flex items-center justify-between p-4 border-b border-gray-300"
-                        onClick={() => setSelectedFrequentAddress(address)}>
-                            <div className="flex-grow">
-                                <p className="text-lg font-semibold text-blue-600">{address}</p>
+                <div className="flex flex-col overflow-y-auto h-full w-full">
+                    <span className="font-semibold text-2xl flex justify-center p-4">Routing to Frequent Locations</span>
+                    <div className="flex flex-col">
+                    
+                        <div className="overflow-auto h-[25vh]">
+                        {frequentAddresses.map((address, index) => (
+                            <Button key={index} className="flex items-center p-4 border-gray-300 w-[100%] overflow-hidden"
+                            onClick={() => setSelectedFrequentAddress(address)}>
+                                <div className="flex-grow">
+                                <p className={`text-lg font-medium text-black ${address === selectedFrequentAddress ? 'border-blue-500 text-blue-600' : ''}`}>
+
+                                        {address}</p>
+                                </div>
+                            </Button>     
+                        ))}
+                        </div>
+                        
+                        {/* Travel modes that can be set: "TRANSIT", "DRIVING", "WALKING", "BICYCLING" */}
+                        <div className="flex h-[7vh] w-full">
+                        
+                            <div className="w-[25%] ">
+                                <Button 
+                                    className={`flex flex-col h-full w-full items-center justify-center ${travelMode === "TRANSIT" ? 'text-blue-500' : ''}`}
+                                    onClick={()=>setTravelMode("TRANSIT")}>
+                                    <TrainIcon/>
+                                    <span>{formatTravelTime(travelTime.TRANSIT)}</span>
+                                </Button>
                             </div>
-                        </Button>     //Travel modes that can be set: "TRANSIT", "DRIVING", "WALKING", "BICYCLING"
-                    ))}
+
+                            <div className="w-[25%]">
+                                <Button 
+                                    className={`flex flex-col h-full w-full items-center justify-center ${travelMode === "DRIVING" ? 'text-blue-500' : ''}`}
+                                    onClick={()=>setTravelMode("DRIVING")}>
+                                    <CarIcon/>
+                                    <span>{formatTravelTime(travelTime.DRIVING)}</span>
+                                </Button>
+                            </div>
+                            
+                            <div className="w-[25%]">
+                                <Button 
+                                    className={`flex flex-col h-full w-full items-center justify-center ${travelMode === "BICYCLING" ? 'text-blue-500' : ''}`}
+                                    onClick={()=>setTravelMode("BICYCLING")}>
+                                    <BicycleIcon/>
+                                    <span>{formatTravelTime(travelTime.BICYCLING)}</span>
+                                </Button>
+                            </div>
+
+                            <div className="w-[25%]">
+                                <Button 
+                                    className={`flex flex-col h-full w-full items-center justify-center ${travelMode === "WALKING" ? 'text-blue-500' : ''}`}
+                                    onClick={()=>setTravelMode("WALKING")}>
+                                    <WalkingIcon/>
+                                    <span>{formatTravelTime(travelTime.WALKING)}</span>
+                                </Button>
+                            </div>
+
+                        </div>
+
                     </div>
+                    
+                    
                 </div>
             </Sider>
                 

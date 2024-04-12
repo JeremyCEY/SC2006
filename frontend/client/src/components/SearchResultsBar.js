@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Button, List, Select, ConfigProvider, message } from 'antd';
 import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined, HeartOutlined } from '@ant-design/icons';
-import { jwtDecode } from 'jwt-decode';
 
 const { Sider } = Layout;
 
-function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId }) {
+function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, selectedResale }) {
     const [collapsed, setCollapsed] = useState(false);
     const [bookmarked, setBookmarked] = useState({}); 
 
@@ -16,17 +15,6 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
     const toggleSidebar = () => {
         setCollapsed(!collapsed);
     };
-
-    const [userID, setUserID] = useState(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setUserID(decodedToken.id);
-        }
-    }, []);
-
 
     // Heart icon to bookmark ------------
     const handleBookmarkClick = async (propertyId) => {
@@ -41,7 +29,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
         try {
             const method = isCurrentlyBookmarked ? 'DELETE' : 'POST';
     
-            const url = `http://localhost:3000/bookmark/${userID}/${propertyId}`;
+            const url = `http://localhost:3000/bookmark/${userId}/${propertyId}`;
             
             const response = await fetch(url, {
                 method: method,
@@ -75,9 +63,9 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
     useEffect(() => {
         const fetchBookmarkedItems = async () => {
           const token = localStorage.getItem('token');
-          if (token && userID) {
+          if (token && userId) {
             try {
-              const response = await fetch(`http://localhost:3000/bookmark/${userID}`, {
+              const response = await fetch(`http://localhost:3000/bookmark/${userId}`, {
                 headers: {
                   'Authorization': `Bearer ${token}`,
                 },
@@ -102,7 +90,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
         };
       
         fetchBookmarkedItems();
-      }, [userID]);
+      }, [userId]);
 
     return (
         <>
@@ -142,24 +130,24 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
                         grid={{ column: 2 }}
                         dataSource={sortedData}
                         renderItem={property => {
-                            // console.log('Property:', property);  
                             return (     
                                 <List.Item>
                                     <Button
-                                        className="h-[20vh] w-[15vw] shadow-md bg-gray-50"
+                                        className={`h-[20vh] w-[15vw] shadow-md 
+                                        ${property.id === selectedResale?.id ? 'border-blue-500' : ''}`}
                                         key={property.id}
                                         onClick={() => handleDivClick(property)}
                                     >
-                                        <div className="header">
+                                        <div className={`${property.id === selectedResale?.id ? 'text-blue-500' : ''}`}>
                                             <div className="residence-name">{property.town}</div>
                                             <div className="price-range">${property.resale_price.toLocaleString()}</div>
                                         </div>
-                                        <ul className="residence-details">
+                                        <ul className={`${property.id === selectedResale?.id ? 'text-blue-500' : ''}`}>
                                             <li>Type: {property.flat_type}</li>
                                             <li>Street: {property.street_name}</li>
                                             <li>Floor Area: {property.floor_area_sqm} sqm</li>
                                         </ul>
-                                        {userID && (<HeartOutlined
+                                        {userId && (<HeartOutlined
                                             style={{
                                                 position: 'absolute',
                                                 top: '10px',
