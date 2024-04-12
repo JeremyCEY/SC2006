@@ -1,12 +1,8 @@
-//Home.js
-import homeImage from "../images/home.png"
-import Explore from "./Explore";
-import LoggedOutNavbar from "../components/LoggedOutNavbar";
-import LoggedInNavbar from "../components/LoggedInNavbar";
-//  import "./Css/Explore.css";
 import React, { useState, useEffect } from 'react';
 
-import Map from '../components/Map'
+import homeImage from "../images/home.png"
+import LoggedOutNavbar from "../components/LoggedOutNavbar";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 
 function Home(){
     const [residences, setResidences] = useState([]);
@@ -68,10 +64,8 @@ function Home(){
                     </div>
                 </div>
             </div>
-            {/* <Map></Map> */}
         </>
     );
-    
 }
 
 export default Home

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+import { message, Input } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 
 import mainLogo from '../images/logo.png'
-import { message, Typography, Input, Button } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 
 function Register(){
     const [formData, setFormData] = useState({ name: '', email: '', password: '' , confirmPassword: '', security: '' });

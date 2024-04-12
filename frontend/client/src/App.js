@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-  Link,
-  Redirect
 } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -32,7 +30,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          <Route path="/FAQ" element={<FAQ />} />
+          <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          
+          <Route path="/FAQ" element={<FAQ />} />
           <Route path="/login/forget-password" element={<ForgetPassword />} />
           <Route path="/explore" element={<Explore />} />
         </Routes>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Button, List, Select, ConfigProvider, message } from 'antd';
-import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined, HeartOutlined } from '@ant-design/icons';
 import { jwtDecode } from 'jwt-decode';
 
 const { Sider } = Layout;
@@ -8,8 +8,6 @@ const { Sider } = Layout;
 function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId }) {
     const [collapsed, setCollapsed] = useState(false);
     const [bookmarked, setBookmarked] = useState({}); 
-    
-
 
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
@@ -19,16 +17,15 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
         setCollapsed(!collapsed);
     };
 
-    const [userID, setUserID] = useState(null); // State for user ID
-
+    const [userID, setUserID] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            setUserID(decodedToken.id); // Set user ID from decoded token
+            setUserID(decodedToken.id);
         }
-    }, []); // Empty dependency array to run only once on component mount
+    }, []);
 
 
     // Heart icon to bookmark ------------
@@ -145,39 +142,37 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId })
                         grid={{ column: 2 }}
                         dataSource={sortedData}
                         renderItem={property => {
-                            console.log('Property:', property);  // Log the entire property object to inspect its structure
-
-                            return (
-                                
-                            <List.Item>
-                                <Button
-                                    className="h-[20vh] w-[15vw] shadow-md bg-gray-50"
-                                    key={property.id}    // i think should be property._Id but that gives undefined in database
-                                    onClick={() => handleDivClick(property)}
-                                >
-                                    <div className="header">
-                                        <div className="residence-name">{property.town}</div>
-                                        <div className="price-range">${property.resale_price.toLocaleString()}</div>
-                                    </div>
-                                    <ul className="residence-details">
-                                        <li>Type: {property.flat_type}</li>
-                                        <li>Street: {property.street_name}</li>
-                                        <li>Floor Area: {property.floor_area_sqm} sqm</li>
-                                    </ul>
-                                    <HeartOutlined
-                                        style={{
-                                            position: 'absolute',
-                                            top: '10px',
-                                            right: '10px',
-                                            color: bookmarked[property.id] ? 'red' : 'gray',
-                                            fontSize: '16px',
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleBookmarkClick(property.id);}}   // if i use .id it works but _.id stores undefined
-                                    />
-                                </Button>
-                            </List.Item>
+                            // console.log('Property:', property);  
+                            return (     
+                                <List.Item>
+                                    <Button
+                                        className="h-[20vh] w-[15vw] shadow-md bg-gray-50"
+                                        key={property.id}
+                                        onClick={() => handleDivClick(property)}
+                                    >
+                                        <div className="header">
+                                            <div className="residence-name">{property.town}</div>
+                                            <div className="price-range">${property.resale_price.toLocaleString()}</div>
+                                        </div>
+                                        <ul className="residence-details">
+                                            <li>Type: {property.flat_type}</li>
+                                            <li>Street: {property.street_name}</li>
+                                            <li>Floor Area: {property.floor_area_sqm} sqm</li>
+                                        </ul>
+                                        {userID && (<HeartOutlined
+                                            style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                right: '10px',
+                                                color: bookmarked[property.id] ? 'red' : 'gray',
+                                                fontSize: '16px',
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleBookmarkClick(property.id);}}   // if i use .id it works but _.id stores undefined
+                                        />)}
+                                    </Button>
+                                </List.Item>
                             )
                         }}
                     />

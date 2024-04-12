@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Formik, Form, Field } from 'formik';
@@ -9,7 +9,6 @@ import { Button, Select } from 'antd';
 
 
 function Searchbar({ initialValues }) {
-    // Set default values if initialValues is empty
     const defaultInitialValues = {
         location: [],
         propertyType: [],
@@ -21,31 +20,14 @@ function Searchbar({ initialValues }) {
     
     const navigate = useNavigate();
 
-    const [responseData, setResponseData] = useState(null);
-    const [formValues, setFormValues] = useState(null);
-    // useEffect(() => {
-    //     console.log('Initial values:', mergedInitialValues);
-    // }, [mergedInitialValues]);
-
     const handleSubmit = async (values) => {
-        console.log(values); // Here, you can handle form submission logic
-    
         try {
             const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
-            // console.log(response.data);
-            // setResponseData(response.data); // Store the response data in state
-            // setFormValues(values); // Store the form values in state
             navigate('/explore', { state: { responseData: response.data, formValues: values } });
         } catch (error) {
             console.error(error);
         }
-        
-
-
-        // Navigate to explore page
-        // window.location.href = '/explore';
     };
-  
   
     return (
         <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit} >
@@ -72,9 +54,8 @@ function Searchbar({ initialValues }) {
                                     }
                                     onChange={(selectedValues) => {
                                         setFieldValue('location', selectedValues);
-                                        // console.log({ ...values, location: selectedValues });
                                     }}
-                                    defaultValue={values.location} // Set defaultValue based on values.location
+                                    defaultValue={values.location}
 
                                     options={[
                                     {
@@ -204,9 +185,8 @@ function Searchbar({ initialValues }) {
                                 suffixIcon={null}
                                 onChange={(selectedValues) => {
                                     setFieldValue('propertyType', selectedValues);
-                                    // console.log({ ...values, propertyType: selectedValues });
                                 }}
-                                defaultValue={values.propertyType} // Set defaultValue based on values.location
+                                defaultValue={values.propertyType}
 
                                 options={[
                                     {
@@ -275,9 +255,8 @@ function Searchbar({ initialValues }) {
                                 suffixIcon={null}
                                 onChange={(selectedValues) => {
                                     setFieldValue('amenities', selectedValues);
-                                    // console.log({ ...values, amenities: selectedValues });
                                 }}
-                                defaultValue={values.amenities} // Set defaultValue based on values.location
+                                defaultValue={values.amenities}
 
                                 options={[
                                     {
@@ -296,10 +275,10 @@ function Searchbar({ initialValues }) {
                                         value: 'primary_school',
                                         label: 'Primary School',
                                     },
-                                    {
-                                        value: '',
-                                        label: 'MRT',
-                                    },
+                                    // {
+                                    //     value: '',
+                                    //     label: 'MRT',
+                                    // },
                                     {
                                         value: 'park',
                                         label: 'Park',
@@ -324,16 +303,12 @@ function Searchbar({ initialValues }) {
                                     placeholder=""
                                     optionFilterProp="children"
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                                    // filterSort={(optionA, optionB) =>
-                                    // (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                    // }
                                     variant='borderless'
                                     suffixIcon={null}
                                     onChange={(selectedValues) => {
                                         setFieldValue('budget', selectedValues);
-                                        // console.log({ ...values, budget: selectedValues });
                                     }}
-                                    defaultValue={values.budget} // Set defaultValue based on values.location
+                                    defaultValue={values.budget}
 
                                     options={[
                                     {
@@ -411,9 +386,8 @@ function Searchbar({ initialValues }) {
                                     suffixIcon={null}
                                     onChange={(selectedValues) => {
                                         setFieldValue('rooms', selectedValues);
-                                        // console.log({ ...values, rooms: selectedValues });
                                     }}
-                                    defaultValue={values.rooms} // Set defaultValue based on values.location
+                                    defaultValue={values.rooms}
 
                                     options={[
                                     {
@@ -452,7 +426,7 @@ function Searchbar({ initialValues }) {
                             <Button size="large" 
                                     shape="circle"
                                     className="border-none shadow-none"
-                                    htmlType="submit" // This will submit the form 
+                                    htmlType="submit"
                                     icon={<SearchOutlined style={{ fontSize: '25px' }}/>}/>     
                         </div>
                                     

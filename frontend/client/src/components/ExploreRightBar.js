@@ -6,7 +6,6 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const { Sider } = Layout;
 
 
-
 function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress, setTravelMode }) {
     
     const [collapsedRight, setCollapsedRight] = useState(false);
@@ -14,7 +13,6 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
     const onCollapseRight = collapsedRight => {
         setCollapsedRight(collapsedRight);
     };
-
 
     const toggleSidebarRight = () => {
         setCollapsedRight(!collapsedRight);

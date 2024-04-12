@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; 
@@ -12,31 +12,23 @@ import { Menu, Layout } from 'antd'
 const { Sider } = Layout;
 
 function Dashboard() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('savedProperties');
-    // const userId = '65fe8c23cec43e4c08995198'
 
-    const [userId, setUserId] = useState(null); // State for user ID
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            // console.log('Decoded token:', decodedToken);
-            // console.log('User ID:', decodedToken.id);
             setUserId(decodedToken.id);
-            // console.log('User ID:', userId);
         } else {
             console.log('No token found in local storage');
         }
     }, [userId]);
 
-    {/* Sidebar Selection */}
-
     const handleMenuClick = (key) => {
         setActiveSection(key);
     };
-
 
     const renderContent = () => {
         if (!userId) {
@@ -55,14 +47,11 @@ function Dashboard() {
         }
     };
 
-    const navbarHeight = '64px'; 
-
     return (
         <>
             <LoggedInNavbar />
 
             <div className="flex" >
-                {/* Sidebar */}
                 <Sider width={250} className='bg-gray-50 h-[87vh]'>
                     <Menu
                         mode="inline"
@@ -88,7 +77,6 @@ function Dashboard() {
                     />
                 </Sider>
 
-                {/* Page content */}
                 <div className="flex-grow">
                     {renderContent()}
                 </div>

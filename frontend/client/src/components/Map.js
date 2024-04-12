@@ -16,9 +16,6 @@ const center = {
 };
 
 function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
-    // useEffect(() => {
-    //     console.log(selectedResale1);
-    // }, [selectedResale1]);
     const [response, setResponse] = useState(null);
     const [destination, setDestination] = useState('');
 
@@ -31,7 +28,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
         libraries: ['places'],
     });
-
 
     //pans and zoom when different properties are selected
     useEffect(() => {
@@ -56,22 +52,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         setSelectedResale(null);
     };
 
-    // useEffect(() => {
-    //     axios.get('/testData') // Make sure this URL is correct and accessible
-    //         .then(response => setResales(response.data))
-    //         .catch(err => console.error('Failed to fetch resale data:', err));
 
-    //     // Fetch GeoJSON data similar to resale data
-    //     axios.get('geodata/railnames') // Adjust URL as necessary
-    //         .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
-    //         .catch(err => console.error('Failed to fetch GeoJSON data:', err));
-
-    //     axios.get('geodata/mrtlines')
-    //         .then(response => setMrt(response.data))
-    //         .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
-    // }, []);
-
-    //
     useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
@@ -180,28 +161,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-            {/* {
-                    responseData.map(resale => (
-                        
-                        <Marker
-                            key={resale.id}
-                            position={{ lat: parseFloat(resale.latitude), lng: parseFloat(resale.longitude) }}
-                            // clusterer={clusterer}
-                            onClick={() => handleMarkerClick(resale)}
-                        >
-
-                            {selectedResale === resale && (
-                                <InfoWindow onCloseClick={handleCloseInfoWindow}>
-                                    <div>
-                                        <p>Address: {resale.street_name + " " + resale.block_no}</p>
-                                        <p>Price: {"$" + resale.resale_price}</p>
-                                    </div>
-                                </InfoWindow>
-                            )}
-
-                        </Marker>
-                    ))
-                    } */}
             {selectedResale1 && (
 
                 <Marker

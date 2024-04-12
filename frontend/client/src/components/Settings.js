@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Map from '../components/Map'
 import { message, Typography, Input, Button } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
-//import Test from '../components/Navbar'
-import Explore from "../pages/Explore";
 
 const { Title } = Typography;
 
@@ -22,9 +18,6 @@ const Settings = ({ userId }) => {
 
     const [showNameSave, setShowNameSave] = useState(false);
     const [showEmailSave, setShowEmailSave] = useState(false);
-
-    const [savedProperties, setSavedProperties] = useState([]);
-    const [residences, setResidences] = useState([]);
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null); // Define token state
@@ -49,8 +42,8 @@ const Settings = ({ userId }) => {
                     });
                     setName(response.data.name);
                     setEmail(response.data.email);
-                    console.log(name);
-                    console.log(email);
+                    // console.log(name);
+                    // console.log(email);
                 } catch (error) {
                     console.error('Error fetching account details:', error);
                 }

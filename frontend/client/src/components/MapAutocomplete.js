@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { GoogleMap, Autocomplete, useJsApiLoader } from '@react-google-maps/api';
-import axios from 'axios';
 
 const mapContainerStyle = {
-    width: '80%', // Adjusted for better layout
-    height: '600px'
+    width: '100%',
+    height: '70vh'
 };
 
 const center = {
-    lat: 1.290270,
+    lat: 1.350270,
     lng: 103.8198
 };
 
 function MapAutocomplete({setSelectedPlace}) {
+    
     const [markers, setMarkers] = useState([]);
     const autocompleteRef = useRef(null);
     const mapRef = useRef(null);
@@ -21,8 +21,6 @@ function MapAutocomplete({setSelectedPlace}) {
         googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
         libraries: ['places']
     });
-
-
 
     const onPlaceChanged = () => {
         const place = autocompleteRef.current.getPlace();
@@ -66,23 +64,20 @@ function MapAutocomplete({setSelectedPlace}) {
                 onLoad={(autocomplete) => autocompleteRef.current = autocomplete}
                 onPlaceChanged={() => onPlaceChanged()}
             >
-                <input
+                <input className="w-[40%] h-[9%]
+                                absolute left-[30%] top-[3%]
+                                border border-radius-[3px]
+                                "
                     type="text"
                     placeholder="Enter a frequently visited location"
                     style={{
-                        boxSizing: `border-box`,
                         border: `1px solid transparent`,
-                        width: `240px`,
-                        height: `32px`,
                         padding: `0 12px`,
                         borderRadius: `3px`,
                         boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
                         fontSize: `14px`,
                         outline: `none`,
                         textOverflow: `ellipses`,
-                        position: "absolute",
-                        left: "50%",
-                        marginLeft: "-120px"
                     }}
                 />
             </Autocomplete>
