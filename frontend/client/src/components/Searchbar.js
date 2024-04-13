@@ -284,8 +284,8 @@ function Searchbar({ initialValues }) {
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'cafe',
-                                        label: 'Coffee shop/Hawker Centre',
+                                        value: 'food',
+                                        label: 'Food',
                                     },
                                     {
                                         value: 'restaurant',

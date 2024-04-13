@@ -110,34 +110,58 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const [circleCenter, setCircleCenter] = useState(null);
     const [circleRadius, setCircleRadius] = useState(500);
 
+    const [showAmenities, setShowAmenities] = useState(false);
+
+
     useEffect(() => {
         if (isLoaded && selectedResale1 !== null) {
             // Fetch amenities when the map is loaded
             fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
             setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) })
+            // console.log(showAmenities);
         }
-    }, [isLoaded, selectedResale1]);
+    }, [isLoaded, selectedResale1, showAmenities, amenityTypes]);
+
 
     const fetchAmenities = async (location) => {
         const service = new window.google.maps.places.PlacesService(mapRef.current);
         const request = {
             location: location,
             radius: 500,
-            type: amenityTypes, // Adjust types as needed
+            type: 'cafe,restaurant,park,supermarket,shopping_mall,primary_school'
+            // type: amenityTypes
         };
-        // console.log(amenityTypes);
+    
+        console.log('Amenity Types', amenityTypes);
+    
         if (amenityTypes.length > 0) {
-            service.nearbySearch(request, (results, status) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                    const filteredResults = results.filter(amenity => amenityTypes.includes(amenity.types[0]));
-                    setAmenities(filteredResults);
-                } else {
-                    setAmenities([]);
-                }
-            });
+            try {
+                const results = await new Promise((resolve, reject) => {
+                    service.nearbySearch(request, (results, status) => {
+                        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                            resolve(results);
+                        } else {
+                            reject(status);
+                        }
+                    });
+                });
+    
+                console.log('Results', results);
+                const filteredResults = results.filter(amenity => amenity.types.some(type => amenityTypes.includes(type)));
+                console.log('Filtered Results', filteredResults);
+                setAmenities(filteredResults);
+                setShowAmenities(true); 
+    
+            } catch (error) {
+                console.error('Error fetching amenities:', error);
+                setAmenities([]);
+                setShowAmenities(false);
+            }
+        } else {
+            setShowAmenities(false); 
         }
-        console.log(amenities);
     };
+
 
     const processedAmenities = amenities.map(amenity => {
         let iconUrl;
@@ -151,7 +175,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             case 'secondary_school':
                 iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
                 break;
-            case 'cafe':
+            case 'food':
                 iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/cafe_pinlet.svg';
                 break;
             case 'park':
@@ -167,7 +191,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                 iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'; // Replace with default icon URL
                 break;
         }
-        console.log(amenity.types);
+        // console.log(amenity.types);
         // Return amenity object with additional 'iconUrl' property
         return { ...amenity, iconUrl };
     });
@@ -204,7 +228,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                         </InfoWindow>
                     )}
 
-                    <Circle center={circleCenter} radius={circleRadius}></Circle>
+                    {showAmenities && (<Circle center={circleCenter} radius={circleRadius}></Circle>)}
 
                     {directionsRequested && (               //routing stuff
                         <DirectionsService
@@ -226,7 +250,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
                 </Marker>
             )}
-            {processedAmenities.map((amenity, index) => (
+            {showAmenities && (processedAmenities.map((amenity, index) => (
                 <Marker
                     key={index}
                     position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}
@@ -235,7 +259,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                         scaledSize: new window.google.maps.Size(30, 30),
                     }}
                 />
-            ))}
+            )))}
         </GoogleMap >
     ) : <></>;
 }
