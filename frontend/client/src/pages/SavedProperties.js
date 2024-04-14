@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const SavedProperties = ({ userId }) => {
@@ -111,12 +111,14 @@ const SavedProperties = ({ userId }) => {
         }
     };
 
+    const { Title } = Typography;
 
-    
     return (
-        <div className='w-full overflow-y-auto h-[87vh]'>
+        <div className='flex w-full overflow-y-auto h-[87vh]'>
             {!propertiesExist ? (
-                <div>No properties saved</div>
+                <div style={{ display: 'flex', width: '100%', textAlign: 'center', marginTop: '5%', justifyContent: 'center' }}>
+                <Title level={3} >No properties saved</Title>
+                </div>
             ) : (
                 residences.map((property) => (
                     <div key={property._id} className="border-b border-gray-300 p-4 w-full">
