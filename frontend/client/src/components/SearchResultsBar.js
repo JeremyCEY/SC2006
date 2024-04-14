@@ -100,7 +100,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
                 collapsed={collapsed}
                 onCollapse={onCollapse}
                 collapsedWidth={0}
-                width={500}
+                width={'34vw'}
                 trigger={null}
                 style={{
                     position: 'absolute',
@@ -129,7 +129,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
 
                 <div className='h-[77vh] overflow-auto justify-center flex'>
                     <List
-                        className='ml-4'
+                        className='ml-5'
                         grid={{ column: 2 }}
                         dataSource={sortedData}
                         renderItem={property => {
@@ -177,7 +177,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
                     onClick={toggleSidebar}
                     style={{
                         position: 'absolute',
-                        left: collapsed ? 0 : '500px',
+                        left: collapsed ? 0 : '34vw',
                         transition: 'left 0.2s ease',
                         zIndex: 10,
                         top: '50vh',
