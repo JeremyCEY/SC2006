@@ -116,7 +116,11 @@ const SavedProperties = ({ userId }) => {
     return (
         <div className='w-full overflow-y-auto h-[87vh]'>
             {!propertiesExist ? (
-                <div>No properties saved</div>
+                <div className="flex justify-center">
+                    <span className="font-semibold text-2xl mt-[5vh]">
+                        No properties saved
+                    </span>
+                </div>
             ) : (
                 residences.map((property) => (
                     <div key={property._id} className="border-b border-gray-300 p-4 w-full">
