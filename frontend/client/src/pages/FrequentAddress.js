@@ -133,7 +133,7 @@ const FrequentLocations = ({ userId }) => {
                     type="primary"
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
-                    className="text-[#ffffff] mt-[5vh] mb-[5vh]"
+                    className="text-[#ffffff] mt-[5vh] mb-[5vh] font-semibold"
                     style={{
                         backgroundColor: isHovering ? '#0050b3' : '#1890ff', // blue button 
                         borderColor: isHovering ? '#0050b3' : '#1890ff', 

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom';
 
 const SavedProperties = ({ userId }) => {
 
@@ -83,6 +86,32 @@ const SavedProperties = ({ userId }) => {
             console.error('Error deleting property:', error);
         }
     };
+
+    const navigate = useNavigate();
+    const defaultInitialValues = {
+        location: [],
+        propertyType: [],
+        amenities: [],
+        budget: [],
+        rooms: []
+    };
+    
+    //show saved property on explore page
+    const handleShow = async (propertyId) => {
+        try {
+            // const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: defaultInitialValues });
+            navigate('/property',
+            { state: { selectedId: propertyId }})
+                // setShowLeftBar: false, 
+            //     // responseData: response.data, formValues: defaultInitialValues 
+            // }});
+            console.log('Show property:', propertyId)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     
     return (
         <div className='w-full overflow-y-auto h-[87vh]'>
@@ -98,12 +127,20 @@ const SavedProperties = ({ userId }) => {
                             >
                                 {property.town}
                             </div>
-                            <button
-                                onClick={() => handleDelete(property._id)}
-                                className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
-                            >
-                                Delete
-                            </button>
+                            <div>
+                                <button
+                                    onClick={() => handleShow(property._id)}
+                                    className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mr-2"
+                                >
+                                    Show
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(property._id)}
+                                    className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                         <div className="text-gray-500">{property.flat_type} {property.property_type}</div>
                         {expandedPropertyId === property._id && (
