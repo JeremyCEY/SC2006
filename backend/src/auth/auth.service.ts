@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {BadRequestException, ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose'
 import { User } from './user.schema';
 import { Model } from 'mongoose';
@@ -96,25 +96,36 @@ export class AuthService {
      * @throws UnauthorizedException if user not found or no change in email
      * @throws ConflictException if new email is already in use 
      */
-    async updateEmail(userId: string, newEmail: string): Promise<{token: string}> {
+    async updateEmail(userId: string, newEmail: string): Promise<{ token: string }> {
         const user = await this.userModel.findById(userId);
         if (!user) {
             throw new UnauthorizedException('User not found');
-        }
-
-        const existingemail = await this.userModel.findOne({newEmail});
-        if(existingemail){
-            throw new ConflictException('This email is already in use');
         }
 
         if (newEmail === user.email) {
             throw new UnauthorizedException('No change in email');
         }
 
-        user.email = newEmail;
-        await user.save();
-        const token = this.jwtService.sign({id: user._id});
-        return {token};
+        // Ensure valid email
+        // You can use a simple regex for email validation
+        const emailRegex = /\S+@\S+\.\S+/;
+        if (!emailRegex.test(newEmail)) {
+            throw new BadRequestException('Invalid email');
+        }
+
+        try {
+            const existingEmail = await this.userModel.findOne({ email: newEmail });
+            if (existingEmail) {
+                throw new ConflictException('This email is already in use');
+            }
+
+            user.email = newEmail;
+            await user.save();
+            const token = this.jwtService.sign({ id: user._id });
+            return { token };
+        } catch (error) {
+            throw new ConflictException('This email is already in use');
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import { Button, Input, message, Result } from 'antd';
@@ -54,7 +54,7 @@ const ForgotPassword = () => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await axios.patch('http://localhost:3000/auth/forgetpassword', values);
-            // Assuming your backend returns a success message
+            // If backend returns a success message
             message.success(response.data || 'Password reset successfully.');
             setPasswordReset(true);
             setResetMessage(response.data || 'Password reset successfully.');
@@ -90,6 +90,15 @@ const ForgotPassword = () => {
             />
         );
     }
+
+    /**
+     * Styles the error message for input fields.
+     */
+    const errorStyle = {
+        color: 'red', // Red color for errors
+        marginTop: '4px', // Some space above the error message
+        fontSize: 'clamp(14px, 1.5vw, 18px)'
+    };
 
     return (
         // Main container for the Forgot Password page, centered both vertically and horizontally.
@@ -139,6 +148,8 @@ const ForgotPassword = () => {
                                     />
                                 )}
                             </Field>
+                            <ErrorMessage name="email" component="div" className="error-message" style={errorStyle}/>
+
                         </div>
                         {/* SECTION Security question */}
                         {/* Security question */}
@@ -148,7 +159,7 @@ const ForgotPassword = () => {
                             alignItems: 'center',
                             margin: '10px 0'
                         }}>
-                            <span style={{fontWeight: 'bold', marginRight: '8px'}}>Security Question</span>
+                            <span style={{fontWeight: 'bold', marginRight: '8px', fontSize: 'clamp(14px, 1.5vw, 18px)'}}>Security Question</span>
                             <span>What's your pet's name?</span>
                         </div>
                         {/* Security answer input field with a lock icon */}
@@ -164,6 +175,8 @@ const ForgotPassword = () => {
                                 />
                             )}
                         </Field>
+                        <ErrorMessage name="securityAnswer" component="div" className="error-message" style={errorStyle}/>
+
                         {/* SECTION Submit button for the form */}
                         <div style={{
                             width: '100%',

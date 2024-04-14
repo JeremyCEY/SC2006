@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {message} from 'antd'
+import {message, Input} from 'antd'
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
@@ -91,7 +92,7 @@ function Login(){
                     <div className="flex pb-5">
                         <img src={username} className="h-8 pr-2" alt="Username" />
 
-                        <input className="shadow appearance-none 
+                        <Input className="shadow appearance-none
                                         border rounded w-[300px] py-2 px-3 
                                         text-gray-700 leading-tight 
                                         focus:outline-none focus:shadow-outline" 
@@ -107,13 +108,14 @@ function Login(){
                     <div className="flex pb-5">
                         <img src={password} className="h-7 pr-2" alt="Logo" />
 
-                        <input className="shadow appearance-none 
+                        <Input.Password className="shadow appearance-none
                                         border rounded w-[300px] py-2 px-3 
                                         text-gray-700 leading-tight 
                                         focus:outline-none focus:shadow-outline" 
                                 name="password" 
                                 type="password" 
                                 placeholder="Password"
+                                iconRender={(visible) => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                                 value={formData.password}
                                 onChange={handleInputChange}
                         />
