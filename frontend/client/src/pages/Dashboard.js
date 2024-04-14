@@ -55,7 +55,7 @@ function Dashboard() {
                 <Sider width={250} className='bg-gray-50 h-[87vh]'>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['saved_properties']}
+                        defaultSelectedKeys={['savedProperties']}
                         className='h-full border-0 bg-gray-50 font-semibold text-1xl'
                         style={{ height: '100%', borderRight: 0 }}
                         onClick={({ key }) => handleMenuClick(key)}
