@@ -116,8 +116,8 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     useEffect(() => {
         if (isLoaded && selectedResale1 !== null) {
             // Fetch amenities when the map is loaded
+            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
             fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
-            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) })
             // console.log(showAmenities);
         }
     }, [isLoaded, selectedResale1, showAmenities, amenityTypes]);
@@ -128,8 +128,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         const request = {
             location: location,
             radius: 500,
-            type: 'cafe,restaurant,park,supermarket,shopping_mall,primary_school'
-            // type: amenityTypes
+            type: amenityTypes
         };
     
         console.log('Amenity Types', amenityTypes);
@@ -228,7 +227,8 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                         </InfoWindow>
                     )}
 
-                    {showAmenities && (<Circle center={circleCenter} radius={circleRadius}></Circle>)}
+                    <Circle center={circleCenter} radius={circleRadius}></Circle>
+                    {showAmenities}
 
                     {directionsRequested && (               //routing stuff
                         <DirectionsService

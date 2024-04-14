@@ -245,7 +245,6 @@ function Searchbar({ initialValues }) {
                         <div className="flex flex-col w-[15%]">
                         <span className="font-semibold text-sm">Amenities</span>
                         <Select maxTagCount="responsive"                                
-                                mode="multiple"
                                 optionFilterProp="children"
                                 filterOption={(input, option) => (option?.label ?? '').includes(input)}
                                 filterSort={(optionA, optionB) =>
@@ -275,21 +274,13 @@ function Searchbar({ initialValues }) {
                                         value: 'primary_school',
                                         label: 'Primary School',
                                     },
-                                    // {
-                                    //     value: '',
-                                    //     label: 'MRT',
-                                    // },
                                     {
                                         value: 'park',
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'food',
-                                        label: 'Food',
-                                    },
-                                    {
                                         value: 'restaurant',
-                                        label: 'Restaurant',
+                                        label: 'Food',
                                     },
                                 ]}
                             />
