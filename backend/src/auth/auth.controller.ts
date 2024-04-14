@@ -40,8 +40,8 @@ export class AuthController {
      * @returns A promise resolving to a string indicating the result of the operation.
      */
     @Patch('/forgetpassword')
-    async forgetPassword(@Body ('email') email: string, @Body ('answer')answer: string): Promise<string>{
-        return this.authService.forgetPassword(email, answer)
+    async forgetPassword(@Body('email') email: string, @Body('securityAnswer') securityAnswer: string): Promise<string>{
+        return this.authService.forgetPassword(email, securityAnswer)
     }
 
     //MODIFY data

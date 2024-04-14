@@ -71,12 +71,13 @@ export class AuthService {
      * @returns Success message after resetting password
      * @throws UnathorizedException if email or security answer is invalid
      */
-    async forgetPassword(email: string, answer: string): Promise<string>{
+    async forgetPassword(email: string, securityAnswer: string): Promise<string>{
         const user = await this.userModel.findOne({email});
+        console.log(`Resetting password: compare security answer ${user.security} to ${securityAnswer}`);
         if(!user){
             throw new UnauthorizedException('Invalid email address');
         }
-        if(user.security!=answer){
+        if(user.security!=securityAnswer){
             throw new UnauthorizedException('Wrong Answer to Security Question');
         }
         else{
