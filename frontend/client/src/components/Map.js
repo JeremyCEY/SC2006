@@ -15,6 +15,8 @@ const center = {
     lng: 103.8198
 };
 
+const libraries = ['places'];
+
 function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
     const [response, setResponse] = useState(null);
     const [destination, setDestination] = useState('');
@@ -26,7 +28,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
-        libraries: ['places'],
+        libraries: libraries
     });
 
     //pans and zoom when different properties are selected
@@ -240,8 +242,9 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                             callback={directionsCallback}
                         />
                     )}
-
+{response &&(
                     <DirectionsRenderer directions={response} />
+)}
 
                     {response && (                  //idk how to display this
                         <div>

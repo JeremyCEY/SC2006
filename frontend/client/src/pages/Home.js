@@ -81,7 +81,7 @@ function Home() {
                     <h2 className="font-bold text-3xl text-center mb-6">Explore Residences</h2>
                     <div className="flex flex-wrap justify-center gap-4">
                         {residences.map((resale, index) => (
-                            <div key={resale.id}
+                            <div key={resale._id}
                                 // className= "w-[30%], p-[20px], shadow-md, m-[10px]"
                                 style={{ width: '30%', padding: '20px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', margin: '10px' }}>
                                 <div className="header">
