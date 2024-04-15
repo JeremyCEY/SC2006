@@ -4,6 +4,17 @@ import { FilterOutlined, ArrowUpOutlined, ArrowDownOutlined, LeftOutlined, Right
 
 const { Sider } = Layout;
 
+/**
+ * Collapsable window on the left side of Explore Page showing property listings filtered by Search bar parameters selected by the user
+ * 
+ * @param {*} setSortOption - how the property listings should be sorted, selected by the user
+ * @param {*} sortedData - the sorted property listings based on sort option
+ * @param {*} handleDivClick - handler for clicking a property listing
+ * @param {*} userId - ID of the user who is currently logged in
+ * @param {*} selectedResale - the resale unit selected by the user
+ * @param {*} bookmarked - to save a selected property into user's saved properties
+ * @returns 
+ */
 function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, selectedResale, setBookmarked, bookmarked }) {
     const [collapsed, setCollapsed] = useState(false);
     // const [bookmarked, setBookmarked] = useState({}); 
@@ -60,6 +71,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
             message.error('Failed to update the bookmark.');
         }
     };
+    
    // ---------------- keeping heart red after bookmarked--------
     useEffect(() => {
         const fetchBookmarkedItems = async () => {

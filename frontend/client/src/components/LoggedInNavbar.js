@@ -7,8 +7,19 @@ import mainLogo from '../images/logo.png';
 
 import Searchbar from './Searchbar';
 
+/**
+ * Navbar only visible by logged in users
+ * 
+ * @param {*} formValues - values within the search bar 
+ * @returns 
+ */
 function LoggedInNavbar({formValues}) {
 
+    /**
+     * The menu visible to a logged in user
+     * 
+     * @param {*} e 
+     */
     const handleMenuClick = (e) => {
         console.log('click', e);
         switch (e.key) {
@@ -25,7 +36,10 @@ function LoggedInNavbar({formValues}) {
                 break;
             }
         };
-
+    
+    /**
+     * Logs the user out of the website
+     */
     const logout = async () => {
         localStorage.removeItem('token');
         window.location.href = '/';

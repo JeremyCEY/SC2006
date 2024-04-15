@@ -7,6 +7,12 @@ import mainLogo from '../images/logo.png';
 
 import Searchbar from './Searchbar';
 
+/**
+ * Navbar only visible by logged out users
+ * 
+ * @param {*} formValues - values within the search bar 
+ * @returns 
+ */
 function LoggedOutNavbar({formValues}) {
             
     const handleMenuClick = (e) => {

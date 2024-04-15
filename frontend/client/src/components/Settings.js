@@ -5,6 +5,12 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 const { Title } = Typography;
 
+/**
+ * Functions for the settings page under user dashboard
+ * 
+ * @param {*} userId - ID of the user who is currently logged in
+ * @returns 
+ */
 const Settings = ({ userId }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
