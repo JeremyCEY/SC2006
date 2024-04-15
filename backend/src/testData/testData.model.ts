@@ -1,7 +1,10 @@
 import * as mongoose from 'mongoose';
 
+/**
+ * Test Data Interface
+ * Represents the structure of test data documents.
+ */
 export interface TestData extends mongoose.Document {
-  //export interface Resale{
   id: string;
   month: string;
   town: string;
@@ -18,6 +21,10 @@ export interface TestData extends mongoose.Document {
   Longitude: number;
 }
 
+/**
+ * Test Data Schema
+ * Defines the schema for the test data collection.
+ */
 export const TestDataScehma = new mongoose.Schema({
   month: {type: String, required: true},
   town: {type: String, required: true},

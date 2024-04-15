@@ -1,11 +1,17 @@
-// geodata.service.ts
 import { Injectable } from '@nestjs/common';
-
 import * as fs from 'fs/promises';
-import * as path from 'path';
 
+
+/**
+ * Service responsible for handling geodata-related operations.
+ */
 @Injectable()
 export class GeodataService {
+    
+    /**
+     * Combines GeoJSON files into a single FeatureCollection.
+     * @returns A promise that resolves to the combined GeoJSON data.
+     */
     async combineGeoJsonFiles(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
         //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson\\railobjects';
