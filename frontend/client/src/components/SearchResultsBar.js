@@ -148,6 +148,7 @@ function SearchResultsBar({ setSortOption, sortedData, handleDivClick, userId, s
                                         <ul className={`${property.id === selectedResale?.id ? 'text-blue-500' : ''}`}>
                                             <li>Type: {property.flat_type}</li>
                                             <li>Street: {property.street_name}</li>
+                                            <li>Block Number: {property.block_no}</li>
                                             <li>Floor Area: {property.floor_area_sqm} sqm</li>
                                         </ul>
                                         {userId && (<HeartOutlined

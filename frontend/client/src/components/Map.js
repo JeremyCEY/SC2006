@@ -221,7 +221,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     {selectedResale === selectedResale1 && (
                         <InfoWindow onCloseClick={handleCloseInfoWindow}>
                             <div>
-                                <p>Address: {selectedResale1.street_name + " " + selectedResale1.block_no}</p>
+                                <p>Address: {selectedResale1.street_name + " Blk " + selectedResale1.block_no}</p>
                                 <p>Price: {"$" + selectedResale1.resale_price}</p>
                             </div>
                         </InfoWindow>

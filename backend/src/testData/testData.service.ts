@@ -14,7 +14,7 @@ export class TestDataService {
 
     //for databse use
     async dbcreateTestData(month: string,town: string,
-        flat_type: string, block_no: number,
+        flat_type: string, block_no: string,
         street_name: string, storey_range: string,
         floor_area_sqm: number, flat_model: string,
         lease_commense_date: number, remaining_lease: string,
@@ -43,7 +43,7 @@ export class TestDataService {
     async dbgetAllTestData(){
         const result = await this.testDataModel.find().exec();
         return result.map((testData) => ({id:testData.id, month: testData.month,town: testData.town,
-            flat_type: testData.flat_type, block_no: testData.block_no,
+            flat_type: testData.flat_type, block_no: testData.block,
             street_name: testData.street_name, storey_range: testData.storey_range,
             floor_area_sqm: testData.floor_area_sqm, flat_model: testData.flat_model,
             lease_commense_date: testData.lease_commense_date, remaining_lease: testData.remaining_lease,
@@ -69,7 +69,7 @@ export class TestDataService {
 
     async dbupdateTestData(
         id: string, month: string,town: string,
-        flat_type: string, block_no: number,
+        flat_type: string, block_no: string,
         street_name: string, storey_range: string,
         floor_area_sqm: number, flat_model: string,
         lease_commense_date: number, remaining_lease: string,
@@ -367,7 +367,7 @@ export class TestDataService {
           
           
         return result.map((testData) => ({id:testData.id, month: testData.month,town: testData.town,
-            flat_type: testData.flat_type, block_no: testData.block_no,
+            flat_type: testData.flat_type, block_no: testData.block,
             street_name: testData.street_name, storey_range: testData.storey_range,
             floor_area_sqm: testData.floor_area_sqm, flat_model: testData.flat_model,
             lease_commense_date: testData.lease_commense_date, remaining_lease: testData.remaining_lease,
