@@ -6,6 +6,10 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { User } from './user.schema';
 import { jwtConstants } from './auth.constant';
 
+/**
+ * Strategy for JWT authentication
+ * This is used to validate JWT tokens and extract user information from them
+ */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -18,6 +22,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  /**
+   * Validates the payload extracted from the JWT token
+   * @param payload Payload extracted from the JWT token
+   * @returns User object if the user is found 
+   * Otherwise throws an UnathorizedException 
+   */
   async validate(payload) {
     const { id } = payload;
 

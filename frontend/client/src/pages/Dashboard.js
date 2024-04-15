@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; 
@@ -12,29 +12,29 @@ import { Menu, Layout } from 'antd'
 const { Sider } = Layout;
 
 function Dashboard() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('savedProperties');
-    // const userId = '65fe8c23cec43e4c08995198'
 
-    const [userId, setUserId] = useState(null); // State for user ID
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            setUserId(decodedToken.id); // Set user ID from decoded token
+            setUserId(decodedToken.id);
+        } else {
+            console.log('No token found in local storage');
         }
-    }, []); // Empty dependency array to run only once on component mount
-
-
-    {/* Sidebar Selection */}
+    }, [userId]);
 
     const handleMenuClick = (key) => {
         setActiveSection(key);
     };
 
-
     const renderContent = () => {
+        if (!userId) {
+            return <div>Loading...</div>;
+        }
+    
         switch (activeSection) {
             case 'savedProperties':
                 return <SavedProperties userId={userId} />;
@@ -47,20 +47,15 @@ function Dashboard() {
         }
     };
 
-    const navbarHeight = '64px'; 
-
     return (
         <>
             <LoggedInNavbar />
 
-            <div className="flex">
-                
-                
-                {/* Sidebar */}
+            <div className="flex" >
                 <Sider width={250} className='bg-gray-50 h-[87vh]'>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['saved_properties']}
+                        defaultSelectedKeys={['savedProperties']}
                         className='h-full border-0 bg-gray-50 font-semibold text-1xl'
                         style={{ height: '100%', borderRight: 0 }}
                         onClick={({ key }) => handleMenuClick(key)}
@@ -82,8 +77,7 @@ function Dashboard() {
                     />
                 </Sider>
 
-                {/* Page content */}
-                <div className="flex">
+                <div className="flex-grow">
                     {renderContent()}
                 </div>
             </div>

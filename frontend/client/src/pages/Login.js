@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom';
-
+import React, { useState } from 'react';
+import axios from 'axios';
+import {message} from 'antd'
 
 import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
 import password from '../images/lock.png'
 
-import axios from 'axios';
-
 function Login(){
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({ username: '', password: '' });
 
@@ -37,8 +34,7 @@ function Login(){
             const { token } = response.data;
             console.log('Received token:', token);
             localStorage.setItem('token', token);
-    
-            // Redirect to another page, update state, etc. based on your application flow
+            message.success("Login successful")
             window.location.href = '/dashboard';
 
         } catch (error) {
@@ -46,35 +42,35 @@ function Login(){
             if (error.response) {
                 console.error('Server responded with status:', error.response.status);
                 if (error.response.status === 401) {
-                    alert('Invalid email or password');
+                    message.error('Invalid email or password');
                 } else {
-                    alert('An error occurred. Please try again later.');
+                    message.error(error.response.data.message || 'An error occurred. Please try again later.');
                 }
             } else if (error.request) {
                 // The request was made but no response was received
                 console.error('No response received:', error.request);
-                alert('No response received. Please check your internet connection.');
+                message.error('No response received. Please check your internet connection.');
             } else {
                 // Something happened in setting up the request that triggered an error
                 console.error('Request setup error:', error.message);
-                alert('An error occurred. Please try again later.');
+                message.error('An error occurred. Please try again later.');
             }
         }
     };
-
 
     
     return(
         <>
             <div className="flex flex-col items-center ">
                 <a href="/" className="self-start pl-3 pt-3">
-                    <button type="button" className="text-white bg-blue-800 
-                                                hover:bg-blue-800 focus:ring-4 focus:outline-none 
-                                                focus:ring-blue-300 font-medium rounded-full 
-                                                text-sm p-2.5 text-center inline-flex 
-                                                items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 
-                                                dark:focus:ring-blue-800
-                                                pr">
+                    <button type="button" 
+                            className="text-white bg-blue-800 
+                                    hover:bg-blue-800 focus:ring-4 focus:outline-none 
+                                    focus:ring-blue-300 font-medium rounded-full 
+                                    text-sm p-2.5 text-center inline-flex 
+                                    items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 
+                                    dark:focus:ring-blue-800
+                                    pr">
                         <svg className="w-5 h-5 rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                         </svg>
@@ -150,8 +146,6 @@ function Login(){
                     </a>
                 </div>
             </div>
-
-            
         </>
     );
 }

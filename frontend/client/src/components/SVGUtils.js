@@ -1,4 +1,3 @@
-// SVGUtils.js
 export const SVGUtils = {
     // Fetches SVG content from a URL
     async fetchSVG(url) {

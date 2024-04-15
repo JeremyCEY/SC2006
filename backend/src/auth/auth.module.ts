@@ -7,12 +7,17 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './auth.constant';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { BookmarkService } from 'src/bookmark v2/bookmark.service';
-import { BookmarkController } from 'src/bookmark v2/bookmark.controller';
+import { BookmarkService } from 'src/bookmark/bookmark.service';
+import { BookmarkController } from 'src/bookmark/bookmark.controller';
 import { FrequentAddressController } from 'src/frequentaddress/frequentaddress.controller';
 import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.service';
+import { LoginFunctionController } from 'src/loginfunction/loginfunction.controller';
+import { LoginFunctionService } from 'src/loginfunction/loginfunction.service';
 
-
+/**
+ * Module for authentication-related features.
+ * It imports necessary modules and sets up controllers, services and providers for authentication.
+ */
 @Module({
   imports: [
     MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
@@ -24,8 +29,8 @@ import { FrequentAddressService } from 'src/frequentaddress/frequentaddress.serv
     })
 
   ],
-  controllers: [AuthController, BookmarkController, FrequentAddressController],
-  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService],
+  controllers: [AuthController, BookmarkController, FrequentAddressController, LoginFunctionController],
+  providers: [AuthService, JwtStrategy, BookmarkService, FrequentAddressService, LoginFunctionService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

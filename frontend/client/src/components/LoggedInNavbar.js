@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import mainLogo from '../images/logo.png';
+import React from 'react';
 
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Space, Avatar } from 'antd';
+import { Button, Dropdown, Avatar } from 'antd';
+
+import mainLogo from '../images/logo.png';
 
 import Searchbar from './Searchbar';
 
@@ -24,33 +25,31 @@ function LoggedInNavbar({formValues}) {
                 break;
             }
         };
-        
-    const items = [
-            {
-                label: 'Dashboard',
-                key: '1',
-                
-            },
-            {
-                label: 'Logout',
-                key: '2',
-            },
-            {
-                label: 'FAQ',
-                key: '3',
-            },
-
-        ];
-
-        const menuProps = {
-            items,
-            onClick: handleMenuClick,
-        };
 
     const logout = async () => {
         localStorage.removeItem('token');
         window.location.href = '/';
         console.log('Loggedout');
+    };
+        
+    const items = [
+        {
+            label: 'Dashboard',
+            key: '1',
+        },
+        {
+            label: 'Logout',
+            key: '2',
+        },
+        {
+            label: 'FAQ',
+            key: '3',
+        },
+    ];
+
+    const menuProps = {
+        items,
+        onClick: handleMenuClick,
     };
 
     return (
@@ -58,23 +57,27 @@ function LoggedInNavbar({formValues}) {
                         sticky shadow-lg
                         top-0 z-99999
                         h-[13vh]">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[13vh]">
+            <div className="w-[100%] max-w-screen-xl 
+                            flex flex-wrap items-center 
+                            justify-between mx-auto h-[13vh]">
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src={mainLogo} className="h-12 pl-4" alt="Logo" />
+                    <img src={mainLogo} className="h-12 ml-4" alt="Logo" />
                 </a>
-                <Searchbar initialValues={formValues}/>
-
-                <Dropdown menu={menuProps} className='w-[7vw] h-[4vw]
-                                                            border rounded-[100px] shadow-md'>
-                                        <Button>
-                                                <Space>
-                                                <Avatar size="large" className="text-blue-700" icon={<UserOutlined/>} />
-                                                <DownOutlined />
-                                                </Space>
-                                        </Button>
-                                </Dropdown>
+                <div className="w-[75%] h-[70%]">
+                <Searchbar initialValues={formValues} />
+                </div>
+                <div className="w-[7%] h-[70%] mr-3">
+                    <Dropdown menu={menuProps} className='
+                            border rounded-[100px] shadow-md'>
+                            <Button className="h-[100%] w-[100%]">
+                                    <Avatar size="large" 
+                                        className="text-blue-700 bg-[#F4F4F4]" 
+                                        icon={<UserOutlined/>} />
+                                    <DownOutlined />
+                            </Button>
+                    </Dropdown>
+                    </div>
             </div>
-            
         </nav>
     );
 }

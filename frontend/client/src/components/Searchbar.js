@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Formik, Form, Field } from 'formik';
@@ -9,7 +9,6 @@ import { Button, Select } from 'antd';
 
 
 function Searchbar({ initialValues }) {
-    // Set default values if initialValues is empty
     const defaultInitialValues = {
         location: [],
         propertyType: [],
@@ -21,43 +20,25 @@ function Searchbar({ initialValues }) {
     
     const navigate = useNavigate();
 
-    const [responseData, setResponseData] = useState(null);
-    const [formValues, setFormValues] = useState(null);
-    // useEffect(() => {
-    //     console.log('Initial values:', mergedInitialValues);
-    // }, [mergedInitialValues]);
-
     const handleSubmit = async (values) => {
-        console.log(values); // Here, you can handle form submission logic
-    
         try {
             const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
-            // console.log(response.data);
-            // setResponseData(response.data); // Store the response data in state
-            // setFormValues(values); // Store the form values in state
             navigate('/explore', { state: { responseData: response.data, formValues: values } });
         } catch (error) {
             console.error(error);
         }
-        
-
-
-        // Navigate to explore page
-        // window.location.href = '/explore';
     };
   
-  
     return (
-        <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={mergedInitialValues} onSubmit={handleSubmit} >
             {({ values, setFieldValue }) => (
-                <Form className='w-[80%] h-[50%]'>
+                <Form style={{ height: '100%', width: '100%' }}>
                     <div className="
-                                    flex items-center
+                                    flex flex-row items-center
                                     justify-between
                                     border shadow-md
-                                    
                                     rounded-[100px]
-                                    ">
+                                    "  style={{width:'100%', height: '100%' }}>
                         {/* Location */}
                         <div className="flex flex-col ml-10 w-[15%]">
                             <span className="font-semibold text-sm">Location</span>
@@ -73,9 +54,8 @@ function Searchbar({ initialValues }) {
                                     }
                                     onChange={(selectedValues) => {
                                         setFieldValue('location', selectedValues);
-                                        // console.log({ ...values, location: selectedValues });
                                     }}
-                                    defaultValue={values.location} // Set defaultValue based on values.location
+                                    defaultValue={values.location}
 
                                     options={[
                                     {
@@ -205,9 +185,8 @@ function Searchbar({ initialValues }) {
                                 suffixIcon={null}
                                 onChange={(selectedValues) => {
                                     setFieldValue('propertyType', selectedValues);
-                                    // console.log({ ...values, propertyType: selectedValues });
                                 }}
-                                defaultValue={values.propertyType} // Set defaultValue based on values.location
+                                defaultValue={values.propertyType}
 
                                 options={[
                                     {
@@ -266,7 +245,6 @@ function Searchbar({ initialValues }) {
                         <div className="flex flex-col w-[15%]">
                         <span className="font-semibold text-sm">Amenities</span>
                         <Select maxTagCount="responsive"                                
-                                mode="multiple"
                                 optionFilterProp="children"
                                 filterOption={(input, option) => (option?.label ?? '').includes(input)}
                                 filterSort={(optionA, optionB) =>
@@ -276,9 +254,8 @@ function Searchbar({ initialValues }) {
                                 suffixIcon={null}
                                 onChange={(selectedValues) => {
                                     setFieldValue('amenities', selectedValues);
-                                    // console.log({ ...values, amenities: selectedValues });
                                 }}
-                                defaultValue={values.amenities} // Set defaultValue based on values.location
+                                defaultValue={values.amenities}
 
                                 options={[
                                     {
@@ -298,20 +275,12 @@ function Searchbar({ initialValues }) {
                                         label: 'Primary School',
                                     },
                                     {
-                                        value: '',
-                                        label: 'MRT',
-                                    },
-                                    {
                                         value: 'park',
                                         label: 'Park',
                                     },
                                     {
-                                        value: 'cafe',
-                                        label: 'Coffee shop/Hawker Centre',
-                                    },
-                                    {
                                         value: 'restaurant',
-                                        label: 'Restaurant',
+                                        label: 'Food',
                                     },
                                 ]}
                             />
@@ -325,16 +294,12 @@ function Searchbar({ initialValues }) {
                                     placeholder=""
                                     optionFilterProp="children"
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                                    // filterSort={(optionA, optionB) =>
-                                    // (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                    // }
                                     variant='borderless'
                                     suffixIcon={null}
                                     onChange={(selectedValues) => {
                                         setFieldValue('budget', selectedValues);
-                                        // console.log({ ...values, budget: selectedValues });
                                     }}
-                                    defaultValue={values.budget} // Set defaultValue based on values.location
+                                    defaultValue={values.budget}
 
                                     options={[
                                     {
@@ -412,9 +377,8 @@ function Searchbar({ initialValues }) {
                                     suffixIcon={null}
                                     onChange={(selectedValues) => {
                                         setFieldValue('rooms', selectedValues);
-                                        // console.log({ ...values, rooms: selectedValues });
                                     }}
-                                    defaultValue={values.rooms} // Set defaultValue based on values.location
+                                    defaultValue={values.rooms}
 
                                     options={[
                                     {
@@ -453,7 +417,7 @@ function Searchbar({ initialValues }) {
                             <Button size="large" 
                                     shape="circle"
                                     className="border-none shadow-none"
-                                    htmlType="submit" // This will submit the form 
+                                    htmlType="submit"
                                     icon={<SearchOutlined style={{ fontSize: '25px' }}/>}/>     
                         </div>
                                     

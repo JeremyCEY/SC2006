@@ -14,7 +14,7 @@ import ExploreRightBar from '../components/ExploreRightBar';
 const { Content } = Layout;
 
 
-function Explore() {
+function ShowProperty() {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -25,53 +25,26 @@ function Explore() {
 
 
     const location = useLocation();
-    const responseData = location.state.responseData;
-    const formValues = location.state.formValues;
-
+    const selectedId = location.state.selectedId;
     const [selectedResale, setSelectedResale] = useState(null);
-    const [selectedProperty, setSelectedProperty] = useState(false);
-
-    const [showLeftBar, setShowLeftBar] = useState(true);
-
-
-    const handleDivClick = (resale) => {
-        // console.log('Clicked:', resale);
-        setSelectedProperty(true);
-        setSelectedResale(resale);
-    };
-
-    const [bookmarked, setBookmarked] = useState({});
-    const [sortOption, setSortOption] = useState(null);
-
-    const [sortedData, setSortedData] = useState([]);
 
     useEffect(() => {
-        let sorted = [...responseData];
-        if (sortOption) {
-            const [field, direction] = sortOption.split(' ');
-            if (field === 'bookmark') {
-                const bookmarkedProperties = sorted.filter(property => bookmarked[property.id]);
-                const nonBookmarkedProperties = sorted.filter(property => !bookmarked[property.id]);
-                sorted = [...bookmarkedProperties, ...nonBookmarkedProperties];
-            } else {
-                sorted.sort((a, b) => {
-                    if (field === 'price' && direction === 'up') {
-                        return a.resale_price - b.resale_price;
-                    } else if (field === 'price' && direction === 'down') {
-                        return b.resale_price - a.resale_price;
-                    } else if (field === 'size' && direction === 'up') {
-                        return a.floor_area_sqm - b.floor_area_sqm;
-                    } else if (field === 'size' && direction === 'down') {
-                        return b.floor_area_sqm - a.floor_area_sqm;
-                    }
-                    return 0; // Return 0 if no valid sorting condition is met
-                });
+        const fetchResale = async () => {
+            const response = await fetch(`http://localhost:3000/testData/${selectedId}`);
+            let data = await response.json();
+            console.log('Selected resale:', data);
+            data={
+                ...data,
+                latitude: data.Latitude,
+                longitude: data.Longitude,
             }
-        }
-        
-        setSortedData(sorted);
-    }, [responseData, sortOption, bookmarked]);
+            setSelectedResale(data);
+        };
+
+        fetchResale();
+    }, [selectedId]);
     
+    const [selectedProperty, setSelectedProperty] = useState(true);    
 
 
     const [frequentAddresses, setFrequentAddresses] = useState([]);
@@ -118,25 +91,25 @@ function Explore() {
     return (
         <>
             <div className='relative z-[1000]'>
-                {isAuthenticated ? <LoggedInNavbar formValues={formValues} /> : <LoggedOutNavbar formValues={formValues} />}
+                {isAuthenticated ? <LoggedInNavbar /> : <LoggedOutNavbar  />}
             </div>
             <Layout >
                 <Layout>
                     <Content>
                         <Map
                             selectedResale1={selectedResale}
-                            responseData={responseData}
+                            // responseData={responseData}
                             selectedFrequentAddress={selectedFrequentAddress}
                             travelMode={travelMode}
                             setTravelTime={setTravelTime}
                             travelTime={travelTime}
-                            amenityTypes={formValues.amenities}
+                            amenityTypes={[]}
                         />
                     </Content>
                 </Layout>
 
 
-                <SearchResultsBar bookmarked={bookmarked} setBookmarked={setBookmarked} setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} userId={userId} selectedResale={selectedResale}/>
+                {/* <SearchResultsBar bookmarked={bookmarked} setBookmarked={setBookmarked} setSortOption={setSortOption} sortedData={sortedData} handleDivClick={handleDivClick} userId={userId} selectedResale={selectedResale}/> */}
 
                 {selectedProperty && 
                     <ExploreRightBar
@@ -155,4 +128,4 @@ function Explore() {
     );
 }
 
-export default Explore
+export default ShowProperty

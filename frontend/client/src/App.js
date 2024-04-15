@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-  Link,
-  Redirect
 } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -16,7 +14,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import ForgetPassword from './pages/ForgetPassword';
 import Explore from './pages/Explore';
-
+import ShowProperty from './pages/ShowProperty';
 
 function App() {
 
@@ -32,9 +30,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          <Route path="/FAQ" element={<FAQ />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />} />          
+          <Route path="/FAQ" element={<FAQ />} />
+          <Route path="/login/forget-password" element={<ForgetPassword />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/property" element={isAuthenticated() ? <ShowProperty /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
     </>

@@ -16,9 +16,6 @@ const center = {
 };
 
 function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
-    // useEffect(() => {
-    //     console.log(selectedResale1);
-    // }, [selectedResale1]);
     const [response, setResponse] = useState(null);
     const [destination, setDestination] = useState('');
 
@@ -28,10 +25,9 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const mapRef = useRef(null);
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyD6pSI0fbs6q6bo-YXRcpxtMliZ20EQvN8",
+        googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
         libraries: ['places'],
     });
-
 
     //pans and zoom when different properties are selected
     useEffect(() => {
@@ -56,22 +52,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         setSelectedResale(null);
     };
 
-    // useEffect(() => {
-    //     axios.get('/testData') // Make sure this URL is correct and accessible
-    //         .then(response => setResales(response.data))
-    //         .catch(err => console.error('Failed to fetch resale data:', err));
 
-    //     // Fetch GeoJSON data similar to resale data
-    //     axios.get('geodata/railnames') // Adjust URL as necessary
-    //         .then(response => setRailNames(response.data.features)) // Assuming the data is in `features`
-    //         .catch(err => console.error('Failed to fetch GeoJSON data:', err));
-
-    //     axios.get('geodata/mrtlines')
-    //         .then(response => setMrt(response.data))
-    //         .catch(err => console.error('Failed to fetch GeoJSON data for MRT station and line overlay:', err))
-    // }, []);
-
-    //
     useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
@@ -84,17 +65,43 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             setDestination(String(selectedFrequentAddress));
             setDirectionsRequested(true);
         }
-    }, [selectedFrequentAddress, selectedResale1]);
+    }, [selectedFrequentAddress, selectedResale1, travelMode]);
 
     const directionsCallback = (response) => {
         if (response !== null && response.status === 'OK') {
             setResponse(response);
             setDirectionsRequested(false);
-            setTravelTime(response.routes[0].legs[0].duration.text)
+            // setTravelTime(response.routes[0].legs[0].duration.text)
         } else {
             console.log('Directions request failed due to ' + response?.status);
         }
     };
+
+    //set travel time for all modes
+    useEffect(() => {
+        if (selectedFrequentAddress !== null) {
+            // Make a request for each transport mode
+            ['DRIVING', 'TRANSIT', 'WALKING', 'BICYCLING'].forEach(mode => {
+                const DirectionsService = new window.google.maps.DirectionsService();
+                DirectionsService.route({
+                    origin: ({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) }),
+                    destination: destination,
+                    travelMode: mode,
+                }, (result, status) => {
+                    if (status === window.google.maps.DirectionsStatus.OK) {
+                        // Set the travel time for the current mode
+                        setTravelTime(prevState => ({ 
+                            ...prevState, 
+                            [mode]: result.routes[0].legs[0].duration.text 
+                        }));
+                        // console.log(`Travel time for ${mode}: ${result.routes[0].legs[0].duration.text}`);
+                    } else {
+                        console.error(`error fetching directions ${result}`);
+                    }
+                });
+            });
+        }
+    }, [destination, selectedResale1]);
 
     // Routing funcs end
 
@@ -103,34 +110,57 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const [circleCenter, setCircleCenter] = useState(null);
     const [circleRadius, setCircleRadius] = useState(500);
 
+    const [showAmenities, setShowAmenities] = useState(false);
+
+
     useEffect(() => {
         if (isLoaded && selectedResale1 !== null) {
             // Fetch amenities when the map is loaded
+            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
             fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
-            setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) })
+            // console.log(showAmenities);
         }
-    }, [isLoaded, selectedResale1]);
+    }, [isLoaded, selectedResale1, showAmenities, amenityTypes]);
+
 
     const fetchAmenities = async (location) => {
         const service = new window.google.maps.places.PlacesService(mapRef.current);
         const request = {
             location: location,
             radius: 500,
-            type: amenityTypes, // Adjust types as needed
+            type: amenityTypes
         };
-        console.log(amenityTypes);
+    
+        console.log('Amenity Types', amenityTypes);
+    
         if (amenityTypes.length > 0) {
-            service.nearbySearch(request, (results, status) => {
-                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                    const filteredResults = results.filter(amenity => amenityTypes.includes(amenity.types[0]));
-                    setAmenities(filteredResults);
-                } else {
-                    setAmenities([]);
-                }
-            });
+            try {
+                const results = await new Promise((resolve, reject) => {
+                    service.nearbySearch(request, (results, status) => {
+                        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                            resolve(results);
+                        } else {
+                            reject(status);
+                        }
+                    });
+                });
+    
+                console.log('Results', results);
+                const filteredResults = results.filter(amenity => amenity.types.some(type => amenityTypes.includes(type)));
+                console.log('Filtered Results', filteredResults);
+                setAmenities(filteredResults);
+                setShowAmenities(true); 
+    
+            } catch (error) {
+                console.error('Error fetching amenities:', error);
+                setAmenities([]);
+                setShowAmenities(false);
+            }
+        } else {
+            setShowAmenities(false); 
         }
-        console.log(amenities);
     };
+
 
     const processedAmenities = amenities.map(amenity => {
         let iconUrl;
@@ -144,7 +174,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             case 'secondary_school':
                 iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet.svg';
                 break;
-            case 'cafe':
+            case 'food':
                 iconUrl = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/cafe_pinlet.svg';
                 break;
             case 'park':
@@ -160,7 +190,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                 iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'; // Replace with default icon URL
                 break;
         }
-        console.log(amenity.types);
+        // console.log(amenity.types);
         // Return amenity object with additional 'iconUrl' property
         return { ...amenity, iconUrl };
     });
@@ -180,28 +210,6 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-            {/* {
-                    responseData.map(resale => (
-                        
-                        <Marker
-                            key={resale.id}
-                            position={{ lat: parseFloat(resale.latitude), lng: parseFloat(resale.longitude) }}
-                            // clusterer={clusterer}
-                            onClick={() => handleMarkerClick(resale)}
-                        >
-
-                            {selectedResale === resale && (
-                                <InfoWindow onCloseClick={handleCloseInfoWindow}>
-                                    <div>
-                                        <p>Address: {resale.street_name + " " + resale.block_no}</p>
-                                        <p>Price: {"$" + resale.resale_price}</p>
-                                    </div>
-                                </InfoWindow>
-                            )}
-
-                        </Marker>
-                    ))
-                    } */}
             {selectedResale1 && (
 
                 <Marker
@@ -220,6 +228,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
 
                     <Circle center={circleCenter} radius={circleRadius}></Circle>
+                    {showAmenities}
 
                     {directionsRequested && (               //routing stuff
                         <DirectionsService
@@ -241,7 +250,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
                 </Marker>
             )}
-            {processedAmenities.map((amenity, index) => (
+            {showAmenities && (processedAmenities.map((amenity, index) => (
                 <Marker
                     key={index}
                     position={{ lat: amenity.geometry.location.lat(), lng: amenity.geometry.location.lng() }}
@@ -250,7 +259,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                         scaledSize: new window.google.maps.Size(30, 30),
                     }}
                 />
-            ))}
+            )))}
         </GoogleMap >
     ) : <></>;
 }

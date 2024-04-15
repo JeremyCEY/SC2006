@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Map from '../components/Map'
-import Explore from "../pages/Explore";
-import { Modal, Button, Input } from 'antd';
+
+import { Modal, Button } from 'antd';
+
 import MapAutocomplete from '../components/MapAutocomplete';
-
-
 
 const FrequentLocations = ({ userId }) => {
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [expandedLocationId, setExpandedLocationId] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [token, setToken] = useState(null);
 
     // for add freq ------------------------ maybe issue (location part)
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,12 +22,6 @@ const FrequentLocations = ({ userId }) => {
         setIsModalVisible(false);
     };
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setIsAuthenticated(storedToken !== null);
-        setToken(storedToken);
-    }, []);
- // working 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token && userId) {
@@ -50,7 +39,7 @@ const FrequentLocations = ({ userId }) => {
                 return response.json();
             })
             .then(data => {
-                console.log('Frequent addresses:', data);
+                // console.log('Frequent addresses:', data);
                 setFrequentAddresses(data); 
             })
             .catch(error => {
@@ -103,7 +92,7 @@ const FrequentLocations = ({ userId }) => {
             }
             
             setIsModalVisible(false);
-            console.log(selectedPlace);
+            // console.log(selectedPlace);
         } catch (error) {
             console.error('Error adding new frequent address:', error);
         }
@@ -112,7 +101,7 @@ const FrequentLocations = ({ userId }) => {
     // autocomplete addfreq -------------------- added this after the maps
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="w-full overflow-y-auto h-[87vh]">
             {frequentAddresses.map((address, index) => (
                 <div key={index} className="flex items-center justify-between p-4 border-b border-gray-300">
                     <div className="flex-grow">
@@ -120,16 +109,11 @@ const FrequentLocations = ({ userId }) => {
                     </div>
                     <button 
                         onClick={() => handleDelete(address)} 
-                        className="text-white bg-red-500 hover:bg-red-700 font-bold py-1 px-1 rounded"
+                        className="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
                     >
                         Delete
                     </button>
-                    <button 
-                        onClick={() => {/* EDit button, might delete */}} 
-                        className="text-white bg-blue-300 hover:bg-blue-500 font-bold py-1 px-3 rounded"
-                    >
-                        Edit
-                    </button>
+                    
                 </div>
             ))}
             <style>
@@ -144,34 +128,37 @@ const FrequentLocations = ({ userId }) => {
                         border-color: #0050b3;
                     }
                 `} </style>
-  
-            <Button
-                type="primary"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                style={{
+            <div className='flex justify-center'>
+                <Button
+                    type="primary"
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                    className="text-[#ffffff] mt-[5vh] mb-[5vh] font-semibold"
+                    style={{
+                        backgroundColor: isHovering ? '#0050b3' : '#1890ff', // blue button 
+                        borderColor: isHovering ? '#0050b3' : '#1890ff', 
+                    }}
+                    onClick={showModal}
+                >
+                    Add Frequent Address
                     
-                    backgroundColor: isHovering ? '#0050b3' : '#1890ff', // blue button 
-                    borderColor: isHovering ? '#0050b3' : '#1890ff', 
-                    color: '#ffffff', 
-                    marginTop: '10px'
-                    
-                }}
-                onClick={showModal}
-            >
-                Add Frequent Address
-                
-            </Button>
+                </Button>
+            </div>
             <Modal
                 className="add-modal"
                 title="Add New Frequent Address"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={() => handleAddFrequentAddress()}
                 onCancel={() => setIsModalVisible(false)}
                 okText="Add"
+                centered
+                width={'70vw'}
             >
-                <MapAutocomplete
-                    setSelectedPlace={setSelectedPlace}/>      {/* might be the issue */}
+                <div className="flex justify-center">
+                    <MapAutocomplete
+                        setSelectedPlace={setSelectedPlace}/>      
+                        {/* might be the issue */}
+                </div> 
             </Modal>
         </div>
     );
