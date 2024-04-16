@@ -1,5 +1,8 @@
-//railname.model.ts
 import * as mongoose from 'mongoose';
+
+/**
+ * Mongoose model for storing rail name data in GeoJSON format.
+ */
 
 // Define a schema for GeoJSON Geometry objects
 const GeometrySchema = new mongoose.Schema({

@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose';
 
+/**
+ * Interface representing a resale property document in the database.
+ * Defines the structure of a resale property including its attributes.
+ */
 export interface Resale extends mongoose.Document{
 //export interface Resale{
     id: String;
@@ -16,6 +20,10 @@ export interface Resale extends mongoose.Document{
     resale_price: number;
 }
 
+/**
+ * Mongoose schema definition for the Resale model.
+ * Defines the structure and data types of the Resale document.
+ */
 export const ResaleSchema = new mongoose.Schema({
     month: {type: String, required: true},
     town: {type: String, required: true},

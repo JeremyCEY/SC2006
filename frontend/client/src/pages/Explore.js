@@ -14,15 +14,7 @@ import ExploreRightBar from '../components/ExploreRightBar';
 const { Content } = Layout;
 
 
-function Explore() {
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(token !== null);
-    }, []);
-
+function Explore({isAuthenticated}) {
 
     const location = useLocation();
     const responseData = location.state.responseData;

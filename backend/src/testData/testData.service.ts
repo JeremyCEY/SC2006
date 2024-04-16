@@ -5,16 +5,31 @@ import { InjectModel } from '@nestjs/mongoose';
 
 
 
-
+/**
+ * Service responsible for interacting with test data in the database.
+ */
 @Injectable()
 export class TestDataService {
     constructor(@InjectModel('TestData') private readonly testDataModel: Model<TestData>){}
 
-    //-------------------------------------------------------------------------------------------------------------------------//
-
-    //for databse use
+    /**
+     * Creates test data in the database.
+     * @param month - Month.
+     * @param town - Town.
+     * @param flat_type - Flat type.
+     * @param block_no - Block number.
+     * @param street_name - Street name.
+     * @param storey_range - Storey range.
+     * @param floor_area_sqm - Floor area in square meters.
+     * @param flat_model - Flat model.
+     * @param lease_commense_date - Lease commencement date.
+     * @param remaining_lease - Remaining lease.
+     * @param resale_price - Resale price.
+     * @param latitude - Latitude.
+     * @param longitude - Longitude.
+     */
     async dbcreateTestData(month: string,town: string,
-        flat_type: string, block_no: number,
+        flat_type: string, block_no: string,
         street_name: string, storey_range: string,
         floor_area_sqm: number, flat_model: string,
         lease_commense_date: number, remaining_lease: string,
@@ -40,16 +55,26 @@ export class TestDataService {
         
     }
 
+    /**
+     * Retrieves all test data from the database.
+     * @returns All test data.
+     */
     async dbgetAllTestData(){
         const result = await this.testDataModel.find().exec();
         return result.map((testData) => ({id:testData.id, month: testData.month,town: testData.town,
-            flat_type: testData.flat_type, block_no: testData.block_no,
+            flat_type: testData.flat_type, block_no: testData.block,
             street_name: testData.street_name, storey_range: testData.storey_range,
             floor_area_sqm: testData.floor_area_sqm, flat_model: testData.flat_model,
             lease_commense_date: testData.lease_commense_date, remaining_lease: testData.remaining_lease,
             resale_price: testData.resale_price, latitude: testData.Latitude, longitude: testData.Longitude}));
     }
 
+    /**
+     * Retrieves test data by ID from the database.
+     * @param id - Test data ID.
+     * @returns Test data with the specified ID.
+     * @throws NotFoundException if test data with the specified ID is not found.
+     */
     async dbgetTestDataById(id: string){
         let found;
         
@@ -66,10 +91,27 @@ export class TestDataService {
         return found;
     }
 
-
+    /**
+     * Updates test data in the database.
+     * @param id - Test data ID.
+     * @param month - Month.
+     * @param town - Town.
+     * @param flat_type - Flat type.
+     * @param block_no - Block number.
+     * @param street_name - Street name.
+     * @param storey_range - Storey range.
+     * @param floor_area_sqm - Floor area in square meters.
+     * @param flat_model - Flat model.
+     * @param lease_commense_date - Lease commencement date.
+     * @param remaining_lease - Remaining lease.
+     * @param resale_price - Resale price.
+     * @param latitude - Latitude.
+     * @param longitude - Longitude.
+     * @returns Updated test data.
+     */
     async dbupdateTestData(
         id: string, month: string,town: string,
-        flat_type: string, block_no: number,
+        flat_type: string, block_no: string,
         street_name: string, storey_range: string,
         floor_area_sqm: number, flat_model: string,
         lease_commense_date: number, remaining_lease: string,
@@ -133,6 +175,11 @@ export class TestDataService {
         return testData;
     }
 
+    /**
+     * Deletes test data from the database by ID.
+     * @param id - Test data ID.
+     * @throws NotFoundException if test data with the specified ID is not found.
+     */
     async dbdeleteTestDataById(id:string){
         const result = await this.testDataModel.deleteOne({_id: id}).exec();
 
@@ -142,7 +189,15 @@ export class TestDataService {
         
     }
 
-
+    /**
+     * Filters test data based on specified parameters.
+     * @param location - Location.
+     * @param property_type - Property type.
+     * @param amenities - Amenities.
+     * @param budget - Budget.
+     * @param rooms - Rooms.
+     * @returns Filtered test data.
+     */
     async filterTestData(location: string[], property_type: string[],
                         amenities: string[], budget: string[],
                         rooms: string[]) {
@@ -367,7 +422,7 @@ export class TestDataService {
           
           
         return result.map((testData) => ({id:testData.id, month: testData.month,town: testData.town,
-            flat_type: testData.flat_type, block_no: testData.block_no,
+            flat_type: testData.flat_type, block_no: testData.block,
             street_name: testData.street_name, storey_range: testData.storey_range,
             floor_area_sqm: testData.floor_area_sqm, flat_model: testData.flat_model,
             lease_commense_date: testData.lease_commense_date, remaining_lease: testData.remaining_lease,

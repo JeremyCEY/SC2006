@@ -14,35 +14,38 @@ import ExploreRightBar from '../components/ExploreRightBar';
 const { Content } = Layout;
 
 
-function ShowProperty() {
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(token !== null);
-    }, []);
-
-
+function ShowProperty({isAuthenticated}) {
     const location = useLocation();
     const selectedId = location.state.selectedId;
     const [selectedResale, setSelectedResale] = useState(null);
 
+    //set selected resale
     useEffect(() => {
-        const fetchResale = async () => {
-            const response = await fetch(`http://localhost:3000/testData/${selectedId}`);
-            let data = await response.json();
-            console.log('Selected resale:', data);
-            data={
-                ...data,
-                latitude: data.Latitude,
-                longitude: data.Longitude,
-            }
-            setSelectedResale(data);
+        const fetchResale = () => {
+            fetch(`http://localhost:3000/testData/${selectedId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Selected resale:', data);
+                    data = {
+                        ...data,
+                        latitude: data.Latitude,
+                        longitude: data.Longitude,
+                    };
+                    setSelectedResale(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching resale:', error);
+                });
         };
-
+    
         fetchResale();
     }, [selectedId]);
+    
     
     const [selectedProperty, setSelectedProperty] = useState(true);    
 
@@ -50,6 +53,8 @@ function ShowProperty() {
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [userId, setUserId] = useState(null); // State for user ID
 
+
+    //set frequent addresses
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -77,6 +82,7 @@ function ShowProperty() {
                 })
                 .catch(error => {
                     console.error('Error fetching frequent addresses:', error);
+                    console.log('Frequent addresses:', frequentAddresses);
                 });
         }
     }, [userId]);
@@ -96,6 +102,7 @@ function ShowProperty() {
             <Layout >
                 <Layout>
                     <Content>
+                        {selectedResale && (
                         <Map
                             selectedResale1={selectedResale}
                             // responseData={responseData}
@@ -105,6 +112,7 @@ function ShowProperty() {
                             travelTime={travelTime}
                             amenityTypes={[]}
                         />
+                        )}
                     </Content>
                 </Layout>
 

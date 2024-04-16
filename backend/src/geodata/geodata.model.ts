@@ -1,5 +1,10 @@
-//geodata.model.ts
 import * as mongoose from 'mongoose';
+
+/**
+ * Geodata Model and Schema Definitions
+ * This file defines the Mongoose model and schemas for storing and querying geospatial data.
+ * It includes schemas for defining geometry, features, and feature collections.
+ */
 
 // Define a schema for GeoJSON Geometry objects
 const GeometrySchema = new mongoose.Schema({

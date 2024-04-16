@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Avatar } from 'antd';
 
@@ -7,25 +7,40 @@ import mainLogo from '../images/logo.png';
 
 import Searchbar from './Searchbar';
 
+/**
+ * Navbar only visible by logged in users
+ * 
+ * @param {*} formValues - values within the search bar 
+ * @returns 
+ */
 function LoggedInNavbar({formValues}) {
+    const navigate = useNavigate(); // Initialize useNavigate
 
+    /**
+     * The menu visible to a logged in user
+     * 
+     * @param {*} e 
+     */
     const handleMenuClick = (e) => {
         console.log('click', e);
         switch (e.key) {
             case '1':
-                window.location.href = '/dashboard';
+                navigate('/dashboard');
                 break;
             case '2':
                 logout();
                 break;
             case '3':
-                window.location.href = '/FAQ';
+                navigate('/FAQ');
                 break;
             default:
                 break;
             }
         };
-
+    
+    /**
+     * Logs the user out of the website
+     */
     const logout = async () => {
         localStorage.removeItem('token');
         window.location.href = '/';
@@ -55,7 +70,7 @@ function LoggedInNavbar({formValues}) {
     return (
         <nav className="bg-white border-gray-200 
                         sticky shadow-lg
-                        top-0 z-99999
+                        top-0 z-50
                         h-[13vh]">
             <div className="w-[100%] max-w-screen-xl 
                             flex flex-wrap items-center 

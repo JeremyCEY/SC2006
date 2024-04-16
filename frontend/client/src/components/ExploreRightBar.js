@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TrainIcon from '@mui/icons-material/Train';
 import BicycleIcon from '@mui/icons-material/DirectionsBike';
@@ -10,6 +10,12 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
+/**
+ * Formats the time given by Maps API into a more readable format
+ * 
+ * @param {*} time time given by Maps API
+ * @returns Time expressed in hours and minutes
+ */
 function formatTravelTime(time) {
     if (time === "") {
         return "";
@@ -29,6 +35,16 @@ function formatTravelTime(time) {
     return formattedTime;
 }
 
+/**
+ * Collapsable window in the Explore Page
+ * 
+ * @param {*} isAuthenticated - checks whether user is logged in
+ * @param {*} frequentAddresses - array of frequently visited addresses saved under the user
+ * @param {*} selectedFrequentAddress - the frequently visited address selected by the user
+ * @param {*} travelMode - the type of transportation for Map to determine a route
+ * @param {*} travelTime - time taken for each route set by Map
+ * @returns 
+ */
 function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFrequentAddress, selectedFrequentAddress, setTravelMode, travelMode, travelTime }) {
     
     const [collapsedRight, setCollapsedRight] = useState(false);
@@ -40,7 +56,13 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
     const toggleSidebarRight = () => {
         setCollapsedRight(!collapsedRight);
     };
-    
+    const [frequentAddressesIsEmpty, setFrequentAddressesIsEmpty] = useState(true);
+    useEffect(() => {
+        setFrequentAddressesIsEmpty(!frequentAddresses || frequentAddresses.length === 0);
+        console.log(frequentAddressesIsEmpty);
+
+    }, [frequentAddresses]);
+
     return (
         <>
         {isAuthenticated && (
@@ -63,6 +85,11 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
             >
                 <div className="flex flex-col overflow-y-auto h-full w-full">
                     <span className="font-semibold text-2xl flex justify-center p-4">Routing to Frequent Locations</span>
+                    {frequentAddressesIsEmpty ? (
+                        <div>
+                            <span className="font-semibold flex justify-center">No Frequent Locations Added</span>
+                        </div>
+                    ):(
                     <div className="flex flex-col">
                     
                         <div className="overflow-auto h-[25vh]">
@@ -120,7 +147,7 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
                         </div>
 
                     </div>
-                    
+                    )}
                     
                 </div>
             </Sider>

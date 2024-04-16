@@ -10,11 +10,26 @@ const mapContainerStyle = {
     height: '87vh'
 };
 
+/**
+ * Center point of the map, defaulted to Singapore
+ */
 const center = {
     lat: 1.350270,
     lng: 103.8198
 };
 
+const libraries = ['places'];
+
+/**
+ * Map display on Explore Page using @react-google-maps/api
+ * 
+ * @param {*} selectedResale1 - the resale unit selected by the user
+ * @param {*} selectedFrequentAddress - the frequently visited address selected by the user
+ * @param {*} travelMode - the type of transportation for Map to determine a route
+ * @param {*} setTravelTime - the travel time for a route as determined by the Maps Direction services
+ * @param {*} amenityTypes - the type of amenities selected by the user to be displayed on the Map
+ * @returns 
+ */
 function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMode, setTravelTime, amenityTypes }) {
     const [response, setResponse] = useState(null);
     const [destination, setDestination] = useState('');
@@ -22,14 +37,22 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     const [resales, setResales] = useState([]);
     const [mrt, setMrt] = useState([]);
     const [railNames, setRailNames] = useState([]); //
+
     const mapRef = useRef(null);
+
+    /**
+     * Loader for the Maps API
+     */
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyDLCMSp9E0LVe8-nZbxQwORyFHLULTrIXA",
-        libraries: ['places'],
+        libraries: libraries
     });
+    const [circleCenter, setCircleCenter] = useState(null);
 
-    //pans and zoom when different properties are selected
+    /**
+     * Pans and zooms the map based on the selected resale unit
+     */
     useEffect(() => {
         if (mapRef.current && selectedResale1) {
             mapRef.current.panTo({
@@ -39,7 +62,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             mapRef.current.setZoom(15); // Set your desired zoom level here
 
         }
-    }, [selectedResale1]);
+    }, [selectedResale1, circleCenter]);
 
 
     const [selectedResale, setSelectedResale] = useState(null);
@@ -53,13 +76,16 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
     };
 
 
-    useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
+    //useRailNameOverlays(mapRef, railNames, mrtSvgURL, locationSvgURL, isLoaded);
     //useGeoJsonOverlay(mapRef, mrt);
 
     //For Routing:
 
     const [directionsRequested, setDirectionsRequested] = useState(false); // Track whether directions have been requested
 
+    /**
+     * Sets the routing destination to a selected frequently visited address
+     */
     useEffect(() => {
         if (selectedFrequentAddress !== null) {
             setDestination(String(selectedFrequentAddress));
@@ -67,6 +93,11 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         }
     }, [selectedFrequentAddress, selectedResale1, travelMode]);
 
+    /**
+     * Callback function for the Map to provide direction services
+     * 
+     * @param {*} response 
+     */
     const directionsCallback = (response) => {
         if (response !== null && response.status === 'OK') {
             setResponse(response);
@@ -107,23 +138,36 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
 
     //amenity searching
     const [amenities, setAmenities] = useState([]);
-    const [circleCenter, setCircleCenter] = useState(null);
     const [circleRadius, setCircleRadius] = useState(500);
 
     const [showAmenities, setShowAmenities] = useState(false);
 
-
+    /**
+     * Draws a circle around the selected property and displays the locations with selected amenity type within the circle
+     */
     useEffect(() => {
+        console.log('Selected Resale:', selectedResale1);
+        
         if (isLoaded && selectedResale1 !== null) {
             // Fetch amenities when the map is loaded
             setCircleCenter({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
+            console.log('Circle Center:', circleCenter);
             fetchAmenities({ lat: parseFloat(selectedResale1.latitude), lng: parseFloat(selectedResale1.longitude) });
             // console.log(showAmenities);
         }
-    }, [isLoaded, selectedResale1, showAmenities, amenityTypes]);
+    }, [isLoaded, selectedResale1, amenityTypes]);
 
-
-    const fetchAmenities = async (location) => {
+    /**
+     * Sorts and sets a list of places within the selected property circle that match with the selected amenity type
+     * 
+     * @param {*} location - the resale unit selected by the user 
+     */
+    const fetchAmenities = (location) => {
+        if (!mapRef.current) {
+            console.error('Map reference is null');
+            return;
+        }
+    
         const service = new window.google.maps.places.PlacesService(mapRef.current);
         const request = {
             location: location,
@@ -134,34 +178,28 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         console.log('Amenity Types', amenityTypes);
     
         if (amenityTypes.length > 0) {
-            try {
-                const results = await new Promise((resolve, reject) => {
-                    service.nearbySearch(request, (results, status) => {
-                        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                            resolve(results);
-                        } else {
-                            reject(status);
-                        }
-                    });
-                });
+            service.nearbySearch(request, (results, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                    console.log('Results', results);
+                    const filteredResults = results.filter(amenity => amenity.types.some(type => amenityTypes.includes(type)));
+                    console.log('Filtered Results', filteredResults);
+                    setAmenities(filteredResults);
+                    setShowAmenities(true);
     
-                console.log('Results', results);
-                const filteredResults = results.filter(amenity => amenity.types.some(type => amenityTypes.includes(type)));
-                console.log('Filtered Results', filteredResults);
-                setAmenities(filteredResults);
-                setShowAmenities(true); 
-    
-            } catch (error) {
-                console.error('Error fetching amenities:', error);
-                setAmenities([]);
-                setShowAmenities(false);
-            }
+                } else {
+                    console.error('Error fetching amenities:', status);
+                    setAmenities([]);
+                    setShowAmenities(false);
+                }
+            });
         } else {
-            setShowAmenities(false); 
+            setShowAmenities(false);
         }
     };
 
-
+    /**
+     * Provides different icons for amenities based on the type of amenity being displayed
+     */
     const processedAmenities = amenities.map(amenity => {
         let iconUrl;
         switch (amenity.types[0]) {
@@ -195,6 +233,33 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
         return { ...amenity, iconUrl };
     });
 
+    const circleRef = useRef(null); // Ref to keep track of the circle
+
+    useEffect(() => {
+        const createOrUpdateCircle = () => {
+            if (circleRef.current !== null) {
+                // Remove the previous circle
+                circleRef.current.setMap(null);
+            }
+            // Create a new circle if circleCenter is available
+            if (isLoaded && circleCenter !== null) {
+                const newCircle = new window.google.maps.Circle({
+                    center: circleCenter,
+                    radius: circleRadius,
+                    map: mapRef.current,
+                    // fillColor: '#FF0000', // Example color, adjust as needed
+                    fillOpacity: 0.35,
+                    strokeColor: '#000000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                });
+                circleRef.current = newCircle; // Update the ref with the new circle
+            }
+        };
+    
+        createOrUpdateCircle(); // Call the function initially and whenever dependencies change
+    }, [isLoaded, circleCenter, circleRadius]);
+
 
     //amenity searching end
 
@@ -210,7 +275,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
             onLoad={mapInstance => { mapRef.current = mapInstance; }} // Correct usage of onLoad
             options={{ mapId: "42923ec279983523" }}
         >
-            {selectedResale1 && (
+            {selectedResale1 && circleCenter&& (
 
                 <Marker
                     key={selectedResale1}
@@ -221,13 +286,12 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     {selectedResale === selectedResale1 && (
                         <InfoWindow onCloseClick={handleCloseInfoWindow}>
                             <div>
-                                <p>Address: {selectedResale1.street_name + " " + selectedResale1.block_no}</p>
+                                <p>Address: {selectedResale1.street_name}</p>
                                 <p>Price: {"$" + selectedResale1.resale_price}</p>
                             </div>
                         </InfoWindow>
                     )}
-
-                    <Circle center={circleCenter} radius={circleRadius}></Circle>
+                    
                     {showAmenities}
 
                     {directionsRequested && (               //routing stuff
@@ -250,6 +314,7 @@ function Map({ responseData, selectedResale1, selectedFrequentAddress, travelMod
                     )}
                 </Marker>
             )}
+
             {showAmenities && (processedAmenities.map((amenity, index) => (
                 <Marker
                     key={index}

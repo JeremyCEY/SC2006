@@ -11,6 +11,12 @@ const center = {
     lng: 103.8198
 };
 
+/**
+ * Map display when adding new frequently visited addresses, using @react-google-maps/api
+ * 
+ * @param {*} setSelectedPlace - the frequently visited address selected by the user to be saved 
+ * @returns 
+ */
 function MapAutocomplete({setSelectedPlace}) {
     
     const [markers, setMarkers] = useState([]);
@@ -22,6 +28,9 @@ function MapAutocomplete({setSelectedPlace}) {
         libraries: ['places']
     });
 
+    /**
+     * Handler for the Map whenever the user searches for a different location
+     */
     const onPlaceChanged = () => {
         const place = autocompleteRef.current.getPlace();
         if (place && place.geometry && place.geometry.location && mapRef.current) {

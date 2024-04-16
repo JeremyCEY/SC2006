@@ -1,10 +1,17 @@
-// railname.service.ts
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+/**
+ * Service responsible for retrieving rail names and processing GeoJSON data.
+ */
 @Injectable()
 export class RailNameService {
+
+    /**
+     * Retrieve all rail names and process GeoJSON data.
+     * @returns GeoJSON data containing rail names.
+     */
     async getAllNames(): Promise<any> {
         //const directoryPath = path.join(__dirname, '..', '..', 'railgeojson');
         //const directoryPath = 'D:\\2006-SCSB-SCSB-T2\\backend\\railgeojson';

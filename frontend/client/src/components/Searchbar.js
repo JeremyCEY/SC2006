@@ -7,7 +7,12 @@ import axios from 'axios';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Select } from 'antd';
 
-
+/**
+ * Search bar within the Navbar for users to select parameters to filter the property listings by
+ * 
+ * @param {*} initialValues - parameters for the filter (default as empty)
+ * @returns 
+ */
 function Searchbar({ initialValues }) {
     const defaultInitialValues = {
         location: [],
@@ -20,6 +25,11 @@ function Searchbar({ initialValues }) {
     
     const navigate = useNavigate();
 
+    /**
+     * Handler for the click of the search button
+     * 
+     * @param {*} values - parameters selected by the user to filter the property listings by
+     */
     const handleSubmit = async (values) => {
         try {
             const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: values });
@@ -256,7 +266,7 @@ function Searchbar({ initialValues }) {
                                     setFieldValue('amenities', selectedValues);
                                 }}
                                 defaultValue={values.amenities}
-
+                                allowClear
                                 options={[
                                     {
                                         value: 'supermarket',
