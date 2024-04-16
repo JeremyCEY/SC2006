@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 import LoggedInNavbar from '../components/LoggedInNavbar';
 import SavedProperties from './SavedProperties'; 
@@ -11,20 +12,22 @@ import { Menu, Layout } from 'antd'
 
 const { Sider } = Layout;
 
-function Dashboard() {
+function Dashboard({isAuthenticated}) {
     const [activeSection, setActiveSection] = useState('savedProperties');
-
     const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        
         if (token) {
             const decodedToken = jwtDecode(token);
             setUserId(decodedToken.id);
         } else {
             console.log('No token found in local storage');
         }
-    }, [userId]);
+        
+    }, [isAuthenticated, userId]);
+    
 
     const handleMenuClick = (key) => {
         setActiveSection(key);

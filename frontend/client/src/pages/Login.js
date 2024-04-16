@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useHistory hook
-
 import axios from 'axios';
 import {message} from 'antd'
 
@@ -26,20 +25,21 @@ function Login({setIsAuthenticated}){
     
         try {
             const response = await axios.post('http://localhost:3000/auth/login', {
-                email: formData.username,
-                password: formData.password,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            email: formData.username,
+            password: formData.password,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            
+        });
     
             const { token } = response.data;
             // console.log('Received token:', token);
             localStorage.setItem('token', token);
             message.success("Login successful")
             setIsAuthenticated(true);
-            navigate('/dashboard'); // Imperative navigation after successful login
+            navigate('/dashboard');
 
 
         } catch (error) {

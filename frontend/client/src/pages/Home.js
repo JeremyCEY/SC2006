@@ -55,7 +55,7 @@ function Home({isAuthenticated}) {
 
     return (
         <>
-            {isAuthenticated ? <LoggedInNavbar /> : <LoggedOutNavbar />}
+            {isAuthenticated ? <LoggedInNavbar isAuthenticated={isAuthenticated}/> : <LoggedOutNavbar />}
             <div className="flex flex-col items-center">
                 <div className="pt-10 pb-10 pl-5 pr-5">
                     <img src={homeImage} className="w-full" alt="Home" />
