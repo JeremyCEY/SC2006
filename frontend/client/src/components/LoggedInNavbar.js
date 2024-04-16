@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Avatar } from 'antd';
 
@@ -14,6 +14,7 @@ import Searchbar from './Searchbar';
  * @returns 
  */
 function LoggedInNavbar({formValues}) {
+    const navigate = useNavigate(); // Initialize useNavigate
 
     /**
      * The menu visible to a logged in user
@@ -24,13 +25,13 @@ function LoggedInNavbar({formValues}) {
         console.log('click', e);
         switch (e.key) {
             case '1':
-                window.location.href = '/dashboard';
+                navigate('/dashboard');
                 break;
             case '2':
                 logout();
                 break;
             case '3':
-                window.location.href = '/FAQ';
+                navigate('/FAQ');
                 break;
             default:
                 break;

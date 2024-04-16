@@ -3,14 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 
-function FAQ() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(token !== null);
-  }, []);
-
+function FAQ({isAuthenticated}) {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
 
   const toggleQuestion = (index) => {

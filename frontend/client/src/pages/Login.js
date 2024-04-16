@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useHistory hook
+
 import axios from 'axios';
 import {message} from 'antd'
 
@@ -6,8 +8,9 @@ import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
 import password from '../images/lock.png'
 
-function Login(){
-    
+function Login({setIsAuthenticated}){
+    const navigate = useNavigate(); // Get the history object
+
     const [formData, setFormData] = useState({ username: '', password: '' });
 
     const handleInputChange = (event) => {
@@ -32,10 +35,12 @@ function Login(){
             });
     
             const { token } = response.data;
-            console.log('Received token:', token);
+            // console.log('Received token:', token);
             localStorage.setItem('token', token);
             message.success("Login successful")
-            window.location.href = '/dashboard';
+            setIsAuthenticated(true);
+            navigate('/dashboard'); // Imperative navigation after successful login
+
 
         } catch (error) {
             console.error('Login error:', error);

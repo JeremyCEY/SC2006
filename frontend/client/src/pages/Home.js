@@ -5,7 +5,7 @@ import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useNavigate } from 'react-router-dom';
 
-function Home() {
+function Home({isAuthenticated}) {
     const [residences, setResidences] = useState([]);
 
     useEffect(() => {
@@ -38,12 +38,12 @@ function Home() {
         fetchResidences();
     }, []);
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(token !== null);
-    }, []);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     setIsAuthenticated(token !== null);
+    // }, []);
 
     const navigate = useNavigate();
     const handleShow = async (propertyId) => {

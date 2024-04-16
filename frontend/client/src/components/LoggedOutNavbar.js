@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Avatar } from 'antd';
@@ -14,18 +15,19 @@ import Searchbar from './Searchbar';
  * @returns 
  */
 function LoggedOutNavbar({formValues}) {
-            
+    const navigate = useNavigate();
+
     const handleMenuClick = (e) => {
         console.log('click', e);
         switch (e.key) {
             case '1':
-                window.location.href = '/login';
+                navigate('/login');
                 break;
             case '2':
-                window.location.href = '/register';
+                navigate('/register');
                 break;
             case '3':
-                window.location.href = '/FAQ';
+                navigate('/FAQ');
                 break;
             default:
                 break;
