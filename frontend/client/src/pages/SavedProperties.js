@@ -128,22 +128,17 @@ const SavedProperties = ({ userId }) => {
     //show saved property on explore page
     const handleShow = async (propertyId) => {
         try {
-            // const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: defaultInitialValues });
             navigate('/property',
             { state: { selectedId: propertyId }})
-                // setShowLeftBar: false, 
-            //     // responseData: response.data, formValues: defaultInitialValues 
-            // }});
+
             console.log('Show property:', propertyId)
         } catch (error) {
             console.error(error);
         }
     };
 
-    const { Title } = Typography;
-
     return (
-        <div className='flex w-full overflow-y-auto h-[87vh]'>
+        <div className='w-full overflow-y-auto h-[87vh]'>
             {!propertiesExist ? (
                 <div className="flex justify-center">
                     <span className="font-semibold text-2xl mt-[5vh]">
