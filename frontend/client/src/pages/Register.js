@@ -5,8 +5,21 @@ import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutli
 
 import mainLogo from '../images/logo.png'
 
+/**
+ * The Register component handles new user registration, allowing users to enter their details
+ * such as name, email, password, and a security question. It validates the inputs, submits the registration
+ * form, and handles responses from the server.
+ *
+ * @returns {React.Component} - A form that allows new users to register.
+ */
+
 function Register(){
     const [formData, setFormData] = useState({ name: '', email: '', password: '' , confirmPassword: '', security: '' });
+
+/**
+     * Updates the form data state upon input changes.
+     * @param {Event} event - The input change event.
+     */
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -15,6 +28,12 @@ function Register(){
             [name]: value
         }));
     };
+
+     /**
+     * Handles the submission of the registration form.
+     * Validates the input fields, makes a POST request to the server, and processes the response.
+     * @param {Event} event - The form submission event.
+     */
     
     const handleSubmit = async (event) => {
         event.preventDefault();

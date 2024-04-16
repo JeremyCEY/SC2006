@@ -13,6 +13,14 @@ import ExploreRightBar from '../components/ExploreRightBar';
 
 const { Content } = Layout;
 
+/**
+ * The Explore component is the main interface for exploring properties.
+ * It allows users to view properties on a map, filter and sort search results, and view detailed information about a property.
+ * It handles user authentication states to toggle between logged-in and logged-out views.
+ *
+ * @param {boolean} isAuthenticated - Indicates if the user is authenticated.
+ * @returns {React.Component} - The Explore component with dynamic, interactive features based on user input and authentication.
+ */
 
 function Explore({isAuthenticated}) {
 
@@ -25,6 +33,12 @@ function Explore({isAuthenticated}) {
 
     const [showLeftBar, setShowLeftBar] = useState(true);
 
+    /**
+     * Handles user clicks on individual property divs to display detailed information.
+     * Sets the property as selected, enabling further interaction or information display.
+     *
+     * @param {object} resale - The resale property that was clicked.
+     */
 
     const handleDivClick = (resale) => {
         // console.log('Clicked:', resale);
@@ -36,6 +50,11 @@ function Explore({isAuthenticated}) {
     const [sortOption, setSortOption] = useState(null);
 
     const [sortedData, setSortedData] = useState([]);
+
+    /**
+     * Handles sorting of properties based on the selected sort option.
+     * Sorts properties by price or size in ascending or descending order.
+     */
 
     useEffect(() => {
         let sorted = [...responseData];
@@ -68,6 +87,11 @@ function Explore({isAuthenticated}) {
 
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [userId, setUserId] = useState(null); // State for user ID
+
+/**
+     * Uses JWT to decode user data from localStorage and fetches frequent addresses.
+     * It triggers on token existence and updates when user ID changes, suggesting a login or token refresh.
+     */
 
     useEffect(() => {
         const token = localStorage.getItem('token');

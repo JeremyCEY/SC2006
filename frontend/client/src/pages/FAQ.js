@@ -3,8 +3,24 @@ import React, { useState, useEffect } from 'react';
 import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 
+/**
+ * The FAQ component provides a list of frequently asked questions about the platform.
+ * It allows users to toggle the visibility of answers for each question.
+ * It uses conditional rendering based on the user's authentication status to show different navigation bars.
+ *
+ * @param {boolean} isAuthenticated - Indicates if the user is authenticated.
+ * @returns {React.Component} - The FAQ component with expandable/collapsible questions.
+ */
+
 function FAQ({isAuthenticated}) {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
+
+  /**
+   * Toggles the visibility of an answer for a selected question.
+   * If the question is already active, it will be collapsed; otherwise, it will expand.
+   *
+   * @param {number} index - The index of the question to toggle.
+   */
 
   const toggleQuestion = (index) => {
     if (activeQuestionIndex === index) {

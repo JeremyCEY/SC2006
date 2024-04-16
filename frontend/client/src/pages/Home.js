@@ -5,8 +5,22 @@ import LoggedOutNavbar from "../components/LoggedOutNavbar";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * The Home component serves as the landing page and provides a brief overview and navigation for the site.
+ * It fetches and displays a list of residences, and allows authenticated users to navigate to detailed views of these residences.
+ *
+ * @param {Object} props - Component props.
+ * @param {boolean} props.isAuthenticated - Indicates whether the user is authenticated.
+ * @returns {React.Component} - The Home component which displays the main features and links of the platform.
+ */
+
 function Home({isAuthenticated}) {
     const [residences, setResidences] = useState([]);
+
+    /**
+     * Fetches residence data from multiple endpoints and displays a selection on the homepage.
+     * It runs on component mount and aggregates data from multiple fetched sources.
+     */
 
     useEffect(() => {
         const fetchResidences = async () => {
@@ -39,6 +53,14 @@ function Home({isAuthenticated}) {
     }, []);
 
     const navigate = useNavigate();
+
+    /**
+     * Navigates to the property detail page of a selected residence.
+     * It uses the 'react-router-dom' to navigate and passes the property ID via state.
+     *
+     * @param {string} propertyId - The ID of the property to show details for.
+     */
+
     const handleShow = async (propertyId) => {
         try {
             // const response = await axios.get('http://localhost:3000/testData/testData/filter', { params: defaultInitialValues });

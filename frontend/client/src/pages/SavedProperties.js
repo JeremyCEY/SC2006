@@ -3,12 +3,27 @@ import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * The SavedProperties component displays a list of properties saved by the user.
+ * It allows the user to view more details about each property, delete them from saved properties,
+ * and navigate to a detailed view of the property.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.userId - The unique identifier for the user to fetch saved properties.
+ * @returns {React.Component} - A component that lists saved properties and provides interaction options.
+ */
+
 const SavedProperties = ({ userId }) => {
 
     const [savedProperties, setSavedProperties] = useState([]);
     const [residences, setResidences] = useState([]);
     const [expandedPropertyId, setExpandedPropertyId] = useState(null);
     const [propertiesExist, setSavedPropertiesExist] = useState(false);
+
+     /**
+     * Toggles the expanded view of property details.
+     * @param {string} id - The unique identifier of the property to expand or collapse.
+     */
 
     const toggleDetails = (id) => {
         if (expandedPropertyId === id) {
@@ -17,6 +32,11 @@ const SavedProperties = ({ userId }) => {
             setExpandedPropertyId(id); 
         }
     };    
+
+    /**
+     * Fetches the saved properties for the user and the details of each property.
+     * Executes when the component mounts or the userId changes.
+     */
 
     //retrieve id of saved properties from bookmark
     useEffect(() => {
@@ -66,6 +86,10 @@ const SavedProperties = ({ userId }) => {
         }
     }, [userId, savedProperties]);
     
+    /**
+     * Deletes a property from the user's saved properties.
+     * @param {string} propertyId - The unique identifier of the property to delete.
+     */
 
     //retrieve object of resale based on id
     const handleDelete = async (propertyId) => {
@@ -95,6 +119,11 @@ const SavedProperties = ({ userId }) => {
         budget: [],
         rooms: []
     };
+    
+    /**
+     * Navigates to the property detail page to show more details about a specific property.
+     * @param {string} propertyId - The unique identifier of the property to display.
+     */
     
     //show saved property on explore page
     const handleShow = async (propertyId) => {
