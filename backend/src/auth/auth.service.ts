@@ -73,10 +73,11 @@ export class AuthService {
      */
     async forgetPassword(email: string, securityAnswer: string): Promise<string>{
         const user = await this.userModel.findOne({email});
-        console.log(`Resetting password: compare security answer ${user.security} to ${securityAnswer}`);
         if(!user){
             throw new UnauthorizedException('Invalid email address');
         }
+        console.log(`Resetting password: compare security answer ${user.security} to ${securityAnswer}`);
+
         if(user.security!=securityAnswer){
             throw new UnauthorizedException('Wrong Answer to Security Question');
         }
