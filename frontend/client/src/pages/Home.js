@@ -91,7 +91,7 @@ function Home() {
                                 <ul className="residence-details">
                                     <li>Type: {resale.flat_type}</li>
                                     <li>Street:  {resale.street_name}</li>
-                                    <li>Block number: {resale.block_no}</li>
+                                    <li>Block number: {resale.block}</li>
                                     <li>Floor area:  {resale.floor_area_sqm} sqm</li>
                                     <button
                                         onClick={() => handleShow(resale._id)}
