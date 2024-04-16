@@ -266,7 +266,7 @@ function Searchbar({ initialValues }) {
                                     setFieldValue('amenities', selectedValues);
                                 }}
                                 defaultValue={values.amenities}
-
+                                allowClear
                                 options={[
                                     {
                                         value: 'supermarket',

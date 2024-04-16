@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TrainIcon from '@mui/icons-material/Train';
 import BicycleIcon from '@mui/icons-material/DirectionsBike';
@@ -56,7 +56,13 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
     const toggleSidebarRight = () => {
         setCollapsedRight(!collapsedRight);
     };
-    
+    const [frequentAddressesIsEmpty, setFrequentAddressesIsEmpty] = useState(true);
+    useEffect(() => {
+        setFrequentAddressesIsEmpty(!frequentAddresses || frequentAddresses.length === 0);
+        console.log(frequentAddressesIsEmpty);
+
+    }, [frequentAddresses]);
+
     return (
         <>
         {isAuthenticated && (
@@ -79,6 +85,11 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
             >
                 <div className="flex flex-col overflow-y-auto h-full w-full">
                     <span className="font-semibold text-2xl flex justify-center p-4">Routing to Frequent Locations</span>
+                    {frequentAddressesIsEmpty ? (
+                        <div>
+                            <span className="font-semibold flex justify-center">No Frequent Locations Added</span>
+                        </div>
+                    ):(
                     <div className="flex flex-col">
                     
                         <div className="overflow-auto h-[25vh]">
@@ -136,7 +147,7 @@ function ExploreRightBar({ isAuthenticated, frequentAddresses, setSelectedFreque
                         </div>
 
                     </div>
-                    
+                    )}
                     
                 </div>
             </Sider>

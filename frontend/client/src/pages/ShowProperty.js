@@ -107,6 +107,7 @@ function ShowProperty() {
                 })
                 .catch(error => {
                     console.error('Error fetching frequent addresses:', error);
+                    console.log('Frequent addresses:', frequentAddresses);
                 });
         }
     }, [userId]);
