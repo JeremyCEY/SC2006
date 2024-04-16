@@ -9,7 +9,7 @@ export interface TestData extends mongoose.Document {
   month: string;
   town: string;
   flat_type: string;
-  block_no: number;
+  block: string;
   street_name: string;
   storey_range: string;
   floor_area_sqm: number;
@@ -29,7 +29,7 @@ export const TestDataScehma = new mongoose.Schema({
   month: {type: String, required: true},
   town: {type: String, required: true},
   flat_type: {type: String, required: true},
-  block_no: {type: Number, required: true},
+  block: {type: String, required: true},
   street_name: {type: String, required: true},
   storey_range: {type: String, required: true},
   floor_area_sqm: {type: Number, required: true},
