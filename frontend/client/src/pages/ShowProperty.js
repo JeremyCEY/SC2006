@@ -13,6 +13,15 @@ import ExploreRightBar from '../components/ExploreRightBar';
 
 const { Content } = Layout;
 
+/**
+ * The ShowProperty component displays detailed information about a selected property.
+ * It provides functionalities such as viewing the property on a map, exploring related amenities,
+ * and routing options to the property from frequently visited addresses.
+ *
+ * @param {Object} props - Component props.
+ * @param {boolean} props.isAuthenticated - Indicates whether the user is authenticated.
+ * @returns {React.Component} - A component that showcases detailed information about a specific property.
+ */
 
 function ShowProperty({isAuthenticated}) {
     const location = useLocation();
@@ -53,7 +62,9 @@ function ShowProperty({isAuthenticated}) {
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [userId, setUserId] = useState(null); // State for user ID
 
-
+    /**
+     * Fetches the frequent addresses of the logged-in user.
+     */
     //set frequent addresses
     useEffect(() => {
         const token = localStorage.getItem('token');

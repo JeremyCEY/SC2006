@@ -12,9 +12,22 @@ import { Menu, Layout } from 'antd'
 
 const { Sider } = Layout;
 
+/**
+ * Represents the main dashboard page for authenticated users.
+ * Provides navigation to various sections like Saved Properties, Frequently Visited Addresses, and Settings.
+ *
+ * @param {boolean} isAuthenticated - Indicates if the user is authenticated
+ * @returns {React.Component} - The Dashboard component with dynamic content based on user interaction.
+ */
+
 function Dashboard({isAuthenticated}) {
     const [activeSection, setActiveSection] = useState('savedProperties');
     const [userId, setUserId] = useState(null);
+
+/**
+     * Decode the JWT from localStorage to find the user's ID.
+     * This effect runs on initial mount and when isAuthenticated or userId changes.
+     */
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -28,10 +41,22 @@ function Dashboard({isAuthenticated}) {
         
     }, [isAuthenticated, userId]);
     
+    /**
+     * Handles user's navigation through the dashboard menu.
+     * Sets the current active section based on menu item clicked.
+     *
+     * @param {string} key - The key of the menu item clicked.
+     */
 
     const handleMenuClick = (key) => {
         setActiveSection(key);
     };
+
+    /**
+     * Dynamically renders the content based on the active section.
+     * Displays user-specific information fetched from the server.
+     * @returns {React.Component} - The component corresponding to the active menu section.
+     */
 
     const renderContent = () => {
         if (!userId) {

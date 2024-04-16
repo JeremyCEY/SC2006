@@ -4,6 +4,16 @@ import { Modal, Button } from 'antd';
 
 import MapAutocomplete from '../components/MapAutocomplete';
 
+/**
+ * Component for managing frequently visited locations.
+ * It allows users to view, add, and delete frequently visited addresses.
+ * Addresses can be added through an interactive map autocomplete component.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.userId - ID of the user to fetch locations for and modify them.
+ * @returns {React.Component} - A component displaying a list of frequently visited addresses.
+ */
+
 const FrequentLocations = ({ userId }) => {
     const [frequentAddresses, setFrequentAddresses] = useState([]);
     const [expandedLocationId, setExpandedLocationId] = useState(null);
@@ -21,6 +31,10 @@ const FrequentLocations = ({ userId }) => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+
+    /**
+     * Fetches the list of frequent addresses from the server when the component mounts or when dependencies change.
+     */
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -48,11 +62,22 @@ const FrequentLocations = ({ userId }) => {
         }
     }, [userId, selectedPlace, isModalVisible]);    //updates whenever a new location is added
 
+    /**
+     * Toggles the expanded state of a location detail view.
+     *
+     * @param {string} id - The ID of the location to toggle.
+     */
+
     const toggleDetails = (id) => {
         setExpandedLocationId(expandedLocationId === id ? null : id);
     };
     
-    //for delete button ------------------------- working
+   /**
+     * Deletes a specific frequent address (button)
+     *
+     * @param {object} location - The location object to delete.
+     */
+
     const handleDelete = async (location) => {
         const token = localStorage.getItem('token');
         try {
@@ -74,8 +99,12 @@ const FrequentLocations = ({ userId }) => {
             console.error('Error deleting address:', error);
         }
     };
-    //addFreq button ----------------------------- issue starting here
-    const handleAddFrequentAddress = async () => {
+
+
+/**
+     * Adds a new frequent address from the selected place in the autocomplete component.
+     */
+        const handleAddFrequentAddress = async () => {
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`http://localhost:3000/frequentaddress/${userId}`, {

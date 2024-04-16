@@ -8,10 +8,25 @@ import mainLogo from '../images/logo.png'
 import username from '../images/user.png'
 import password from '../images/lock.png'
 
+/**
+ * The Login component allows users to authenticate by entering their credentials.
+ * If the authentication is successful, it stores the user's token in localStorage and redirects to the dashboard.
+ * This component handles form data changes, submission, and navigates to different routes based on user actions.
+ *
+ * @param {Object} props - Component props.
+ * @param {function} props.setIsAuthenticated - Function to update the authentication state of the user.
+ * @returns {React.Component} - A form that allows users to log in.
+ */
+
 function Login({setIsAuthenticated}){
     const navigate = useNavigate(); // Get the history object
 
     const [formData, setFormData] = useState({ username: '', password: '' });
+
+    /**
+     * Handles changes to input fields by updating the component's state.
+     * @param {Event} event - The input change event.
+     */
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -20,6 +35,13 @@ function Login({setIsAuthenticated}){
             [name]: value
         }));
     };
+
+    /**
+     * Handles the submission of the login form.
+     * Performs a POST request to authenticate the user and navigate to the dashboard on success.
+     * Displays errors through messages if authentication fails.
+     * @param {Event} event - The form submission event.
+     */
 
     const handleSubmit = async (event) => {
         event.preventDefault();
