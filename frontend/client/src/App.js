@@ -40,6 +40,7 @@ useEffect(() => {
       setIsAuthenticated(true);
     }
   }
+  // console.log('checked token')
 }, [setIsAuthenticated]);
 
 // useEffect(() => {

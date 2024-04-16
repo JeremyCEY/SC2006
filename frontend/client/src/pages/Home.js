@@ -38,13 +38,6 @@ function Home({isAuthenticated}) {
         fetchResidences();
     }, []);
 
-    // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    //     setIsAuthenticated(token !== null);
-    // }, []);
-
     const navigate = useNavigate();
     const handleShow = async (propertyId) => {
         try {
