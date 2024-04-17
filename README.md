@@ -9,6 +9,18 @@
 ![Project Banner](https://github.com/softwarelab3/2006-SCSB-SCSB-T2/blob/dev/Landing%20page.png)
 
 ## 🛠 Installation and Setup
+**Starting the server and client on Windows:**
+
+```bash
+npm install -g concurrently
+./start.bat
+```
+**Starting the server and client on Mac/Linux:**
+
+```bash
+npm install -g concurrently
+./start.sh
+```
 
 **Starting the server:**
 
