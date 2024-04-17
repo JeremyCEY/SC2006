@@ -3,7 +3,7 @@
 > Filter home locations by desired amenities and frequently visited locations </br>
 > Never be too far from the places you love
 
-- [Demo](#demo-link)
+- [Demo](https://youtu.be/bwiQCzmZxI8)
 - [Documentation](#documentation-link)
 
 ![Project Banner](https://github.com/softwarelab3/2006-SCSB-SCSB-T2/blob/dev/Landing%20page.png)
