@@ -90,6 +90,13 @@ npm start
 - Database<br/>
   ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
+- User Interface<br/>
+  - Tailwind
+  - AntDesign
+
+- APIs and Data <br/>
+  - Google Maps API
+
 ## Contributors ✨
 
 <table>
