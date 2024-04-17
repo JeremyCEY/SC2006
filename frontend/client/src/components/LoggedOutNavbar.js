@@ -57,7 +57,7 @@ function LoggedOutNavbar({formValues}) {
     return (
         <nav className="bg-white border-gray-200
                         sticky shadow-lg
-                        top-0 z-99999
+                        top-0 z-50
                         h-[13vh]">
             <div className="w-[100%] max-w-screen-xl 
                             flex flex-wrap 
