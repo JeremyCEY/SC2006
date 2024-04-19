@@ -201,7 +201,6 @@ export class TestDataService {
     async filterTestData(location: string[], property_type: string[],
                         amenities: string[], budget: string[],
                         rooms: string[]) {
-        console.log(location);
         try {
         
             // Implement your filtering logic here

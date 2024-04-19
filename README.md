@@ -13,7 +13,7 @@
 
 ```bash
 npm install -g concurrently
-./start.bat
+.\start.bat
 ```
 **Starting the server and client on Mac/Linux:**
 
