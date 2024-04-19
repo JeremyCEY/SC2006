@@ -18,7 +18,6 @@ npm install -g concurrently
 **Starting the server and client on Mac/Linux:**
 
 ```bash
-npm install -g concurrently
 ./start.sh
 ```
 
