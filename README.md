@@ -12,7 +12,6 @@
 **Starting the server and client on Windows:**
 
 ```bash
-npm install -g concurrently
 .\start.bat
 ```
 **Starting the server and client on Mac/Linux:**
